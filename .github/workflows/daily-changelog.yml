@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write            # Needed to commit HTML changelogs
+  id-token: write            # Needed by claude-code-action for OIDC auth
 
 concurrency:
   group: changelog
@@ -63,10 +64,7 @@ jobs:
 
             Then produce a JSON changelog following the schema in prompts/changelog-schema.json.
             Output ONLY the JSON object, no markdown fences, no explanation.
-          model: sonnet
-          max_turns: 10
-          timeout_minutes: 10
-          allowed_tools: "Read,Glob,Grep"
+          claude_args: "--model sonnet --max-turns 10 --allowedTools Read,Glob,Grep"
 
       # 6. Format and post to Slack (non-blocking — failure won't stop HTML archive)
       - name: Post to Slack
