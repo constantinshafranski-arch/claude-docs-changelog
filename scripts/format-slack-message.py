@@ -91,20 +91,26 @@ def build_no_updates_payload(date_str: str) -> dict:
     }
 
 
+# Map by category name — more reliable than matching Unicode emoji characters
 SLACK_ICON_MAP = {
-    ">_": ":terminal:",
-    "{}": ":gear:",
-    "⚡": ":zap:",
-    "◈": ":diamond_shape_with_a_dot_inside:",
-    "📚": ":books:",
-    "📄": ":page_facing_up:",
-    "ℹ️": ":information_source:",
-    "🔧": ":wrench:",
-    "🧪": ":test_tube:",
-    "📋": ":clipboard:",
-    "✎": ":pencil2:",
-    "🚀": ":rocket:",
+    "Claude Code CLI": ":terminal:",
+    "Agent SDK": ":gear:",
+    "API Reference": ":zap:",
+    "Platform": ":diamond_shape_with_a_dot_inside:",
+    "Resources": ":books:",
+    "About Claude": ":information_source:",
+    "Agents & Tools": ":wrench:",
+    "Testing & Evaluation": ":test_tube:",
+    "Release Notes": ":clipboard:",
+    "Prompt Library": ":pencil2:",
+    "Getting Started": ":rocket:",
+    "Other": ":page_facing_up:",
 }
+
+
+def get_slack_icon(category: str) -> str:
+    """Get Slack emoji code for a category name."""
+    return SLACK_ICON_MAP.get(category, ":page_facing_up:")
 
 
 def build_stats_bar(sections: list) -> str:
@@ -114,8 +120,7 @@ def build_stats_bar(sections: list) -> str:
         cat = section.get("category", "Unknown")
         total = section.get("docs_updated", 0) + section.get("docs_new", 0)
         new_count = section.get("docs_new", 0)
-        raw_icon = section.get("icon", "📄")
-        icon = SLACK_ICON_MAP.get(raw_icon, raw_icon)
+        icon = get_slack_icon(cat)
         label = f"{icon} {total} {cat}"
         if new_count > 0:
             label += f" ({new_count} new)"
@@ -135,8 +140,7 @@ def build_section_blocks(section: dict) -> list:
     """Build Slack blocks for one category section."""
     blocks = []
     cat = section.get("category", "Unknown")
-    raw_icon = section.get("icon", "📄")
-    icon = SLACK_ICON_MAP.get(raw_icon, raw_icon)
+    icon = get_slack_icon(cat)
     docs_updated = section.get("docs_updated", 0)
     docs_new = section.get("docs_new", 0)
 
@@ -165,17 +169,19 @@ def build_section_blocks(section: dict) -> list:
         changes = entry.get("changes", [])
         source_url = entry.get("source_url", "")
 
-        tag = "🆕 NEW" if is_new else "📝 Updated"
-        lines = [f"*{title}* _{tag}_"]
+        tag = "🆕 *NEW*" if is_new else "📝 _Updated_"
+        lines = [f"*{title}*  {tag}"]
         if summary:
-            lines.append(html_to_mrkdwn(summary))
+            lines.append(f"_{html_to_mrkdwn(summary)}_")
+        if changes:
+            lines.append("")  # blank line before bullets
         for change in changes[:8]:
             lines.append(f"  • {html_to_mrkdwn(change)}")
         if len(changes) > 8:
             lines.append(f"  _…and {len(changes) - 8} more_")
         source_url = sanitize_url(source_url)
         if source_url:
-            lines.append(f"<{source_url}|View docs →>")
+            lines.append(f"\n<{source_url}|View docs →>")
 
         text = "\n".join(lines)
         blocks.append({
@@ -228,8 +234,10 @@ def build_changelog_payload(data: dict) -> dict:
         })
         blocks.append({"type": "divider"})
 
-    # Per-category sections
-    for section in sections:
+    # Per-category sections (with dividers between them)
+    for i, section in enumerate(sections):
+        if i > 0:
+            blocks.append({"type": "divider"})
         section_blocks = build_section_blocks(section)
         blocks.extend(section_blocks)
 
