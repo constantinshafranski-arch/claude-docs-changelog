@@ -66,27 +66,61 @@ jobs:
             Output ONLY the JSON object, no markdown fences, no explanation.
           claude_args: "--model sonnet --max-turns 30 --allowedTools Read,Glob,Grep"
 
+      # 5b. Extract Claude's text output from the execution log
+      - name: Extract Claude output
+        if: steps.detect.outputs.has_changes == 'true'
+        id: extract
+        run: |
+          EXEC_FILE="${{ steps.claude.outputs.execution_file }}"
+          if [ -z "$EXEC_FILE" ] || [ ! -f "$EXEC_FILE" ]; then
+            echo "::error::No execution file found"
+            exit 1
+          fi
+          # Extract the last assistant text message from the execution log
+          CLAUDE_RESULT=$(python3 -c "
+          import json, sys
+          with open('$EXEC_FILE') as f:
+              data = json.load(f)
+          # Walk through messages to find the last assistant text content
+          result = ''
+          for msg in data.get('messages', data if isinstance(data, list) else []):
+              if isinstance(msg, dict):
+                  role = msg.get('role', '')
+                  if role == 'assistant':
+                      for block in msg.get('content', []):
+                          if isinstance(block, dict) and block.get('type') == 'text':
+                              result = block['text']
+                          elif isinstance(block, str):
+                              result = block
+          # Strip markdown fences if present
+          if result.startswith('\`\`\`'):
+              lines = result.split('\n')
+              lines = [l for l in lines if not l.startswith('\`\`\`')]
+              result = '\n'.join(lines)
+          print(result)
+          ")
+          # Save to file for downstream steps (avoids shell quoting issues)
+          echo "$CLAUDE_RESULT" > /tmp/claude-changelog.json
+          echo "has_output=true" >> "$GITHUB_OUTPUT"
+
       # 6. Format and post to Slack (non-blocking — failure won't stop HTML archive)
       - name: Post to Slack
-        if: steps.detect.outputs.has_changes == 'true'
+        if: steps.detect.outputs.has_changes == 'true' && steps.extract.outputs.has_output == 'true'
         continue-on-error: true
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          CLAUDE_OUTPUT: ${{ steps.claude.outputs.result }}
         run: |
-          echo "$CLAUDE_OUTPUT" | python3 scripts/format-slack-message.py > /tmp/slack-payload.json
+          cat /tmp/claude-changelog.json | python3 scripts/format-slack-message.py > /tmp/slack-payload.json
           curl -sf -X POST "$SLACK_WEBHOOK_URL" \
             -H 'Content-Type: application/json' -d @/tmp/slack-payload.json \
             || echo "::warning::Slack webhook failed — continuing with HTML archive"
 
       # 7. Generate and commit HTML changelog
       - name: Archive HTML changelog
-        if: steps.detect.outputs.has_changes == 'true'
-        env:
-          CLAUDE_OUTPUT: ${{ steps.claude.outputs.result }}
+        if: steps.detect.outputs.has_changes == 'true' && steps.extract.outputs.has_output == 'true'
         run: |
           TODAY=$(date -u +%Y-%m-%d)
-          echo "$CLAUDE_OUTPUT" | python3 scripts/format-html-changelog.py \
+          cat /tmp/claude-changelog.json | python3 scripts/format-html-changelog.py \
             > "changelogs/$TODAY.html"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
