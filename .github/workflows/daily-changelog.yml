@@ -62,9 +62,18 @@ jobs:
             file from docs-mirror/docs/ if the diff is too short to understand the change
             (e.g. for new files with no diff context).
 
-            Read prompts/system-prompt.md for writing guidelines and category mapping.
-            Then produce the JSON changelog. Output ONLY valid JSON, no markdown fences.
-          claude_args: "--model sonnet --max-turns 15 --allowedTools Read,Glob,Grep --json-schema prompts/changelog-schema.json"
+            Guidelines:
+            - Summarize what CHANGED, not full doc content
+            - Highlights: 3-6 most impactful changes across all categories
+            - Each bullet: start with <strong>bolded keyword</strong> then &mdash; description
+            - New docs (is_new: true): richer summary since everything is new
+            - URL rules: claude-code__X.md -> https://code.claude.com/docs/en/X, docs__en__A__B.md -> https://platform.claude.com/en/docs/A/B
+            - Category icons: CLI=>">_", SDK=>"{}", API=>"⚡", Platform=>"◈", Resources=>"📚", About=>"ℹ️", Tools=>"🔧", Test=>"🧪", Releases=>"📋", Prompts=>"✎", Start=>"🚀"
+          claude_args: >-
+            --model haiku
+            --max-turns 10
+            --allowedTools Read,Glob,Grep
+            --json-schema '{"type":"object","required":["date","has_updates","highlights","sections"],"properties":{"date":{"type":"string"},"has_updates":{"type":"boolean"},"highlights":{"type":"array","items":{"type":"string"},"maxItems":6},"sections":{"type":"array","items":{"type":"object","required":["category","icon","docs_updated","docs_new","entries"],"properties":{"category":{"type":"string","enum":["Claude Code CLI","Agent SDK","API Reference","Platform","Resources","About Claude","Agents & Tools","Testing & Evaluation","Release Notes","Prompt Library","Getting Started","Other"]},"icon":{"type":"string"},"docs_updated":{"type":"integer"},"docs_new":{"type":"integer"},"entries":{"type":"array","items":{"type":"object","required":["title","is_new","summary","changes","source_url"],"properties":{"title":{"type":"string"},"is_new":{"type":"boolean"},"summary":{"type":"string"},"changes":{"type":"array","items":{"type":"string"}},"source_url":{"type":"string"}}}}}}}}}'
 
       # 5b. Save structured output to file (env var avoids all shell quoting issues)
       - name: Save Claude output
