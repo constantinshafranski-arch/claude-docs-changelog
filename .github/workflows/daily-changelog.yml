@@ -57,15 +57,14 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
-            Read the file CONTEXT.md in the repo root. It contains a list of changed
-            documentation files with their categories and diff excerpts.
+            Read CONTEXT.md — it has all changed files with categories, commit messages,
+            and diff excerpts. Use the diffs to summarize what changed. Only read a full
+            file from docs-mirror/docs/ if the diff is too short to understand the change
+            (e.g. for new files with no diff context).
 
-            Read each changed file from the docs-mirror/docs/ directory to understand
-            the full content (not just the diffs).
-
-            Then produce a JSON changelog following the schema in prompts/changelog-schema.json.
-            Output ONLY the JSON object, no markdown fences, no explanation.
-          claude_args: "--model sonnet --max-turns 30 --allowedTools Read,Glob,Grep --json-schema prompts/changelog-schema.json"
+            Read prompts/system-prompt.md for writing guidelines and category mapping.
+            Then produce the JSON changelog. Output ONLY valid JSON, no markdown fences.
+          claude_args: "--model sonnet --max-turns 15 --allowedTools Read,Glob,Grep --json-schema prompts/changelog-schema.json"
 
       # 5b. Save structured output to file (env var avoids all shell quoting issues)
       - name: Save Claude output
