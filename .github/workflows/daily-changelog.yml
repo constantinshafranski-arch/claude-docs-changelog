@@ -34,7 +34,7 @@ jobs:
 
       # 2. Clone the docs mirror
       - name: Clone claude-code-docs
-        run: git clone --shallow-since="${{ env.LOOKBACK }}" https://github.com/${{ env.DOCS_REPO }}.git docs-mirror || git clone --depth=100 https://github.com/${{ env.DOCS_REPO }}.git docs-mirror
+        run: git clone --depth=100 https://github.com/${{ env.DOCS_REPO }}.git docs-mirror
 
       # 3. Detect changes in last 24h
       - name: Detect doc changes
