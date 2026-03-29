@@ -64,7 +64,7 @@ jobs:
 
             Then produce a JSON changelog following the schema in prompts/changelog-schema.json.
             Output ONLY the JSON object, no markdown fences, no explanation.
-          claude_args: "--model sonnet --max-turns 10 --allowedTools Read,Glob,Grep"
+          claude_args: "--model sonnet --max-turns 30 --allowedTools Read,Glob,Grep"
 
       # 6. Format and post to Slack (non-blocking — failure won't stop HTML archive)
       - name: Post to Slack
