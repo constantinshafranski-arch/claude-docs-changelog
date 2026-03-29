@@ -324,7 +324,7 @@ body::after {
   <header>
     <h1>Claude Docs Changelog</h1>
     <div class="date">March 29, 2026</div>
-    <span class="badge">Up to date &mdash; synced Mar 29 at 21:07 UTC</span>
+    <span class="badge">Up to date &mdash; synced Mar 29 at 21:17 UTC</span>
   </header>
 
   <div class="stats">
@@ -349,12 +349,12 @@ body::after {
   <div class="highlights">
     <h3>Key Highlights</h3>
     <ul>
-      <li><strong>Tmux integration for worktrees</strong> &mdash; New `--tmux` flag enables creating tmux sessions for isolated Claude Code sessions with iTerm2 native pane support</li>
-      <li><strong>Request headers documentation</strong> &mdash; Added `X-Claude-Code-Session-Id` header documentation for LLM gateway proxy implementations</li>
-      <li><strong>Skill description truncation guidance</strong> &mdash; Enhanced skill configuration docs to clarify 250-character truncation limit and adjusted context budget from 2% to 1%</li>
-      <li><strong>Prompt caching minimum threshold clarity</strong> &mdash; Expanded documentation with cost-benefit analysis and verification guidance for cache minimum length requirements</li>
-      <li><strong>Client tool response clarity</strong> &mdash; Refined tool-use overview to explicitly mention `stop_reason: &quot;tool_use&quot;` in client tool execution flow</li>
-      <li><strong>Fast mode pricing clarification</strong> &mdash; Updated fast mode documentation to explicitly include requests over 200k input tokens in pricing</li>
+      <li><strong>--tmux flag for worktrees</strong> &mdash; New Claude Code feature enabling tmux session creation for worktrees with iTerm2 native pane support</li>
+      <li><strong>Skill description character limits</strong> &mdash; Clarified 250-character truncation for skill descriptions with optimization guidance to front-load key use cases</li>
+      <li><strong>Prompt caching validation</strong> &mdash; Detailed explanation of silent failures when prompts fall below minimum token threshold, with cost optimization recommendations</li>
+      <li><strong>Request headers documentation</strong> &mdash; New `X-Claude-Code-Session-Id` header documented for proxy session aggregation without request body parsing</li>
+      <li><strong>Fast mode pricing scope</strong> &mdash; Explicit clarification that 6x Opus pricing applies to requests exceeding 200k input tokens</li>
+      <li><strong>macOS notification troubleshooting</strong> &mdash; New guide addressing osascript notification permission issues with Script Editor setup steps</li>
     </ul>
   </div>
 
@@ -369,9 +369,10 @@ body::after {
       <h3>CLI Reference</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Added `--tmux` flag for creating tmux sessions with worktrees, supporting iTerm2 native panes and classic tmux modes.</p>
+    <p>Added `--tmux` flag to worktree support with iTerm2 native pane integration and classic tmux fallback option.</p>
     <ul>
-      <li><strong>Tmux session flag</strong> &mdash; New `--tmux` option for `--worktree` to create tmux sessions; uses iTerm2 native panes when available or classic tmux mode</li>
+      <li><strong>--tmux flag</strong> &mdash; New flag enables tmux session creation for worktrees, uses iTerm2 native panes when available, accepts `--tmux=classic` for traditional tmux</li>
+      <li><strong>Usage example</strong> &mdash; Updated to show `claude -w feature-auth --tmux` syntax</li>
     </ul>
     <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -382,9 +383,9 @@ body::after {
       <h3>Data Usage</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Clarified environment variable usage for disabling feedback command functionality.</p>
+    <p>Clarified environment variable requirement for disabling feedback command by specifying the exact value needed.</p>
     <ul>
-      <li><strong>Feedback command opt-out</strong> &mdash; Updated `DISABLE_FEEDBACK_COMMAND` environment variable documentation to explicitly state it should be set to `1`</li>
+      <li><strong>DISABLE_FEEDBACK_COMMAND</strong> &mdash; Updated to specify `DISABLE_FEEDBACK_COMMAND=1` instead of ambiguous `DISABLE_FEEDBACK_COMMAND`</li>
     </ul>
     <a class="source-link" href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">code.claude.com/docs/en/data-usage &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="data-usage" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -395,9 +396,11 @@ body::after {
       <h3>Hooks Guide</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Added troubleshooting guidance for macOS notification permission issues with osascript.</p>
+    <p>Added troubleshooting section for macOS notifications, explaining osascript permission requirements and configuration steps.</p>
     <ul>
-      <li><strong>Notification permission troubleshooting</strong> &mdash; Added accordion section explaining how to grant Script Editor notification permissions when osascript notifications fail silently on macOS</li>
+      <li><strong>Notification troubleshooting</strong> &mdash; New Accordion section &#x27;If no notification appears&#x27; with detailed steps</li>
+      <li><strong>Script Editor permissions</strong> &mdash; Explains that osascript routes notifications through Script Editor, which requires notification permission in System Settings</li>
+      <li><strong>Testing command</strong> &mdash; Provides command to test notification delivery and verify Script Editor notification settings</li>
     </ul>
     <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="hooks-guide" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -408,9 +411,10 @@ body::after {
       <h3>LLM Gateway</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Added documentation for request headers used in Claude Code API calls.</p>
+    <p>Documented `X-Claude-Code-Session-Id` request header that proxies can use for session aggregation.</p>
     <ul>
-      <li><strong>Request headers</strong> &mdash; Documented `X-Claude-Code-Session-Id` header for proxy implementations to aggregate session requests</li>
+      <li><strong>Request headers section</strong> &mdash; New section documenting headers included on every API request</li>
+      <li><strong>X-Claude-Code-Session-Id</strong> &mdash; Unique session identifier that proxies can use to aggregate requests without parsing request body</li>
     </ul>
     <a class="source-link" href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">code.claude.com/docs/en/llm-gateway &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="llm-gateway" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -421,10 +425,10 @@ body::after {
       <h3>Settings</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Reorganized teammate mode setting from per-session to global config, updated internal documentation links.</p>
+    <p>Reorganized `teammateMode` setting and updated agent teams documentation link.</p>
     <ul>
-      <li><strong>Setting reorganization</strong> &mdash; Moved `teammateMode` from per-session settings to global config settings</li>
-      <li><strong>Link update</strong> &mdash; Updated agent teams reference link from `#set-up-agent-teams` to `#choose-a-display-mode`</li>
+      <li><strong>Setting relocation</strong> &mdash; Moved `teammateMode` from per-session settings table to global config settings table</li>
+      <li><strong>Link update</strong> &mdash; Changed agent teams reference from `#set-up-agent-teams` to `#choose-a-display-mode`</li>
     </ul>
     <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -435,11 +439,12 @@ body::after {
       <h3>Skills</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Enhanced skill description documentation with truncation limits and adjusted context character budgets for skill discovery.</p>
+    <p>Updated skill description length requirements, lowering buffer limits and adding best practices for truncation.</p>
     <ul>
-      <li><strong>Description truncation guidance</strong> &mdash; Clarified that descriptions longer than 250 characters are truncated in skill listing and recommended front-loading key use cases</li>
-      <li><strong>Context budget adjustment</strong> &mdash; Updated skill description context budget from 2% (16K char fallback) to 1% (8K char fallback) of context window</li>
-      <li><strong>Troubleshooting refinement</strong> &mdash; Improved documentation for skill discovery issues, clarifying that all skill names are always included while descriptions may be shortened</li>
+      <li><strong>Description length limit</strong> &mdash; Clarified that descriptions over 250 characters are truncated in skill listings</li>
+      <li><strong>Character budget</strong> &mdash; Updated from 2% context window / 16k fallback to 1% context window / 8k fallback</li>
+      <li><strong>Best practice</strong> &mdash; Guidance to front-load key use cases since entries are capped at 250 characters regardless of budget</li>
+      <li><strong>Section rename</strong> &mdash; Changed &#x27;Claude doesn&#x27;t see all my skills&#x27; to &#x27;Skill descriptions are cut short&#x27; for clarity</li>
     </ul>
     <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -456,11 +461,11 @@ body::after {
       <h3>Pricing</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Updated formatting consistency and billing language throughout pricing documentation.</p>
+    <p>Improved markdown formatting consistency and refined billing description wording for clarity.</p>
     <ul>
-      <li><strong>List formatting standardization</strong> &mdash; Changed hyphens to colons in list items for consistent formatting across pricing tiers and features</li>
-      <li><strong>Billing language clarity</strong> &mdash; Updated from &#x27;Billing is calculated monthly&#x27; to &#x27;Billing is based on actual monthly usage&#x27;</li>
-      <li><strong>Payment description update</strong> &mdash; Simplified from &#x27;Payments are processed in USD&#x27; to &#x27;All payments are in USD&#x27;</li>
+      <li><strong>Markdown formatting</strong> &mdash; Standardized list formatting with colons inside bold markup (`**Label:**` instead of `**Label**:`)</li>
+      <li><strong>Billing language</strong> &mdash; Changed &#x27;Billing is calculated monthly based on actual usage&#x27; to &#x27;Billing is based on actual monthly usage&#x27;</li>
+      <li><strong>Payment clarity</strong> &mdash; Updated &#x27;Payments are processed in USD&#x27; to &#x27;All payments are in USD&#x27; for conciseness</li>
     </ul>
     <a class="source-link" href="https://platform.claude.com/en/docs/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/en/docs/about-claude/pricing &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="pricing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -477,9 +482,10 @@ body::after {
       <h3>Tool Use Overview</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Clarified client tool response behavior to explicitly document `stop_reason: &quot;tool_use&quot;` in the agentic loop.</p>
+    <p>Clarified client tool execution response format to explicitly include `stop_reason` and `tool_use` blocks.</p>
     <ul>
-      <li><strong>Client tool response clarity</strong> &mdash; Updated explanation to specify that Claude responds with `stop_reason: &quot;tool_use&quot;` and one or more `tool_use` blocks for client tools</li>
+      <li><strong>Response format clarity</strong> &mdash; Updated from &#x27;Claude returns a `tool_use` block&#x27; to precise description: &#x27;Claude responds with `stop_reason: &quot;tool_use&quot;` and one or more `tool_use` blocks&#x27;</li>
+      <li><strong>Complete response documentation</strong> &mdash; Ensures developers understand full API response structure including stop reason</li>
     </ul>
     <a class="source-link" href="https://platform.claude.com/en/docs/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">platform.claude.com/en/docs/agents-and-tools/tool-use/overview &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="tool-use-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -496,10 +502,10 @@ body::after {
       <h3>API and Data Retention</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Updated section headings and internal references for data retention policy documentation.</p>
+    <p>Formalized section title and updated corresponding anchor link for consistency.</p>
     <ul>
-      <li><strong>Section title update</strong> &mdash; Renamed &#x27;Our approach to data retention&#x27; to &#x27;Anthropic&#x27;s approach to data retention&#x27; for clarity</li>
-      <li><strong>Reference link update</strong> &mdash; Updated internal section link to match new title</li>
+      <li><strong>Section title</strong> &mdash; Changed from &#x27;Our approach to data retention&#x27; to &#x27;Anthropic&#x27;s approach to data retention&#x27;</li>
+      <li><strong>Anchor link</strong> &mdash; Updated from `#our-approach-to-data-retention` to `#anthropics-approach-to-data-retention`</li>
     </ul>
     <a class="source-link" href="https://platform.claude.com/en/docs/build-with-claude/api-and-data-retention" target="_blank" rel="noopener">platform.claude.com/en/docs/build-with-claude/api-and-data-retention &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="api-and-data-retention" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -510,11 +516,11 @@ body::after {
       <h3>Compaction</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Updated example token values, clarified usage iteration counts, and linked to more specific compaction cookbook.</p>
+    <p>Updated example values, clarified iteration behavior, and enhanced cookbook link with session memory focus.</p>
     <ul>
-      <li><strong>Example token values</strong> &mdash; Updated usage example with more realistic token counts (45000→23000 input, 1234→1000 output)</li>
-      <li><strong>Iteration count clarification</strong> &mdash; Added explanation of how top-level token counts relate to iteration-level counts in compaction responses</li>
-      <li><strong>Cookbook link precision</strong> &mdash; Changed generic cookbook link to dedicated &#x27;Session memory compaction cookbook&#x27; with specific implementation details</li>
+      <li><strong>Example values</strong> &mdash; Adjusted token counts to more realistic examples (input_tokens: 45k→23k, output_tokens: 1234→1k)</li>
+      <li><strong>Iteration explanation</strong> &mdash; Added clarification that top-level token counts match the message iteration when it&#x27;s the only non-compaction iteration</li>
+      <li><strong>Cookbook link</strong> &mdash; Updated to &#x27;Session memory compaction cookbook&#x27; with updated URL to `https://platform.claude.com/cookbook/misc-session-memory-compaction` emphasizing background threading and prompt caching</li>
     </ul>
     <a class="source-link" href="https://platform.claude.com/en/docs/build-with-claude/compaction" target="_blank" rel="noopener">platform.claude.com/en/docs/build-with-claude/compaction &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="compaction" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -525,9 +531,10 @@ body::after {
       <h3>Fast Mode</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Clarified fast mode pricing to explicitly include requests exceeding 200k input tokens.</p>
+    <p>Clarified pricing scope to explicitly include requests exceeding 200k input token limit.</p>
     <ul>
-      <li><strong>Pricing scope clarification</strong> &mdash; Added explicit note that fast mode pricing applies to full context window including requests over 200k input tokens</li>
+      <li><strong>Pricing clarification</strong> &mdash; Updated from &#x27;6x standard Opus rates across the full context window&#x27; to explicitly state &#x27;including requests over 200k input tokens&#x27;</li>
+      <li><strong>Large context transparency</strong> &mdash; Removes ambiguity about pricing for oversized context requests</li>
     </ul>
     <a class="source-link" href="https://platform.claude.com/en/docs/build-with-claude/fast-mode" target="_blank" rel="noopener">platform.claude.com/en/docs/build-with-claude/fast-mode &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="fast-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
@@ -538,11 +545,12 @@ body::after {
       <h3>Prompt Caching</h3>
       <span class="tag tag-updated">Updated</span>
     </div>
-    <p>Enhanced documentation for cache minimum length requirements with verification guidance and cost-benefit analysis.</p>
+    <p>Enhanced minimum token requirement documentation with validation guidance and cost optimization recommendations.</p>
     <ul>
-      <li><strong>Cache verification guidance</strong> &mdash; Added detailed explanation of how to verify cache hits via `cache_creation_input_tokens` and `cache_read_input_tokens` fields</li>
-      <li><strong>Minimum threshold cost analysis</strong> &mdash; Added guidance that expanding cached content to meet minimum thresholds is often cost-beneficial since cache reads are significantly cheaper</li>
-      <li><strong>Silent failure documentation</strong> &mdash; Clarified that caching below minimum length fails silently with both cache tokens returning 0 and no error raised</li>
+      <li><strong>Minimum length behavior</strong> &mdash; Clarified that requests below minimum are processed without caching with no error returned</li>
+      <li><strong>Validation method</strong> &mdash; Explained how to detect uncached prompts: if both `cache_creation_input_tokens` and `cache_read_input_tokens` are 0, prompt was not cached</li>
+      <li><strong>Cost optimization</strong> &mdash; Added guidance that expanding cached content to reach minimum threshold is worthwhile since cache reads cost significantly less</li>
+      <li><strong>Troubleshooting enhancement</strong> &mdash; Added detail that caching failures are silent and provided validation steps to check minimum token requirements</li>
     </ul>
     <a class="source-link" href="https://platform.claude.com/en/docs/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/en/docs/build-with-claude/prompt-caching &rarr;</a>
     <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
