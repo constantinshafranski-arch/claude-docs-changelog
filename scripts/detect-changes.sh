@@ -13,7 +13,7 @@ cd "$DOCS_DIR"
 # Find changed .md files (exclude manifests/indexes)
 CHANGED=$(git log --since="$LOOKBACK" --diff-filter=AMR \
   --name-only --pretty="" -- 'docs/*.md' \
-  | grep -v 'docs_manifest\|search_index' | sort -u || true)
+  | grep -v 'docs_manifest\|search_index\|changelog\.md' | sort -u || true)
 
 if [[ -z "$CHANGED" ]]; then
   echo "has_changes=false" >> "$GITHUB_OUTPUT"
