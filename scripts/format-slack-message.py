@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Reads Claude's JSON changelog from stdin, outputs Slack Block Kit payload to stdout.
-Handles edge cases: malformed JSON, no updates, oversized blocks.
+Uses attachments for card-like category sections with colored left borders.
 
 Slack limits: 3000 chars per text block, 50 blocks per message.
 """
@@ -91,7 +91,7 @@ def build_no_updates_payload(date_str: str) -> dict:
     }
 
 
-# Map by category name — more reliable than matching Unicode emoji characters
+# Map category name -> Slack emoji
 SLACK_ICON_MAP = {
     "Claude Code CLI": ":terminal:",
     "Agent SDK": ":gear:",
@@ -107,10 +107,29 @@ SLACK_ICON_MAP = {
     "Other": ":page_facing_up:",
 }
 
+# Map category name -> card border color (Obsidian & Amber palette)
+SLACK_COLOR_MAP = {
+    "Claude Code CLI": "#60A0E0",       # blue
+    "Agent SDK": "#C080E0",             # purple
+    "API Reference": "#F0A050",         # amber
+    "Platform": "#F0A050",              # amber
+    "Resources": "#50C8A0",             # green
+    "About Claude": "#60A0E0",          # blue
+    "Agents & Tools": "#F0A050",        # amber
+    "Testing & Evaluation": "#50C8A0",  # green
+    "Release Notes": "#C080E0",         # purple
+    "Prompt Library": "#F0A050",        # amber
+    "Getting Started": "#50C8A0",       # green
+    "Other": "#60A0E0",                 # blue
+}
+
 
 def get_slack_icon(category: str) -> str:
-    """Get Slack emoji code for a category name."""
     return SLACK_ICON_MAP.get(category, ":page_facing_up:")
+
+
+def get_slack_color(category: str) -> str:
+    return SLACK_COLOR_MAP.get(category, "#60A0E0")
 
 
 def build_stats_bar(sections: list) -> str:
@@ -121,26 +140,51 @@ def build_stats_bar(sections: list) -> str:
         total = section.get("docs_updated", 0) + section.get("docs_new", 0)
         new_count = section.get("docs_new", 0)
         icon = get_slack_icon(cat)
-        label = f"{icon} {total} {cat}"
+        label = f"{icon} *{total}* {cat}"
         if new_count > 0:
             label += f" ({new_count} new)"
         parts.append(label)
-    return " │ ".join(parts)
+    return "  │  ".join(parts)
 
 
 def build_highlights_block(highlights: list) -> str:
-    """Format key highlights as mrkdwn bullet list."""
+    """Format key highlights as mrkdwn."""
     lines = []
     for h in highlights[:6]:
-        lines.append(f"• {html_to_mrkdwn(h)}")
+        lines.append(f"  •  {html_to_mrkdwn(h)}")
     return "\n".join(lines)
 
 
-def build_section_blocks(section: dict) -> list:
-    """Build Slack blocks for one category section."""
-    blocks = []
+def build_entry_text(entry: dict) -> str:
+    """Build mrkdwn text for a single doc entry."""
+    title = entry.get("title", "Untitled")
+    is_new = entry.get("is_new", False)
+    summary = entry.get("summary", "")
+    changes = entry.get("changes", [])
+
+    tag = ":new:  *NEW*" if is_new else ":pencil:  _Updated_"
+    lines = [f"*{title}*  {tag}"]
+
+    if summary:
+        lines.append(html_to_mrkdwn(summary))
+
+    for change in changes[:8]:
+        lines.append(f"    •  {html_to_mrkdwn(change)}")
+    if len(changes) > 8:
+        lines.append(f"    _…and {len(changes) - 8} more_")
+
+    source_url = sanitize_url(entry.get("source_url", ""))
+    if source_url:
+        lines.append(f":link:  <{source_url}|View docs →>")
+
+    return "\n".join(lines)
+
+
+def build_category_attachment(section: dict) -> dict:
+    """Build a Slack attachment (colored card) for one category."""
     cat = section.get("category", "Unknown")
     icon = get_slack_icon(cat)
+    color = get_slack_color(cat)
     docs_updated = section.get("docs_updated", 0)
     docs_new = section.get("docs_new", 0)
 
@@ -151,39 +195,20 @@ def build_section_blocks(section: dict) -> list:
         count_parts.append(f"{docs_new} new")
     count_str = " + ".join(count_parts) if count_parts else "0 docs"
 
-    # Category header
+    blocks = []
+
+    # Category header inside the card
     blocks.append({
-        "type": "header",
+        "type": "section",
         "text": {
-            "type": "plain_text",
-            "text": f"{icon} {cat} — {count_str}",
-            "emoji": True,
+            "type": "mrkdwn",
+            "text": f"{icon}  *{cat}*  —  {count_str}",
         },
     })
 
-    # Entries
+    # Each entry as its own section block
     for entry in section.get("entries", []):
-        title = entry.get("title", "Untitled")
-        is_new = entry.get("is_new", False)
-        summary = entry.get("summary", "")
-        changes = entry.get("changes", [])
-        source_url = entry.get("source_url", "")
-
-        tag = "🆕 *NEW*" if is_new else "📝 _Updated_"
-        lines = [f"*{title}*  {tag}"]
-        if summary:
-            lines.append(f"_{html_to_mrkdwn(summary)}_")
-        if changes:
-            lines.append("")  # blank line before bullets
-        for change in changes[:8]:
-            lines.append(f"  • {html_to_mrkdwn(change)}")
-        if len(changes) > 8:
-            lines.append(f"  _…and {len(changes) - 8} more_")
-        source_url = sanitize_url(source_url)
-        if source_url:
-            lines.append(f"\n<{source_url}|View docs →>")
-
-        text = "\n".join(lines)
+        text = build_entry_text(entry)
         blocks.append({
             "type": "section",
             "text": {
@@ -192,15 +217,23 @@ def build_section_blocks(section: dict) -> list:
             },
         })
 
-    return blocks
+    return {
+        "color": color,
+        "blocks": blocks,
+    }
 
 
 def build_changelog_payload(data: dict) -> dict:
-    """Build the full Slack Block Kit payload from changelog JSON."""
+    """Build the full Slack payload with top-level blocks + colored attachments."""
     date_str = data.get("date", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
     highlights = data.get("highlights", [])
     sections = data.get("sections", [])
 
+    total_docs = sum(
+        s.get("docs_updated", 0) + s.get("docs_new", 0) for s in sections
+    )
+
+    # Top-level blocks: header, stats, highlights
     blocks = []
 
     # Header
@@ -208,40 +241,32 @@ def build_changelog_payload(data: dict) -> dict:
         "type": "header",
         "text": {
             "type": "plain_text",
-            "text": f"📰 Claude Docs Changelog — {format_date(date_str)}",
+            "text": f"📰  Claude Docs Changelog  —  {format_date(date_str)}",
             "emoji": True,
         },
     })
 
-    # Stats bar
+    # Stats bar (context = smaller, muted)
     stats = build_stats_bar(sections)
     if stats:
         blocks.append({
-            "type": "section",
-            "text": {"type": "mrkdwn", "text": stats},
+            "type": "context",
+            "elements": [{"type": "mrkdwn", "text": stats}],
         })
-
-    blocks.append({"type": "divider"})
 
     # Key Highlights
     if highlights:
+        blocks.append({"type": "divider"})
         blocks.append({
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"*🔑 Key Highlights*\n{build_highlights_block(highlights)}",
+                "text": f":sparkles:  *Key Highlights*\n\n{build_highlights_block(highlights)}",
             },
         })
-        blocks.append({"type": "divider"})
-
-    # Per-category sections (with dividers between them)
-    for i, section in enumerate(sections):
-        if i > 0:
-            blocks.append({"type": "divider"})
-        section_blocks = build_section_blocks(section)
-        blocks.extend(section_blocks)
 
     # Footer
+    blocks.append({"type": "divider"})
     blocks.append({
         "type": "context",
         "elements": [
@@ -249,28 +274,19 @@ def build_changelog_payload(data: dict) -> dict:
                 "type": "mrkdwn",
                 "text": (
                     f"Generated from <https://github.com/costiash/claude-code-docs|claude-code-docs> "
-                    f"• {sum(s.get('docs_updated', 0) + s.get('docs_new', 0) for s in sections)} docs analyzed "
-                    f"• {date_str} "
-                    f"• <https://github.com/constantinshafranski-arch/claude-docs-changelog/blob/main/changelogs/{date_str}.html|:page_facing_up: Full HTML report>"
+                    f"  •  {total_docs} docs analyzed  •  {date_str}  •  "
+                    f"<https://github.com/constantinshafranski-arch/claude-docs-changelog/blob/main/changelogs/{date_str}.html|:page_facing_up: Full HTML report>"
                 ),
             }
         ],
     })
 
-    # Enforce Slack's 50-block limit
-    if len(blocks) > 50:
-        blocks = blocks[:49]
-        blocks.append({
-            "type": "context",
-            "elements": [
-                {
-                    "type": "mrkdwn",
-                    "text": "…_message truncated — see HTML archive for full changelog_",
-                }
-            ],
-        })
+    # Colored card attachments — one per category
+    attachments = []
+    for section in sections:
+        attachments.append(build_category_attachment(section))
 
-    return {"blocks": blocks}
+    return {"blocks": blocks, "attachments": attachments}
 
 
 def main():
