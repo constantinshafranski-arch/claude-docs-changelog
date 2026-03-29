@@ -25,7 +25,7 @@ env:
 jobs:
   changelog:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
       # 1. Checkout our repo (scripts, prompts, archive)
