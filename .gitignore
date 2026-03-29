@@ -1,0 +1,11 @@
+# Runtime artifacts (created during workflow, cleaned up)
+docs-mirror/
+CONTEXT.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,90 @@
+{
+  "type": "object",
+  "required": ["date", "has_updates", "highlights", "sections"],
+  "properties": {
+    "date": {
+      "type": "string",
+      "description": "ISO date of the changelog (YYYY-MM-DD)"
+    },
+    "has_updates": {
+      "type": "boolean",
+      "description": "Whether any documentation changes were found"
+    },
+    "highlights": {
+      "type": "array",
+      "description": "3-6 most impactful changes, each starting with **bolded keyword** — description",
+      "items": { "type": "string" },
+      "minItems": 0,
+      "maxItems": 6
+    },
+    "sections": {
+      "type": "array",
+      "description": "Grouped by documentation category",
+      "items": {
+        "type": "object",
+        "required": ["category", "icon", "docs_updated", "docs_new", "entries"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "Claude Code CLI",
+              "Agent SDK",
+              "API Reference",
+              "Platform",
+              "Resources",
+              "About Claude",
+              "Agents & Tools",
+              "Testing & Evaluation",
+              "Release Notes",
+              "Prompt Library",
+              "Getting Started",
+              "Other"
+            ]
+          },
+          "icon": {
+            "type": "string",
+            "description": "Emoji icon for the category"
+          },
+          "docs_updated": {
+            "type": "integer",
+            "description": "Number of existing docs that were modified"
+          },
+          "docs_new": {
+            "type": "integer",
+            "description": "Number of newly added docs"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["title", "is_new", "summary", "changes", "source_url"],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Human-readable doc title (not filename)"
+                },
+                "is_new": {
+                  "type": "boolean",
+                  "description": "true if this is a brand new doc, false if updated"
+                },
+                "summary": {
+                  "type": "string",
+                  "description": "One-sentence summary of the doc or what changed"
+                },
+                "changes": {
+                  "type": "array",
+                  "description": "Bullet points: **bold keyword** — description of each change",
+                  "items": { "type": "string" }
+                },
+                "source_url": {
+                  "type": "string",
+                  "description": "Derived URL to the live documentation page"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

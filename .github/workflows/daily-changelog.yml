@@ -1,0 +1,106 @@
+name: Daily Claude Docs Changelog
+
+on:
+  schedule:
+    - cron: '0 5 * * *'    # 05:00 UTC = 08:00 IDT (summer) / 07:00 IST (winter)
+  workflow_dispatch:         # Manual trigger for testing
+    inputs:
+      lookback:
+        description: 'How far back to check for changes (e.g. "24 hours ago", "72 hours ago")'
+        required: false
+        default: '24 hours ago'
+
+permissions:
+  contents: write            # Needed to commit HTML changelogs
+
+concurrency:
+  group: changelog
+  cancel-in-progress: false
+
+env:
+  DOCS_REPO: costiash/claude-code-docs
+  LOOKBACK: ${{ github.event.inputs.lookback || '24 hours ago' }}
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # 1. Checkout our repo (scripts, prompts, archive)
+      - name: Checkout changelog repo
+        uses: actions/checkout@v4
+
+      # 2. Clone the docs mirror
+      - name: Clone claude-code-docs
+        run: git clone --shallow-since="${{ env.LOOKBACK }}" https://github.com/${{ env.DOCS_REPO }}.git docs-mirror || git clone --depth=100 https://github.com/${{ env.DOCS_REPO }}.git docs-mirror
+
+      # 3. Detect changes in last 24h
+      - name: Detect doc changes
+        id: detect
+        run: |
+          chmod +x scripts/detect-changes.sh
+          scripts/detect-changes.sh docs-mirror "${{ env.LOOKBACK }}"
+
+      # 4. Early exit if no changes
+      - name: Skip if no updates
+        if: steps.detect.outputs.has_changes == 'false'
+        run: echo "::notice::No doc changes in last ${{ env.LOOKBACK }}. Skipping."
+
+      # 5. Run claude-code-action for summarization
+      - name: Summarize with Claude
+        if: steps.detect.outputs.has_changes == 'true'
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Read the file CONTEXT.md in the repo root. It contains a list of changed
+            documentation files with their categories and diff excerpts.
+
+            Read each changed file from the docs-mirror/docs/ directory to understand
+            the full content (not just the diffs).
+
+            Then produce a JSON changelog following the schema in prompts/changelog-schema.json.
+            Output ONLY the JSON object, no markdown fences, no explanation.
+          model: sonnet
+          max_turns: 10
+          timeout_minutes: 10
+          allowed_tools: "Read,Glob,Grep"
+
+      # 6. Format and post to Slack (non-blocking — failure won't stop HTML archive)
+      - name: Post to Slack
+        if: steps.detect.outputs.has_changes == 'true'
+        continue-on-error: true
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          CLAUDE_OUTPUT: ${{ steps.claude.outputs.result }}
+        run: |
+          echo "$CLAUDE_OUTPUT" | python3 scripts/format-slack-message.py > /tmp/slack-payload.json
+          curl -sf -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' -d @/tmp/slack-payload.json \
+            || echo "::warning::Slack webhook failed — continuing with HTML archive"
+
+      # 7. Generate and commit HTML changelog
+      - name: Archive HTML changelog
+        if: steps.detect.outputs.has_changes == 'true'
+        env:
+          CLAUDE_OUTPUT: ${{ steps.claude.outputs.result }}
+        run: |
+          TODAY=$(date -u +%Y-%m-%d)
+          echo "$CLAUDE_OUTPUT" | python3 scripts/format-html-changelog.py \
+            > "changelogs/$TODAY.html"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "changelogs/$TODAY.html"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "changelog: $TODAY"
+            git push
+          fi
+
+      # 8. Cleanup
+      - name: Cleanup
+        if: always()
+        run: rm -rf docs-mirror CONTEXT.md

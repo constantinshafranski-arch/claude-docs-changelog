@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog — March 23–24, 2026</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface-hover: #222632;
+      --border: #2a2e3b;
+      --text: #e2e4ea;
+      --text-muted: #8b8fa3;
+      --accent: #d4a053;
+      --accent-dim: rgba(212, 160, 83, 0.12);
+      --blue: #6ba3f7;
+      --blue-dim: rgba(107, 163, 247, 0.10);
+      --green: #5ec69e;
+      --green-dim: rgba(94, 198, 158, 0.10);
+      --purple: #b390f0;
+      --purple-dim: rgba(179, 144, 240, 0.10);
+      --red: #f07070;
+      --red-dim: rgba(240, 112, 112, 0.08);
+      --radius: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ---- Header ---- */
+    header {
+      text-align: center;
+      padding: 2.5rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+    }
+    header h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+    header .date {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    header .badge {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(94, 198, 158, 0.25);
+    }
+
+    /* ---- Section headings ---- */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 2.5rem 0 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-heading .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .section-heading h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .section-heading .count {
+      margin-left: auto;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+    .icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+    .icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+    .icon-plat { background: var(--accent-dim); color: var(--accent); }
+
+    /* ---- Cards ---- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: #3a3f50; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+    .card-header h3 {
+      font-size: 1.05rem;
+      font-weight: 650;
+    }
+    .tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+    .tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(107,163,247,0.2); }
+    .tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(94,198,158,0.25); }
+    .tag-beta    { background: var(--red-dim); color: var(--red); border: 1px solid rgba(240,112,112,0.2); }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .card ul li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+    .card ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .card ul li strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .source-link {
+      display: inline-block;
+      margin-top: 0.65rem;
+      font-size: 0.8rem;
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .source-link:hover { border-bottom-color: var(--blue); }
+
+    /* ---- Key highlights box ---- */
+    .highlights {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .highlights h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .highlights ul li::before { background: var(--accent); }
+
+    /* ---- Stats bar ---- */
+    .stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .stat {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      text-align: center;
+    }
+    .stat .num {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .stat .label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+    .stat.cli  .num { color: var(--blue); }
+    .stat.sdk  .num { color: var(--purple); }
+    .stat.plat .num { color: var(--accent); }
+
+    /* ---- Footer ---- */
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 600px) {
+      body { padding: 1rem 0.75rem 3rem; }
+      header h1 { font-size: 1.4rem; }
+      .section-heading h2 { font-size: 1.1rem; }
+      .card { padding: 1rem 1.1rem; }
+      .stats { gap: 0.6rem; }
+      .stat { min-width: 100px; padding: 0.75rem; }
+      .stat .num { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">March 23 &ndash; 24, 2026</div>
+    <span class="badge">Up to date &mdash; synced Mar 24 at 15:34 UTC</span>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">5</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat sdk">
+      <div class="num">6</div>
+      <div class="label">Agent SDK (1 new)</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">1</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <!-- Key highlights -->
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Tool Search (new)</strong> &mdash; Agent SDK can now scale to 10,000 tools with on-demand discovery; enabled by default</li>
+      <li><strong>Sandboxing</strong> &mdash; Full OS-level filesystem and network isolation for Bash commands, with open-source runtime</li>
+      <li><strong>Desktop app</strong> &mdash; Computer use, live app preview, PR monitoring, Dispatch from phone, parallel worktree sessions</li>
+      <li><strong>Context Editing (beta)</strong> &mdash; Server-side tool result and thinking block clearing for long conversations</li>
+      <li><strong>TypeScript SDK V2 preview</strong> &mdash; Simplified <code>send()</code> and <code>stream()</code> patterns for multi-turn conversations</li>
+      <li><strong>Plugin Marketplaces</strong> &mdash; Create and distribute plugin catalogs via git repositories</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- CLAUDE CODE CLI -->
+  <!-- ============================================================ -->
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">5 docs updated</span>
+  </div>
+
+  <!-- Desktop -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Desktop App</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Desktop app page now documents a rich set of GUI capabilities beyond the terminal experience.</p>
+    <ul>
+      <li><strong>Computer use</strong> &mdash; Claude can open apps and control your screen on macOS</li>
+      <li><strong>Live app preview</strong> &mdash; embedded browser for dev server verification; Claude auto-takes screenshots, clicks elements, fills forms, and fixes issues</li>
+      <li><strong>Visual diff review</strong> &mdash; inline commenting on file changes before PR creation</li>
+      <li><strong>Parallel sessions</strong> &mdash; automatic Git worktree isolation for concurrent tasks</li>
+      <li><strong>Dispatch integration</strong> &mdash; send tasks from your phone, get a Desktop session</li>
+      <li><strong>Scheduled tasks</strong> &mdash; recurring automation (daily PR reviews, dependency audits)</li>
+      <li><strong>Connectors</strong> &mdash; GitHub, Slack, Linear, and more</li>
+      <li><strong>PR monitoring</strong> &mdash; auto-fix and auto-merge workflows</li>
+      <li><strong>SSH + cloud environments</strong> &mdash; run sessions locally, via SSH, or on Anthropic cloud</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+  </div>
+
+  <!-- Overview -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The overview now covers all entry points for Claude Code in one unified page.</p>
+    <ul>
+      <li><strong>Terminal CLI</strong> &mdash; native install (<code>curl</code>), Homebrew, WinGet, with auto-update for native installs</li>
+      <li><strong>VS Code / Cursor</strong> &mdash; extension with inline diffs, @-mentions, plan review</li>
+      <li><strong>Desktop app</strong> &mdash; standalone GUI with diff review, scheduling, and cloud sessions</li>
+      <li><strong>Web</strong> &mdash; browser-based at claude.ai/code, also available on iOS/Android</li>
+      <li><strong>JetBrains</strong> &mdash; IntelliJ, PyCharm, WebStorm plugin</li>
+      <li><strong>Integrations table</strong> &mdash; Remote Control, Channels, GitHub Actions, GitLab CI/CD, Code Review, Slack, Chrome, Agent SDK</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+  </div>
+
+  <!-- Sandboxing -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Sandboxing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Comprehensive documentation on Claude Code's OS-level sandbox for Bash commands.</p>
+    <ul>
+      <li><strong>Filesystem isolation</strong> &mdash; restricts writes to CWD by default; configurable via <code>sandbox.filesystem.allowWrite/denyWrite/denyRead/allowRead</code></li>
+      <li><strong>Network isolation</strong> &mdash; proxy-based domain filtering; new domain requests trigger permission prompts</li>
+      <li><strong>OS-level enforcement</strong> &mdash; Seatbelt on macOS, bubblewrap on Linux/WSL2</li>
+      <li><strong>Two modes</strong> &mdash; Auto-allow (sandboxed commands run without prompts) and Regular permissions</li>
+      <li><strong>Security benefits</strong> &mdash; protects against prompt injection, malicious dependencies, social engineering</li>
+      <li><strong>Escape hatch</strong> &mdash; <code>dangerouslyDisableSandbox</code> for incompatible tools; disableable with <code>allowUnsandboxedCommands: false</code></li>
+      <li><strong>Open source</strong> &mdash; sandbox runtime available as <code>@anthropic-ai/sandbox-runtime</code> npm package</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+  </div>
+
+  <!-- Plugin Marketplaces -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugin Marketplaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>New guide for creating and distributing plugin catalogs to teams and communities.</p>
+    <ul>
+      <li><strong>Marketplace structure</strong> &mdash; <code>marketplace.json</code> in <code>.claude-plugin/</code> directory listing plugins with sources</li>
+      <li><strong>Plugin sources</strong> &mdash; local paths, git repos (GitHub/GitLab), or remote URLs</li>
+      <li><strong>Distribution</strong> &mdash; push to a git host; users add with <code>/plugin marketplace add</code> and install individual plugins</li>
+      <li><strong>Walkthrough</strong> &mdash; step-by-step example creating a <code>/quality-review</code> skill plugin</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+  </div>
+
+  <!-- Common Workflows -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Common Workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded practical guide covering everyday development patterns and features.</p>
+    <ul>
+      <li><strong>Codebase exploration</strong> &mdash; progressive narrowing from overview to specific components</li>
+      <li><strong>Specialized subagents</strong> &mdash; <code>/agents</code> command, automatic delegation, custom subagent creation in <code>.claude/agents/</code></li>
+      <li><strong>Plan Mode</strong> &mdash; <code>Shift+Tab</code> toggle, <code>--permission-mode plan</code>, <code>Ctrl+G</code> to edit plan in editor</li>
+      <li><strong>Git worktrees</strong> &mdash; <code>claude --worktree feature-auth</code> for parallel isolated sessions; auto-cleanup on exit</li>
+      <li><strong>Notifications</strong> &mdash; <code>Notification</code> hook for desktop alerts when Claude needs attention</li>
+      <li><strong>Scheduling</strong> &mdash; comparison table of cloud tasks, desktop tasks, GitHub Actions, and <code>/loop</code></li>
+      <li><strong>Extended thinking</strong> &mdash; adaptive reasoning on Opus/Sonnet 4.6, <code>ultrathink</code> keyword, <code>Option+T</code> toggle</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- AGENT SDK -->
+  <!-- ============================================================ -->
+  <div class="section-heading">
+    <div class="icon icon-sdk">{}</div>
+    <h2>Claude Agent SDK</h2>
+    <span class="count">1 new + 5 updated</span>
+  </div>
+
+  <!-- Tool Search (NEW) -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool Search</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>Scale agents to up to 10,000 tools with on-demand discovery instead of loading everything upfront.</p>
+    <ul>
+      <li><strong>How it works</strong> &mdash; tool definitions withheld from context; agent searches and loads 3&ndash;5 relevant tools per query</li>
+      <li><strong>Enabled by default</strong> &mdash; configure via <code>ENABLE_TOOL_SEARCH</code> env var (<code>true</code> / <code>auto</code> / <code>auto:N</code> / <code>false</code>)</li>
+      <li><strong>Auto mode</strong> &mdash; activates when tool definitions exceed 10% of context window; <code>auto:N</code> for custom threshold</li>
+      <li><strong>Optimization</strong> &mdash; use descriptive tool names and keyword-rich descriptions for better discovery</li>
+      <li><strong>Limits</strong> &mdash; max 10,000 tools, 3&ndash;5 results per search, requires Sonnet 4+ or Opus 4+ (no Haiku)</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/en/docs/agent-sdk/tool-search" target="_blank" rel="noopener">platform.claude.com/en/docs/agent-sdk/tool-search &rarr;</a>
+  </div>
+
+  <!-- Custom Tools -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Custom Tools</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Complete guide for building in-process MCP tools with the SDK.</p>
+    <ul>
+      <li><strong>Tool definition</strong> &mdash; name, description, input schema (Zod in TS, dict/JSON Schema in Python), async handler</li>
+      <li><strong>Server creation</strong> &mdash; <code>createSdkMcpServer</code> / <code>create_sdk_mcp_server</code> wraps tools into in-process MCP servers</li>
+      <li><strong>Tool annotations</strong> &mdash; <code>readOnlyHint</code>, <code>destructiveHint</code>, <code>idempotentHint</code>, <code>openWorldHint</code> metadata</li>
+      <li><strong>Error handling</strong> &mdash; return <code>isError: true</code> to keep agent loop alive vs. throwing to stop it</li>
+      <li><strong>Rich returns</strong> &mdash; <code>text</code>, <code>image</code> (base64), and <code>resource</code> (URI-labeled content) blocks</li>
+      <li><strong>Access control</strong> &mdash; <code>tools</code> array for built-in availability, <code>allowedTools</code>/<code>disallowedTools</code> for permissions</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/en/docs/agent-sdk/custom-tools" target="_blank" rel="noopener">platform.claude.com/en/docs/agent-sdk/custom-tools &rarr;</a>
+  </div>
+
+  <!-- MCP -->
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP (Connect External Tools)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated guide for connecting agents to external MCP servers.</p>
+    <ul>
+      <li><strong>Transport types</strong> &mdash; stdio (local processes), HTTP/SSE (cloud servers), SDK MCP (in-process)</li>
+      <li><strong>Tool permissions</strong> &mdash; <code>allowedTools</code> with wildcards (<code>mcp__github__*</code>) for server-level approval</li>
+      <li><strong>Authentication</strong> &mdash; env vars for stdio, HTTP headers for remote, OAuth2 via bearer tokens</li>
+      <li><strong>Config file support</strong> &mdash; <code>.mcp.json</code> for declarative server configuration</li>
+      <li><strong>MCP tool search</strong> &mdash; now enabled by default for large tool sets</li>
+      <li><strong>Error handling</strong> &mdash; <code>system.init</code> message reports connection status per server</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/en/docs/agent-sdk/mcp" target="_blank" rel="noopener">platform.claude.com/en/docs/agent-sdk/mcp &rarr;</a>
+  </div>
+
+  <!-- Python SDK -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Python SDK Reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Now documents two interaction patterns for different use cases.</p>
+    <ul>
+      <li><strong><code>query()</code></strong> &mdash; stateless, one-off tasks; creates new session each call; best for automation scripts</li>
+      <li><strong><code>ClaudeSDKClient</code></strong> &mdash; stateful, continuous conversations with session reuse, interrupts, and follow-ups; best for chat interfaces and interactive apps</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/en/docs/agent-sdk/python" target="_blank" rel="noopener">platform.claude.com/en/docs/agent-sdk/python &rarr;</a>
+  </div>
+
+  <!-- TypeScript SDK -->
+  <div class="card">
+    <div class="card-header">
+      <h3>TypeScript SDK Reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Full API reference with a new simplified interface preview.</p>
+    <ul>
+      <li><strong>V2 interface preview</strong> &mdash; simplified <code>send()</code> and <code>stream()</code> patterns for multi-turn conversations</li>
+      <li><strong>Full API reference</strong> &mdash; <code>query()</code>, <code>tool()</code>, <code>createSdkMcpServer()</code>, and all message/option types</li>
+      <li><strong>Tool annotations</strong> &mdash; <code>ToolAnnotations</code> re-exported from MCP SDK with behavioral hint fields</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/en/docs/agent-sdk/typescript" target="_blank" rel="noopener">platform.claude.com/en/docs/agent-sdk/typescript &rarr;</a>
+  </div>
+
+  <!-- User Input -->
+  <div class="card">
+    <div class="card-header">
+      <h3>User Input &amp; Approvals</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Guide for handling tool approvals and clarifying questions in SDK applications.</p>
+    <ul>
+      <li><strong><code>canUseTool</code> callback</strong> &mdash; fires for tool approval requests and <code>AskUserQuestion</code> calls</li>
+      <li><strong>Response types</strong> &mdash; Allow (with optional input modification), Deny (with message)</li>
+      <li><strong>Clarifying questions</strong> &mdash; Claude generates multiple-choice questions; your app presents them and returns selections</li>
+      <li><strong>Option previews (TS)</strong> &mdash; <code>previewFormat: "html"</code> or <code>"markdown"</code> for visual mockups alongside choices</li>
+      <li><strong>Free-text support</strong> &mdash; allow users to type custom answers beyond Claude's predefined options</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/en/docs/agent-sdk/user-input" target="_blank" rel="noopener">platform.claude.com/en/docs/agent-sdk/user-input &rarr;</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PLATFORM -->
+  <!-- ============================================================ -->
+  <div class="section-heading">
+    <div class="icon icon-plat">&#9672;</div>
+    <h2>Claude Platform</h2>
+    <span class="count">1 doc updated</span>
+  </div>
+
+  <!-- Context Editing -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Context Editing</h3>
+      <span class="tag tag-updated">Updated</span>
+      <span class="tag tag-beta">Beta</span>
+    </div>
+    <p>New beta feature for fine-grained server-side conversation context management.</p>
+    <ul>
+      <li><strong>Tool result clearing</strong> (<code>clear_tool_uses_20250919</code>) &mdash; automatically clears oldest tool results when context exceeds threshold; ideal for agentic workflows with heavy tool use</li>
+      <li><strong>Thinking block clearing</strong> (<code>clear_thinking_20251015</code>) &mdash; manage extended thinking blocks with configurable preservation (<code>keep: "all"</code> for cache hits, or <code>{type: "thinking_turns", value: N}</code>)</li>
+      <li><strong>Server-side processing</strong> &mdash; editing happens before the prompt reaches Claude; client maintains full unmodified history</li>
+      <li><strong>Client-side SDK compaction</strong> &mdash; alternative summary-based approach via <code>tool_runner</code> in Python/TS/Ruby SDKs</li>
+      <li><strong>Beta header required</strong> &mdash; <code>context-management-2025-06-27</code></li>
+      <li><strong>Model support</strong> &mdash; all Claude 4.x models (Opus 4&ndash;4.6, Sonnet 4&ndash;4.6, Haiku 4.5)</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/en/docs/build-with-claude/context-editing" target="_blank" rel="noopener">platform.claude.com/en/docs/build-with-claude/context-editing &rarr;</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> local mirror &middot; 12 docs analyzed &middot; March 24, 2026
+  </footer>
+
+</div>
+</body>
+</html>
