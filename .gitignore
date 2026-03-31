@@ -6,6 +6,9 @@ CONTEXT.md
 .DS_Store
 Thumbs.db
 
+# Claude Code
+.claude/
+
 # Python
 __pycache__/
 *.pyc
