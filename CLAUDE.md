@@ -1,13 +1,12 @@
 # Claude Docs Changelog Generator
 
-You are generating a structured JSON changelog of Anthropic/Claude documentation updates.
+You are completing a pre-built changelog scaffold. All deterministic fields (categories, URLs, titles, icons, counts) are already filled in. You only need to write the creative fields.
 
 ## Your Task
-1. Read `CONTEXT.md` — it lists changed doc files with categories and diff excerpts
-2. For each changed file, read the FULL file from `docs-mirror/docs/` (not just the diff)
-3. Read the schema from `prompts/changelog-schema.json`
-4. Read the detailed instructions from `prompts/system-prompt.md` — it is the **single source of truth** for category mapping, URL derivation, and writing guidelines
-5. Produce a JSON object matching the schema
+1. Read the scaffold JSON in the prompt — it has `_context` per entry with diffs, previews, and keywords
+2. For each entry, fill in `summary` (one sentence) and `changes` (bullet array)
+3. Write the top-level `highlights` array (3-6 most impactful changes)
+4. Output the completed JSON without `_context` fields
 
 ## Quick Reference
 - Summarize what CHANGED, not what the doc contains
