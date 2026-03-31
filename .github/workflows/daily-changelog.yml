@@ -46,18 +46,19 @@ jobs:
         if: steps.detect.outputs.has_changes == 'false'
         run: echo "::notice::No doc changes in last ${{ env.LOOKBACK }}. Skipping."
 
-      # 5. Run claude-code-action — prompt is passed directly via GITHUB_ENV,
-      #    so Claude doesn't need to waste turns reading a file.
+      # 5. Run claude-code-action — Claude reads the pre-built prompt file.
+      #    Haiku wastes turns on permission-denied tool calls (Bash/Write/etc.),
+      #    so max-turns is set high enough to absorb ~20 denials and still finish.
       - name: Summarize with Claude
         if: steps.detect.outputs.has_changes == 'true'
         id: claude
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: ${{ env.CHANGELOG_PROMPT }}
+          prompt: Read the file /tmp/changelog-prompt.md and follow the instructions inside it exactly. Output ONLY the completed JSON.
           claude_args: >-
             --model haiku
-            --max-turns 5
+            --max-turns 30
             --allowedTools Read
             --json-schema '{"type":"object","required":["date","has_updates","highlights","sections"],"additionalProperties":false,"properties":{"date":{"type":"string"},"has_updates":{"type":"boolean"},"highlights":{"type":"array","items":{"type":"string"},"maxItems":6},"sections":{"type":"array","items":{"type":"object","required":["category","icon","docs_updated","docs_new","entries"],"additionalProperties":false,"properties":{"category":{"type":"string","enum":["Claude Code CLI","Agent SDK","API Reference","Platform","Resources","About Claude","Agents & Tools","Testing & Evaluation","Release Notes","Prompt Library","Getting Started","Other"]},"icon":{"type":"string"},"docs_updated":{"type":"integer"},"docs_new":{"type":"integer"},"entries":{"type":"array","items":{"type":"object","required":["title","is_new","summary","changes","source_url"],"additionalProperties":false,"properties":{"title":{"type":"string"},"is_new":{"type":"boolean"},"summary":{"type":"string"},"changes":{"type":"array","items":{"type":"string"}},"source_url":{"type":"string"}}}}}}}}}'
 

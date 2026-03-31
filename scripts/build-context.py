@@ -34,7 +34,6 @@ ICONS = {
 DIFF_LIMIT = 300
 DIFF_LIMIT_LARGE = 150
 SYNOPSIS_THRESHOLD = 10
-MAX_PROMPT_BYTES = 200_000  # GITHUB_ENV total file limit is 256KB
 
 
 def categorize(filename: str) -> str:
@@ -195,10 +194,9 @@ def build_scaffold(
     mirror_dir: str,
     lookback: str,
     search_index: dict,
-    diff_limit_override: int | None = None,
 ) -> dict:
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    diff_limit = diff_limit_override or (DIFF_LIMIT_LARGE if len(changed_files) > 50 else DIFF_LIMIT)
+    diff_limit = DIFF_LIMIT_LARGE if len(changed_files) > 50 else DIFF_LIMIT
 
     categories: dict[str, list[dict]] = {}
     for filename in changed_files:
@@ -311,48 +309,16 @@ def main():
             f.write("has_changes=true\n")
             f.write(f"file_count={len(changed)}\n")
 
-    # Build scaffold, retrying with smaller diffs if prompt exceeds GITHUB_ENV limit.
-    # The workflow passes CHANGELOG_PROMPT directly to Claude, so it must fit.
-    diff_limit = None  # use default
     scaffold = build_scaffold(changed, mirror_dir, lookback, search_index)
-    prompt = generate_prompt(scaffold)
-
-    while len(prompt.encode("utf-8")) > MAX_PROMPT_BYTES:
-        current = diff_limit or (DIFF_LIMIT_LARGE if len(changed) > 50 else DIFF_LIMIT)
-        diff_limit = max(30, current // 2)
-        print(f"Prompt too large ({len(prompt.encode('utf-8'))} bytes), "
-              f"reducing diff limit to {diff_limit} lines")
-        if diff_limit == 30 and current == 30:
-            break  # can't reduce further
-        scaffold = build_scaffold(changed, mirror_dir, lookback, search_index,
-                                  diff_limit_override=diff_limit)
-        prompt = generate_prompt(scaffold)
 
     with open("/tmp/changelog-scaffold.json", "w") as f:
         json.dump(scaffold, f, indent=2, ensure_ascii=False)
     print(f"Scaffold written: {len(scaffold['sections'])} sections")
 
+    prompt = generate_prompt(scaffold)
     with open("/tmp/changelog-prompt.md", "w") as f:
         f.write(prompt)
-    prompt_bytes = len(prompt.encode("utf-8"))
-    print(f"Prompt written: {len(prompt)} chars ({prompt_bytes} bytes)")
-
-    if prompt_bytes > MAX_PROMPT_BYTES:
-        print(f"::error::Prompt ({prompt_bytes} bytes) exceeds GITHUB_ENV limit "
-              f"({MAX_PROMPT_BYTES} bytes) even after reducing diffs. "
-              f"Try a shorter lookback window.", file=sys.stderr)
-        sys.exit(1)
-
-    # Write prompt to GITHUB_ENV so the workflow can pass it directly to Claude
-    # as the user message — avoids wasting turns on file reads and permission
-    # denials that cause error_max_turns failures with Haiku.
-    github_env = os.environ.get("GITHUB_ENV")
-    if github_env:
-        with open(github_env, "a") as f:
-            f.write("CHANGELOG_PROMPT<<PROMPT_EOF\n")
-            f.write(prompt)
-            f.write("\nPROMPT_EOF\n")
-        print(f"Prompt exported to GITHUB_ENV ({prompt_bytes} bytes)")
+    print(f"Prompt written: {len(prompt)} chars")
 
 
 if __name__ == "__main__":
