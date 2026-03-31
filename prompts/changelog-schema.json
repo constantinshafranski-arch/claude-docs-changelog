@@ -1,6 +1,7 @@
 {
   "type": "object",
   "required": ["date", "has_updates", "highlights", "sections"],
+  "additionalProperties": false,
   "properties": {
     "date": {
       "type": "string",
@@ -23,6 +24,7 @@
       "items": {
         "type": "object",
         "required": ["category", "icon", "docs_updated", "docs_new", "entries"],
+        "additionalProperties": false,
         "properties": {
           "category": {
             "type": "string",
@@ -58,6 +60,7 @@
             "items": {
               "type": "object",
               "required": ["title", "is_new", "summary", "changes", "source_url"],
+              "additionalProperties": false,
               "properties": {
                 "title": {
                   "type": "string",
