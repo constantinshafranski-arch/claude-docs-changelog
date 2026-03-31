@@ -324,18 +324,471 @@ body::after {
   <header>
     <h1>Claude Docs Changelog</h1>
     <div class="date">March 31, 2026</div>
-    <span class="badge">Up to date &mdash; synced Mar 31 at 12:01 UTC</span>
+    <span class="badge">Up to date &mdash; synced Mar 31 at 12:08 UTC</span>
   </header>
 
   <div class="stats">
+    <div class="stat api">
+      <div class="num">1</div>
+      <div class="label">API Reference</div>
+    </div>
+    <div class="stat about">
+      <div class="num">3</div>
+      <div class="label">About Claude</div>
+    </div>
+    <div class="stat sdk">
+      <div class="num">2</div>
+      <div class="label">Agent SDK</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">13</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">7</div>
+      <div class="label">Platform</div>
+    </div>
+    <div class="stat release">
+      <div class="num">1</div>
+      <div class="label">Release Notes</div>
+    </div>
   </div>
 
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li>Extended output on Message Batches API now supports up to 300k tokens for Claude Opus 4.6 and Sonnet 4.6 with output-300k-2026-03-24 beta header</li>
+      <li>Context-1m beta for Sonnet 4.5 and Sonnet 4 retiring April 30, 2026; only Opus 4.6 and Sonnet 4.6 now have native 1M-token context at standard pricing</li>
+      <li>Auto permission mode expanded to Team, Enterprise, and API plans across Claude Code CLI, Desktop, and VS Code</li>
+      <li>GitHub Enterprise Server now supported for Claude Code on the web, plugin marketplaces, and network configuration</li>
+      <li>Terminal setup for Claude Code on the web via /web-setup command using gh CLI credentials</li>
+      <li>Computer use now available on CLI via /mcp and Desktop setup restructured with step-by-step instructions</li>
+    </ul>
+  </div>
 
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">1 updated</span>
+  </div>
 
+  <div class="card">
+    <div class="card-header">
+      <h3>Service tiers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed long-context token multipliers for Claude Sonnet 4.5 and Sonnet 4; simplified pricing documentation.</p>
+    <ul>
+      <li><strong>long-context multipliers removed</strong> &mdash; Deleted 2x input and 1.5x output token multipliers for Sonnet 4.5/4 long-context requests (&gt;200k tokens)</li>
+      <li><strong>pricing note simplified</strong> &mdash; Updated burndown rate explanation to focus only on US-only inference pricing modifier</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/service-tiers" target="_blank" rel="noopener">platform.claude.com/docs/en/api/service-tiers &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="service-tiers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
 
+  <div class="section-heading">
+    <div class="icon icon-about">ℹ️</div>
+    <h2>About Claude</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Models overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added Message Batches 300k output support, removed 1M context beta requirements, and consolidated model comparison table.</p>
+    <ul>
+      <li><strong>300k output on batches</strong> &mdash; Added note about output-300k-2026-03-24 beta header for extended output on Message Batches API</li>
+      <li><strong>context window standardization</strong> &mdash; Updated comparison table to show all models at 200k context; removed complexity about 1M beta for Sonnet/Opus models</li>
+      <li><strong>footnote restructure</strong> &mdash; Simplified knowledge cutoff footnotes and removed special cases for Haiku training data</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/models/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="models-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>What&#x27;s new in Claude 4.6</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded output token limit documentation to include Message Batches API support for up to 300k tokens.</p>
+    <ul>
+      <li><strong>section title updated</strong> &mdash; Changed from &quot;128k output tokens&quot; to &quot;Higher output token limits&quot; to reflect broader capability</li>
+      <li><strong>batch processing 300k</strong> &mdash; Added information about output-300k-2026-03-24 beta for generating up to 300k tokens on Message Batches API</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-6" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-6 &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="what&#x27;s-new-in-claude-4.6" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Pricing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed long-context pricing section for Sonnet 4.5 and Sonnet 4; updated pricing modifier documentation.</p>
+    <ul>
+      <li><strong>long-context pricing removed</strong> &mdash; Deleted entire section describing 1M context beta pricing multipliers for Sonnet 4.5/4 (2x input, 1.5x output)</li>
+      <li><strong>pricing modifier simplified</strong> &mdash; Removed long context pricing from list of stacking modifiers; now only lists Batch API and data residency</li>
+      <li><strong>usage object guidance removed</strong> &mdash; Deleted instructions for checking usage object to determine premium long-context rates</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="pricing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-sdk">{}</div>
+    <h2>Agent SDK</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agent SDK reference - Python</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Converted context-1m-2025-08-07 beta documentation to retirement warning with April 30, 2026 deadline.</p>
+    <ul>
+      <li><strong>beta retirement warning</strong> &mdash; Changed Note to Warning about context-1m-2025-08-07 beta retiring April 30, 2026</li>
+      <li><strong>migration guidance</strong> &mdash; Added instructions to migrate to Claude Sonnet 4.6 or Opus 4.6 for 1M context</li>
+      <li><strong>400 error clarification</strong> &mdash; Documented that requests with deprecated beta header will return 400 error after retirement date</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agent-sdk/python" target="_blank" rel="noopener">platform.claude.com/docs/en/agent-sdk/python &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agent-sdk-reference---python" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agent SDK reference - TypeScript</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Converted context-1m-2025-08-07 beta documentation to retirement warning; simplified betas parameter description.</p>
+    <ul>
+      <li><strong>beta header deprecation</strong> &mdash; Replaced Note with Warning about context-1m-2025-08-07 retiring April 30, 2026</li>
+      <li><strong>parameter documentation simplified</strong> &mdash; Updated betas field description to remove specific example mentioning context-1m</li>
+      <li><strong>model guidance added</strong> &mdash; Documented migration path to Sonnet 4.6 or Opus 4.6</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agent-sdk/typescript" target="_blank" rel="noopener">platform.claude.com/docs/en/agent-sdk/typescript &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agent-sdk-reference---typescript" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">13 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added terminal-based setup with `/web-setup` command and expanded GitHub Enterprise Server support.</p>
+    <ul>
+      <li><strong>terminal setup section</strong> &mdash; Added new subsection for `/web-setup` command to configure from terminal using gh CLI</li>
+      <li><strong>GitHub Enterprise Server support</strong> &mdash; Updated limitations to document GHES instance support for Teams and Enterprise plans</li>
+      <li><strong>admin controls</strong> &mdash; Added note about admin toggle to disable quick web setup for managed deployments</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated permission mode flag descriptions and auto mode plan eligibility.</p>
+    <ul>
+      <li><strong>--enable-auto-mode flag</strong> &mdash; Updated to specify Team, Enterprise, or API plan eligibility (previously Team only)</li>
+      <li><strong>--allow-dangerously-skip-permissions description</strong> &mdash; Clarified it adds bypassPermissions to mode cycle without immediately activating</li>
+      <li><strong>--dangerously-skip-permissions clarified</strong> &mdash; Updated to clarify equivalence with --permission-mode bypassPermissions</li>
+      <li><strong>--permission-mode expanded</strong> &mdash; Added list of valid values and note about CLI flag overriding settings</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code Desktop</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Restructured computer use setup with steps component, updated permission mode availability, and added CLI computer use support.</p>
+    <ul>
+      <li><strong>computer use setup restructured</strong> &mdash; Changed to Steps component with explicit update requirement, toggle instruction, and permission granting</li>
+      <li><strong>permission modes table updated</strong> &mdash; Changed Auto mode to require Team, Enterprise, or API plans (previously Team only)</li>
+      <li><strong>computer use availability</strong> &mdash; Updated comparison table to show CLI now supports computer use via /mcp on macOS</li>
+      <li><strong>admin control noted</strong> &mdash; Added admin ability to disable bypass permissions mode</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-desktop" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Development containers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated extension names and command palette terminology for clarity.</p>
+    <ul>
+      <li><strong>extension naming updated</strong> &mdash; Changed &quot;Remote - Containers&quot; to &quot;Dev Containers extension&quot; with link to marketplace</li>
+      <li><strong>command palette help updated</strong> &mdash; Changed from &quot;Remote-Containers: Reopen in Container&quot; to &quot;Dev Containers: Reopen in Container&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/devcontainer" target="_blank" rel="noopener">code.claude.com/docs/en/devcontainer &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="development-containers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated hook behavior descriptions and expanded debugging documentation with verbose logging.</p>
+    <ul>
+      <li><strong>TaskCreated hook behavior</strong> &mdash; Changed from &quot;Prevents the task from being created&quot; to &quot;Rolls back the task creation&quot;</li>
+      <li><strong>debugging documentation</strong> &mdash; Removed note about Ctrl+O verbose mode; added CLAUDE_CODE_DEBUG_LOG_LEVEL=verbose for detailed hook matching</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified model setting behavior and added environment variable controls for model aliases.</p>
+    <ul>
+      <li><strong>model setting clarified</strong> &mdash; Explained that model is initial selection, not enforcement; users can still select Default</li>
+      <li><strong>environment variables documented</strong> &mdash; Added ANTHROPIC_DEFAULT_SONNET_MODEL, ANTHROPIC_DEFAULT_OPUS_MODEL, and ANTHROPIC_DEFAULT_HAIKU_MODEL for controlling aliases</li>
+      <li><strong>configuration example improved</strong> &mdash; Expanded example showing how to pin Sonnet 4.5 as both initial and Default selection</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added GitHub Enterprise Server firewall configuration guidance.</p>
+    <ul>
+      <li><strong>GHES firewall support</strong> &mdash; Added section for self-hosted GitHub Enterprise Server behind firewalls with IP allowlist guidance</li>
+      <li><strong>IP range allowlisting</strong> &mdash; Documented need to allowlist Anthropic API IP ranges for GHES instances</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added GitHub Enterprise Server support guidance for plugin marketplaces.</p>
+    <ul>
+      <li><strong>GHES support documented</strong> &mdash; Added note that regex pattern matching is recommended approach for GitHub Enterprise Server and self-hosted GitLab instances</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Sandboxing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated computer use documentation references.</p>
+    <ul>
+      <li><strong>computer use references updated</strong> &mdash; Added reference to CLI computer use documentation alongside Desktop documentation</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="sandboxing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Enhanced defaultMode setting documentation with valid values and flag overrides.</p>
+    <ul>
+      <li><strong>defaultMode documentation expanded</strong> &mdash; Added list of valid permission mode values and note that --permission-mode CLI flag overrides setting</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added cross-reference to agent teams feature for using subagent definitions with teammates.</p>
+    <ul>
+      <li><strong>agent teams integration</strong> &mdash; Added note that subagent definitions are available when spawning teammates; teammates inherit system prompt, tools, and model</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Optimize your terminal setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added fullscreen rendering option to reduce flicker and memory usage during long sessions.</p>
+    <ul>
+      <li><strong>fullscreen rendering section</strong> &mdash; Added new section documenting CLAUDE_CODE_NO_FLICKER=1 environment variable for alternate rendering path</li>
+      <li><strong>session performance</strong> &mdash; Noted that fullscreen mode keeps memory flat and adds mouse support for improved experience</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="optimize-your-terminal-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated plan requirements for Auto mode and bypass permissions.</p>
+    <ul>
+      <li><strong>plan eligibility updated</strong> &mdash; Changed allowDangerouslySkipPermissions extension setting to specify Team, Enterprise, or API plan for Auto mode (previously Team only)</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">7 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batch processing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added extended output section enabling up to 300k token generation on Message Batches API for Opus 4.6 and Sonnet 4.6.</p>
+    <ul>
+      <li><strong>extended output beta section</strong> &mdash; New section documenting output-300k-2026-03-24 beta header for 300k token support</li>
+      <li><strong>use cases documented</strong> &mdash; Listed long-form generation, exhaustive data extraction, code scaffolds, and reasoning chains as target use cases</li>
+      <li><strong>code examples added</strong> &mdash; Provided examples across Shell, Python, TypeScript, C#, Go, Java, PHP, and Ruby</li>
+      <li><strong>pricing and timing</strong> &mdash; Noted that standard 50% batch discount applies and requests can take over an hour to complete</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/batch-processing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/batch-processing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batch-processing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Simplified context window documentation; only Opus 4.6 and Sonnet 4.6 have 1M context.</p>
+    <ul>
+      <li><strong>context window clarification</strong> &mdash; Removed 1M context information for Sonnet 4.5; noted only Opus 4.6 and Sonnet 4.6 have 1M window</li>
+      <li><strong>beta documentation removed</strong> &mdash; Deleted note about Sonnet 4.5 1M context beta requirement</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated context window documentation to reflect that only Opus 4.6 and Sonnet 4.6 support 1M tokens.</p>
+    <ul>
+      <li><strong>context window standardized</strong> &mdash; Removed 1M context support for Sonnet 4.5 and 4; now only Opus 4.6 and Sonnet 4.6 have 1M</li>
+      <li><strong>beta header note removed</strong> &mdash; Deleted context-1m-2025-08-07 beta header requirement for earlier models</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated context window documentation to clarify 1M token support is limited to latest models only.</p>
+    <ul>
+      <li><strong>context window limitation clarified</strong> &mdash; Changed to specify only Opus 4.6 and Sonnet 4.6 have 1M context on Vertex AI</li>
+      <li><strong>beta information removed</strong> &mdash; Deleted reference to context-1m-2025-08-07 beta header requirement</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context windows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed 1M context beta requirements; simplified to reflect that Opus 4.6 and Sonnet 4.6 have native 1M support.</p>
+    <ul>
+      <li><strong>beta requirement removed</strong> &mdash; Deleted context-1m-2025-08-07 beta header requirement for Sonnet 4.5/4</li>
+      <li><strong>model context simplified</strong> &mdash; Updated to say Opus 4.6 and Sonnet 4.6 have 1M; other models have 200k</li>
+      <li><strong>interleaved thinking note removed</strong> &mdash; Removed special context window note for Sonnet 3.7</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-windows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-windows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated output token limits documentation and added Message Batches API extended output reference.</p>
+    <ul>
+      <li><strong>output token limits clarified</strong> &mdash; Updated note to specify Opus 4.6 supports 128k, Sonnet 4.6 and Haiku 4.5 support 64k</li>
+      <li><strong>batch API extended output referenced</strong> &mdash; Added mention of output-300k-2026-03-24 beta for batches with up to 300k tokens</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Simplified pricing modifier stacking documentation by removing long-context pricing reference.</p>
+    <ul>
+      <li><strong>pricing modifier simplified</strong> &mdash; Removed long context pricing from list of stacking multipliers; now only lists Batch API and data residency</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-release">📋</div>
+    <h2>Release Notes</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added announcements about 300k extended output on batches and context-1m beta retirement deadline.</p>
+    <ul>
+      <li><strong>extended output announced</strong> &mdash; Added March 30 release note about 300k max_tokens on Message Batches API with output-300k-2026-03-24 header</li>
+      <li><strong>context-1m retirement announced</strong> &mdash; Documented April 30, 2026 deadline for context-1m-2025-08-07 beta deprecation with migration guidance</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/release-notes/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
 
   <footer>
-    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 0 docs analyzed &middot; 2026-03-31
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 27 docs analyzed &middot; 2026-03-31
   </footer>
 
 </div>
