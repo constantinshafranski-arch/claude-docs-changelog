@@ -70,7 +70,9 @@ Note: `paths_manifest.json` exists in the mirror but is NOT used — its 5 broad
    - Determine category from filename prefix (see mapping below)
    - Detect new vs updated via `git log --diff-filter=A`
    - Extract diff via `git log --since=<lookback> -p -- <file>` (truncated to 300 lines)
-   - Derive source URL: `claude-code__X.md` → `https://code.claude.com/docs/en/X`; `docs__en__A__B.md` → `https://platform.claude.com/en/docs/A/B`
+   - Derive source URL:
+     - `claude-code__X.md` → strip prefix, replace `__` with `/`, drop `.md` → `https://code.claude.com/docs/en/X`
+     - `docs__en__A__B.md` → replace ALL `__` with `/`, drop `.md` → `docs/en/A/B` → `https://platform.claude.com/docs/en/A/B` (canonical, returns 200; the old `/en/docs/` path was a 307 redirect)
    - For new files or files with very short diffs (< 10 lines): also extract a file synopsis (H1 + all H2 headings, first 30 lines)
 
 4. **Build scaffold JSON** — Group entries by category, compute `docs_new` / `docs_updated` counts, assign icons
