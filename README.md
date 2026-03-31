@@ -10,9 +10,8 @@ A GitHub Actions workflow runs daily at **08:00 IST**, detects documentation cha
 GitHub Actions (daily cron)
     │
     ├─→ Clone costiash/claude-code-docs
-    ├─→ Detect changed .md files (git log --since 24h)
-    ├─→ Build CONTEXT.md with diffs
-    ├─→ Claude (via claude-code-action) reads docs + diffs → JSON
+    ├─→ build-context.py pre-computes scaffold (categories, URLs, titles, diffs)
+    ├─→ Claude fills in summaries + highlights (1 turn, 0 tool calls)
     ├─→ Format JSON → Slack Block Kit → POST webhook
     └─→ Format JSON → HTML → commit to changelogs/
 ```
@@ -22,11 +21,10 @@ GitHub Actions (daily cron)
 ```
 ├── .github/workflows/daily-changelog.yml   ← Scheduled workflow
 ├── scripts/
-│   ├── detect-changes.sh                   ← Git diff detection + context builder
+│   ├── build-context.py                    ← Pre-computes scaffold from mirror data
 │   ├── format-slack-message.py             ← JSON → Slack Block Kit payload
 │   └── format-html-changelog.py            ← JSON → styled HTML archive
 ├── prompts/
-│   ├── system-prompt.md                    ← AI summarization instructions
 │   └── changelog-schema.json              ← Enforced output schema
 ├── changelogs/                             ← Auto-committed HTML archive
 ├── CLAUDE.md                               ← Instructions for claude-code-action
@@ -71,7 +69,7 @@ HTML changelogs are auto-committed to `changelogs/YYYY-MM-DD.html` — browsable
 
 ## Cost
 
-~$3/month (Claude Sonnet API). GitHub Actions minutes are free for public repos.
+~$3/month (Claude Haiku API). GitHub Actions minutes are free for public repos.
 
 ## Timezone
 

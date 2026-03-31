@@ -120,4 +120,4 @@ jobs:
       # 8. Cleanup
       - name: Cleanup
         if: always()
-        run: rm -rf docs-mirror CONTEXT.md
+        run: rm -rf docs-mirror
