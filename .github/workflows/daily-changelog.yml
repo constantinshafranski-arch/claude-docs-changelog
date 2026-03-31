@@ -86,9 +86,14 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           cat /tmp/claude-changelog.json | python3 scripts/format-slack-message.py > /tmp/slack-payload.json
-          curl -sf -X POST "$SLACK_WEBHOOK_URL" \
-            -H 'Content-Type: application/json' -d @/tmp/slack-payload.json \
-            || echo "::warning::Slack webhook failed — continuing with HTML archive"
+          echo "Slack payload: $(wc -c < /tmp/slack-payload.json) bytes, $(python3 -c "import json; d=json.load(open('/tmp/slack-payload.json')); print(len(d.get('blocks',[])), 'blocks')")"
+          HTTP_CODE=$(curl -s -o /tmp/slack-response.txt -w '%{http_code}' -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' -d @/tmp/slack-payload.json)
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "Slack post succeeded (HTTP $HTTP_CODE)"
+          else
+            echo "::warning::Slack webhook returned HTTP $HTTP_CODE: $(cat /tmp/slack-response.txt)"
+          fi
 
       # 7. Generate and commit HTML changelog
       - name: Archive HTML changelog
