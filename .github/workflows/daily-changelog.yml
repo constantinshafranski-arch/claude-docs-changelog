@@ -56,7 +56,7 @@ jobs:
           prompt: Read the file /tmp/changelog-prompt.md and follow the instructions inside it exactly. Output ONLY the completed JSON.
           claude_args: >-
             --model haiku
-            --max-turns 3
+            --max-turns 10
             --allowedTools Read
             --json-schema '{"type":"object","required":["date","has_updates","highlights","sections"],"additionalProperties":false,"properties":{"date":{"type":"string"},"has_updates":{"type":"boolean"},"highlights":{"type":"array","items":{"type":"string"},"maxItems":6},"sections":{"type":"array","items":{"type":"object","required":["category","icon","docs_updated","docs_new","entries"],"additionalProperties":false,"properties":{"category":{"type":"string","enum":["Claude Code CLI","Agent SDK","API Reference","Platform","Resources","About Claude","Agents & Tools","Testing & Evaluation","Release Notes","Prompt Library","Getting Started","Other"]},"icon":{"type":"string"},"docs_updated":{"type":"integer"},"docs_new":{"type":"integer"},"entries":{"type":"array","items":{"type":"object","required":["title","is_new","summary","changes","source_url"],"additionalProperties":false,"properties":{"title":{"type":"string"},"is_new":{"type":"boolean"},"summary":{"type":"string"},"changes":{"type":"array","items":{"type":"string"}},"source_url":{"type":"string"}}}}}}}}}'
 
