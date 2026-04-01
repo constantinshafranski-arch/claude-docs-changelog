@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 01, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 01, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 01 at 06:43 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat sdk">
+      <div class="num">2</div>
+      <div class="label">Agent SDK</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">14</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat release">
+      <div class="num">1</div>
+      <div class="label">Release Notes</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>1M context beta retirement clarified</strong> — Agent SDK docs now specify that passing `context-1m-2025-08-07` beta header on Sonnet 4.5/4 has no effect rather than returning 400 error, with requests exceeding 200k context returning errors instead</li>
+      <li><strong>CLI reference expanded with agent teams and streaming flags</strong> — Added `--agent-teams`, `--debug-file`, `--include-partial-messages`, and `--replay-user-messages` flags plus reordered settings table for better discoverability</li>
+      <li><strong>Bedrock endpoint customization and SSO authentication fix</strong> — New `ANTHROPIC_BEDROCK_BASE_URL` environment variable for custom endpoints and troubleshooting guidance for SSO authentication loops with corporate proxies</li>
+      <li><strong>Vertex AI model region variables simplified</strong> — Updated region override syntax to use generic `VERTEX_REGION_CLAUDE_*` variables instead of model-specific names, with reference to Model Garden for availability</li>
+      <li><strong>Hook execution behavior and permission mode interactions documented</strong> — Clarified that multiple hooks run in parallel with most restrictive decision winning, and PreToolUse hooks fire before permission-mode checks and cannot be bypassed</li>
+      <li><strong>Comprehensive settings table reorganized</strong> — Reordered 60+ configuration options alphabetically, added new settings like `language`, `voiceEnabled`, `skipDangerousModePermissionPrompt`, and clarified managed-settings-only restrictions</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-sdk">{}</div>
+    <h2>Agent SDK</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agent SDK reference - Python</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated beta deprecation notice for 1M context window feature on legacy Claude Sonnet models.</p>
+    <ul>
+      <li><strong>context-1m-2025-08-07 beta behavior</strong> — Clarified that header has no effect on Sonnet 4.5 or Sonnet 4 as of April 30, 2026, with requests exceeding 200k context returning errors instead of 400 response</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agent-sdk/python" target="_blank" rel="noopener">platform.claude.com/docs/en/agent-sdk/python &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agent-sdk-reference---python" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agent SDK reference - TypeScript</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated beta deprecation notice for 1M context window feature on legacy Claude Sonnet models.</p>
+    <ul>
+      <li><strong>context-1m-2025-08-07 beta behavior</strong> — Clarified that header has no effect on Sonnet 4.5 or Sonnet 4 as of April 30, 2026, with requests exceeding 200k context returning errors instead of 400 response</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agent-sdk/typescript" target="_blank" rel="noopener">platform.claude.com/docs/en/agent-sdk/typescript &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agent-sdk-reference---typescript" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">14 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added custom endpoint support and troubleshooting guidance for SSO authentication loops with corporate proxy environments.</p>
+    <ul>
+      <li><strong>ANTHROPIC_BEDROCK_BASE_URL environment variable</strong> — New optional setting to override Bedrock endpoint URL for custom endpoints or gateways</li>
+      <li><strong>SSO authentication loop troubleshooting</strong> — Added section documenting authentication loop issue when using AWS SSO with corporate VPNs or TLS inspection proxies, with guidance to remove `awsAuthRefresh` setting or use manual `aws sso login`</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added warning about comment-triggered repository automation risks when using auto-fix feature.</p>
+    <ul>
+      <li><strong>Auto-fix automation warning</strong> — Added notice that Claude can reply on user&#x27;s behalf, potentially triggering workflows like Atlantis or Terraform Cloud on `issue_comment` events</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded CLI flags with agent teams support, streaming options, and additional debug/logging capabilities while reorganizing table for clarity.</p>
+    <ul>
+      <li><strong>--agent-teams flag</strong> — New flag to enable experimental agent teams with SendMessage, TeamCreate, and TeamDelete tools</li>
+      <li><strong>--debug-file flag</strong> — Write debug logs to specific file path with implicit debug mode enabling</li>
+      <li><strong>--include-partial-messages flag</strong> — Include partial streaming events in output, now requires --print, --output-format stream-json, and --verbose</li>
+      <li><strong>--replay-user-messages flag</strong> — Re-emit user messages from stdin to stdout for acknowledgment in streaming JSON mode</li>
+      <li><strong>--add-dir documentation enhanced</strong> — Clarified that flag grants file access and most `.claude/` config is not discovered from these directories</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adjusted CLAUDE.md size recommendation based on cost optimization best practices.</p>
+    <ul>
+      <li><strong>CLAUDE.md size target updated</strong> — Reduced recommendation from ~500 lines to under 200 lines to minimize base context and token costs</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Simplified model region configuration variables and added custom endpoint support.</p>
+    <ul>
+      <li><strong>Region variable naming simplified</strong> — Changed from model-specific `VERTEX_REGION_CLAUDE_3_5_HAIKU` style to generic `VERTEX_REGION_CLAUDE_HAIKU_4_5` pattern</li>
+      <li><strong>ANTHROPIC_VERTEX_BASE_URL environment variable</strong> — New optional setting to override Vertex endpoint URL for custom endpoints or gateways</li>
+      <li><strong>Region configuration documentation</strong> — Added guidance to check Vertex Model Garden for determining which models support global endpoints versus regional-only</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented hook execution semantics, interaction with permission modes, and limitations when multiple hooks modify tool inputs.</p>
+    <ul>
+      <li><strong>Multiple hooks execution behavior</strong> — Clarified that hooks run in parallel and most restrictive permission decision wins, with deny blocking even in bypassPermissions mode</li>
+      <li><strong>Hook result merging rules</strong> — Documented that multiple PreToolUse hooks have non-deterministic ordering when rewriting tool arguments, and last one to finish wins</li>
+      <li><strong>PreToolUse and permission mode interaction</strong> — Hooks fire before permission-mode checks and can enforce policy that users cannot bypass, but cannot loosen restrictions below permission rule limits</li>
+      <li><strong>Command hook limitations expanded</strong> — Clarified that text from `additionalContext` is injected as system reminder that Claude reads as plain text, not as command/tool trigger</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added alternative keyboard shortcut for accepting command suggestions.</p>
+    <ul>
+      <li><strong>Right arrow suggestion acceptance</strong> — Added Right arrow key as alternative to Tab for accepting command suggestions, improving accessibility</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected tool name reference and clarified ToolSearch disabling method.</p>
+    <ul>
+      <li><strong>ToolSearch tool naming clarified</strong> — Updated from `MCPSearch` to `ToolSearch` in permission rules example</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated environment variable naming for interactive initialization flow.</p>
+    <ul>
+      <li><strong>CLAUDE_CODE_NEW_INIT environment variable corrected</strong> — Changed from `true` value to `1` for enabling interactive multi-phase `/init` flow</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Sandboxing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified sandbox filesystem configuration precedence and managed settings behavior.</p>
+    <ul>
+      <li><strong>allowManagedReadPathsOnly clarification</strong> — Documented that `denyRead` still merges from all settings sources even when this setting is enabled</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="sandboxing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Reorganized 60+ configuration options alphabetically and added new settings for language, voice, auto mode, and managed restrictions.</p>
+    <ul>
+      <li><strong>Settings table reorganization</strong> — Reordered all configuration keys alphabetically for improved discoverability</li>
+      <li><strong>New settings added</strong> — `language` (response language), `voiceEnabled` (voice dictation), `skipDangerousModePermissionPrompt`, `allowManagedReadPathsOnly`, `allowedChannelPlugins`, `blockedMarketplaces`, `channelsEnabled`, `defaultShell`, `disabledMcpjsonServers`, `enableAllProjectMcpServers`, `enabledMcpjsonServers`, `fastModePerSessionOptIn`, `feedbackSurveyRate`, `fileSuggestion`, `forceLoginMethod`, `forceLoginOrgUUID`, `prefersReducedMotion`, `strictKnownMarketplaces`</li>
+      <li><strong>Permission settings expanded</strong> — Added `skipDangerousModePermissionPrompt` to control confirmation before entering bypass permissions mode</li>
+      <li><strong>Managed settings documentation enhanced</strong> — Clarified which settings apply only to managed-settings.json and how restriction precedence works across scopes</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified skills discovery behavior in additional directories and noted configuration exclusions.</p>
+    <ul>
+      <li><strong>Skills loading from additional directories</strong> — Documented that `.claude/skills/` in added directories is an exception to configuration discovery rules and loads automatically</li>
+      <li><strong>Configuration exclusions documented</strong> — Added that subagents, commands, and output styles are NOT loaded from additional directories, with reference to exceptions table</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented agent teams requirement for subagent resumption and added note about project subagent discovery.</p>
+    <ul>
+      <li><strong>SendMessage tool availability</strong> — Clarified that `SendMessage` tool for resuming subagents is only available when agent teams are enabled via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` or `--agent-teams` flag</li>
+      <li><strong>Project subagent discovery scope</strong> — Noted that directories added with `--add-dir` do not scan for subagents; to share subagents across projects use `~/.claude/agents/` or plugins</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Optimize your terminal setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added Ctrl+J as universal line break method for terminal environments without Shift+Enter support.</p>
+    <ul>
+      <li><strong>Ctrl+J line break method</strong> — Documented Ctrl+J as terminal-agnostic way to insert newlines that works without configuration</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="optimize-your-terminal-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-release">📋</div>
+    <h2>Release Notes</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified behavior of retiring 1M context window beta for legacy Claude Sonnet models.</p>
+    <ul>
+      <li><strong>1M context beta retirement clarification</strong> — Updated to specify that `context-1m-2025-08-07` beta header has no effect on Sonnet 4.5/4 as of April 30, 2026, with requests exceeding 200k context returning errors rather than 400 response code</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/release-notes/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 17 docs analyzed &middot; 2026-04-01
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
