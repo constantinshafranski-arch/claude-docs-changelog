@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 02, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 02, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 02 at 06:10 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">1</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">13</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">3</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>PermissionDenied hook event</strong> — New hook that fires when auto mode denies a tool call, enabling integration with external processes to log denials and request retries</li>
+      <li><strong>Defer tool calls in non-interactive mode</strong> — PreToolUse hooks can return permissionDecision: &quot;defer&quot; to pause at tool calls and resume later, enabling Agent SDK apps to collect input through custom UIs</li>
+      <li><strong>HIPAA-compliant API access</strong> — Claude API now supports HIPAA compliance alongside ZDR, with signed BAA and feature eligibility table covering PHI handling safeguards</li>
+      <li><strong>Strict tool use data retention</strong> — Added section documenting HIPAA eligibility and schema caching for strict tool use (grammar-constrained sampling)</li>
+      <li><strong>Enhanced binary verification</strong> — Release manifests now signed with GPG keys; updated setup guide covers signature verification and platform-specific code signing</li>
+      <li><strong>Extended thinking display control</strong> — New showThinkingSummaries setting controls whether thinking block summaries appear in interactive mode</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Strict tool use</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added data retention section documenting HIPAA eligibility and schema caching for strict tool use with grammar-constrained sampling.</p>
+    <ul>
+      <li><strong>Data retention documentation</strong> — Strict tool use is HIPAA eligible but PHI must not be included in input_schema definitions; schemas cached separately for up to 24 hours</li>
+      <li><strong>PHI handling guidelines</strong> — Clarified that PHI should only appear in message content where HIPAA protections apply, not in schema property names, enum values, const values, or pattern regex</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="strict-tool-use" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">13 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated thinking token charging clarification and thinking display behavior in interactive mode.</p>
+    <ul>
+      <li><strong>Thinking token billing</strong> — Clarified users are charged for all thinking tokens used even when summaries are redacted by the API</li>
+      <li><strong>Thinking display in interactive mode</strong> — Thinking appears as collapsed stub by default; set showThinkingSummaries: true in settings.json to show full summaries</li>
+      <li><strong>Pipe formatting</strong> — Fixed backtick formatting for --output-format flag in tips</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added PermissionDenied hook event to the lifecycle, enabling handling of auto mode classifier denials with retry capability.</p>
+    <ul>
+      <li><strong>PermissionDenied hook event</strong> — New event fires when auto mode classifier denies a tool call; return {retry: true} to tell model it may retry</li>
+      <li><strong>Tool event matchers</strong> — PermissionDenied now included in tool events that support tool name matchers and if field filtering</li>
+      <li><strong>Hook precedence rules</strong> — When multiple PreToolUse hooks return different decisions, precedence is deny &gt; defer &gt; ask &gt; allow</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Comprehensive updates to hook system including new PermissionDenied event, defer mechanism for non-interactive mode, and output length limits.</p>
+    <ul>
+      <li><strong>PermissionDenied hook documentation</strong> — New hook event fires in auto mode when classifier denies tool calls; input includes tool_name, tool_input, tool_use_id, and reason</li>
+      <li><strong>Defer tool calls for later</strong> — PreToolUse hooks can return permissionDecision: &quot;defer&quot; in -p mode to pause and let calling process resume with answer via Agent SDK</li>
+      <li><strong>Deferred tool use payload</strong> — Includes id, name, and input fields; session remains on disk until resumed; exit with stop_reason: &quot;tool_deferred&quot;</li>
+      <li><strong>PreToolUse decision values</strong> — Expanded from three (allow/deny/ask) to four with &quot;defer&quot; option for non-interactive integration</li>
+      <li><strong>Hook output length limit</strong> — Output injected into context capped at 10,000 characters; excess saved to file with preview and path</li>
+      <li><strong>Tool lifecycle diagram</strong> — Updated diagram shows PermissionDenied as side branch from PermissionRequest for auto-mode denials</li>
+      <li><strong>Exit code 2 behavior table</strong> — PermissionDenied row added showing exit code ignored; use JSON hookSpecificOutput.retry: true instead</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added automatic bash mode entry when pasting text starting with exclamation mark.</p>
+    <ul>
+      <li><strong>Bash mode auto-entry</strong> — Pasting text starting with ! into empty prompt now automatically enters bash mode, matching typed ! behavior</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated CDN documentation to include signing keys alongside executables and manifests.</p>
+    <ul>
+      <li><strong>downloads.claude.ai URLs</strong> — Updated description to include signing keys in addition to install script, version pointers, manifests, and executables</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Output styles</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed misleading statement about efficiency instructions and documented token usage impact of styles.</p>
+    <ul>
+      <li><strong>Token usage documentation</strong> — Added explanation that built-in Explanatory and Learning styles produce longer responses by design, increasing output tokens</li>
+      <li><strong>Prompt caching benefit</strong> — Noted that adding style instructions to system prompt increases input tokens but prompt caching reduces cost after first request</li>
+      <li><strong>Custom style token impact</strong> — Clarified that output tokens for custom styles depend on instructions provided</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/output-styles" target="_blank" rel="noopener">code.claude.com/docs/en/output-styles &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="output-styles" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added clarification for Windows users to distinguish between PowerShell and CMD prompts.</p>
+    <ul>
+      <li><strong>PowerShell vs CMD detection</strong> — Added troubleshooting note: if token &#x27;&amp;&amp;&#x27; error appears, user is in PowerShell not CMD; prompts show PS C:\ in PowerShell</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added note clarifying that relative paths in marketplace sources resolve against main checkout, not worktrees.</p>
+    <ul>
+      <li><strong>Worktree and path resolution</strong> — Relative paths in directory or file sources resolve against repository main checkout; all worktrees share same marketplace location</li>
+      <li><strong>Marketplace state storage</strong> — Clarified marketplace state stored once per user in ~/.claude/plugins/known_marketplaces.json, not per project</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added PermissionDenied hook event to plugin hook support documentation.</p>
+    <ul>
+      <li><strong>Plugin hook events</strong> — PermissionDenied event now supported for plugins; can use to handle auto mode denials with same retry mechanism</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added PowerShell detection help for Windows users running install command.</p>
+    <ul>
+      <li><strong>Windows shell detection guide</strong> — Added note to distinguish PowerShell from CMD; error about &amp;&amp; token separator indicates wrong shell</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated settings table with cleanupPeriodDays minimum constraint, forceLoginOrgUUID array support, and new showThinkingSummaries setting.</p>
+    <ul>
+      <li><strong>cleanupPeriodDays validation</strong> — Changed to require minimum 1; setting to 0 rejected with error; use --no-session-persistence flag instead for non-interactive mode</li>
+      <li><strong>forceLoginOrgUUID flexibility</strong> — Now accepts single UUID string or array of UUIDs; empty array in managed settings fails closed and blocks login</li>
+      <li><strong>showThinkingSummaries setting</strong> — New boolean setting controls whether extended thinking summaries appear; defaults to false in interactive mode, true in -p and SDK</li>
+      <li><strong>allowedHttpHookUrls clarification</strong> — Removed (Managed settings only) label; setting applies to all scopes</li>
+      <li><strong>Settings table expansion</strong> — Significantly expanded descriptions with compliance and behavioral details</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added comprehensive binary integrity verification section with GPG signature validation and platform code signing details.</p>
+    <ul>
+      <li><strong>GPG manifest signature verification</strong> — New step-by-step guide to download and verify signed release manifest; includes fingerprint confirmation</li>
+      <li><strong>SHA256 checksum verification</strong> — Added commands for Linux, macOS, and Windows PowerShell to verify binary checksums against manifest</li>
+      <li><strong>Platform code signatures</strong> — Documented macOS codesign verification, Windows Authenticode verification, and Linux manifest-based verification</li>
+      <li><strong>Manifest availability note</strong> — Signatures available for releases 2.1.89 onward; earlier versions publish checksums without detached signature</li>
+      <li><strong>Fixed code block themes</strong> — Standardized code block theming across bash, powershell, and batch examples</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated subagent mention behavior to show running background subagents with status in typeahead picker.</p>
+    <ul>
+      <li><strong>Background subagent display</strong> — Named background subagents currently running appear in @-mention typeahead showing their status</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>API and data retention</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Major expansion adding HIPAA-compliant API access as alternative to ZDR, with comprehensive compliance guidance and PHI handling restrictions.</p>
+    <ul>
+      <li><strong>HIPAA compliance section</strong> — Claude API now supports HIPAA-compliant integrations with signed BAA for organizations handling protected health information (PHI)</li>
+      <li><strong>HIPAA eligibility table</strong> — Feature eligibility table expanded with HIPAA compliance column; HIPAA-enabled organizations get 400 errors for non-eligible features</li>
+      <li><strong>PHI handling guidelines</strong> — Do not include PHI in JSON schema property names, enum values, const values, or pattern regex; PHI only in message content</li>
+      <li><strong>HIPAA error handling</strong> — API returns 400 invalid_request_error when HIPAA organization requests non-eligible features</li>
+      <li><strong>Feature eligibility restructuring</strong> — Renamed from ZDR eligibility table to feature eligibility table covering both ZDR and HIPAA columns</li>
+      <li><strong>Web fetch HIPAA status</strong> — Marked not eligible for HIPAA compliance despite ZDR eligibility</li>
+      <li><strong>Context management HIPAA restrictions</strong> — Compaction and context editing not eligible for HIPAA compliance</li>
+      <li><strong>Structured outputs HIPAA eligibility</strong> — Added as HIPAA eligible with schema caching PHI restrictions</li>
+      <li><strong>FAQ expansion</strong> — Added questions on HIPAA vs ZDR differences, whether both needed, non-eligible feature behavior, and single org limitations</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/api-and-data-retention" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/api-and-data-retention &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="api-and-data-retention" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Features overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated reference link from ZDR eligibility table to feature eligibility table.</p>
+    <ul>
+      <li><strong>Feature eligibility link</strong> — Updated footnote reference to point to feature-eligibility section instead of zdr-eligibility-by-feature</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="features-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added HIPAA eligibility section with PHI restrictions on schema definitions.</p>
+    <ul>
+      <li><strong>HIPAA eligibility</strong> — Structured outputs HIPAA eligible but PHI must not be in schema definitions</li>
+      <li><strong>PHI schema restrictions</strong> — Schemas cached separately from message content without same PHI protections; do not include PHI in property names, enums, consts, or patterns</li>
+      <li><strong>Data retention reference</strong> — Updated to reference API and data retention page for both ZDR and HIPAA eligibility details</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 17 docs analyzed &middot; 2026-04-02
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
