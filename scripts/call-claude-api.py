@@ -22,7 +22,7 @@ OUTPUT_PATH = "/tmp/claude-changelog.json"
 
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 16384
-CHAR_BUDGET = 3_200_000  # ~800k tokens, safe margin within Sonnet's 1M window
+CHAR_BUDGET = 2_000_000  # ~667k tokens at ~3 chars/token, safe within Sonnet's 1M window
 
 # Same schema that was previously passed via --json-schema
 CHANGELOG_SCHEMA = {
