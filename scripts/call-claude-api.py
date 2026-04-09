@@ -87,9 +87,81 @@ TOOLS = [{
 TOOL_CHOICE = {"type": "tool", "name": "output_changelog"}
 
 
+# ---------------------------------------------------------------------------
+# Validation helpers — defense-in-depth for API responses
+# ---------------------------------------------------------------------------
+
+def validate_entry(entry: object, context: str) -> dict | None:
+    """Validate and normalize a single entry. Returns cleaned entry or None."""
+    if not isinstance(entry, dict):
+        print(f"Warning: {context}: dropping non-dict entry ({type(entry).__name__})", file=sys.stderr)
+        return None
+    required = ("title", "is_new", "summary", "changes", "source_url")
+    for field in required:
+        if field not in entry:
+            print(f"Warning: {context}: entry missing '{field}' (title={entry.get('title', '?')!r})", file=sys.stderr)
+    changes = entry.get("changes", [])
+    if not isinstance(changes, list):
+        print(f"Warning: {context}: 'changes' is {type(changes).__name__}, resetting to []", file=sys.stderr)
+        entry["changes"] = []
+    else:
+        entry["changes"] = [c for c in changes if isinstance(c, str)]
+    return entry
+
+
+def validate_api_response(chunk_data: object, label: str) -> dict:
+    """Validate structure returned by a single API call. Returns cleaned data."""
+    empty = {"date": "", "has_updates": True, "highlights": [], "sections": []}
+    if not isinstance(chunk_data, dict):
+        print(f"Error: {label}: API returned {type(chunk_data).__name__}, expected dict", file=sys.stderr)
+        return empty
+
+    # Validate sections
+    sections = chunk_data.get("sections", [])
+    if not isinstance(sections, list):
+        print(f"Warning: {label}: 'sections' is {type(sections).__name__}, treating as empty", file=sys.stderr)
+        sections = []
+
+    cleaned_sections = []
+    for i, section in enumerate(sections):
+        if not isinstance(section, dict):
+            print(f"Warning: {label}: sections[{i}] is {type(section).__name__}, skipping", file=sys.stderr)
+            continue
+        if "category" not in section:
+            print(f"Warning: {label}: sections[{i}] missing 'category', skipping", file=sys.stderr)
+            continue
+        cat = section["category"]
+        entries = section.get("entries", [])
+        if not isinstance(entries, list):
+            print(f"Warning: {label}: {cat} entries is {type(entries).__name__}, treating as empty", file=sys.stderr)
+            entries = []
+        cleaned_entries = []
+        for j, entry in enumerate(entries):
+            clean = validate_entry(entry, f"{label}/{cat}[{j}]")
+            if clean is not None:
+                cleaned_entries.append(clean)
+        section["entries"] = cleaned_entries
+        cleaned_sections.append(section)
+
+    chunk_data["sections"] = cleaned_sections
+
+    # Validate highlights
+    highlights = chunk_data.get("highlights", [])
+    if not isinstance(highlights, list):
+        chunk_data["highlights"] = []
+    else:
+        chunk_data["highlights"] = [h for h in highlights if isinstance(h, str)]
+
+    return chunk_data
+
+
+# ---------------------------------------------------------------------------
+# API and prompt helpers
+# ---------------------------------------------------------------------------
+
 def call_api(client: anthropic.Anthropic, prompt: str) -> dict:
     """Make a single API call and return the structured JSON from tool use."""
-    estimated_tokens = len(prompt) // 4
+    estimated_tokens = len(prompt) // 3
     print(f"  API call: ~{estimated_tokens:,} estimated input tokens")
 
     try:
@@ -186,6 +258,21 @@ def split_into_chunks(
     return chunks
 
 
+def recount_section_stats(sections: list[dict]) -> None:
+    """Recalculate docs_updated/docs_new from actual entries."""
+    for section in sections:
+        entries = section.get("entries", [])
+        new_count = sum(1 for e in entries if isinstance(e, dict) and e.get("is_new"))
+        updated_count = len(entries) - new_count
+        old_new = section.get("docs_new", 0)
+        old_updated = section.get("docs_updated", 0)
+        if old_new != new_count or old_updated != updated_count:
+            print(f"  Recount {section.get('category', '?')}: "
+                  f"{old_updated}u+{old_new}n -> {updated_count}u+{new_count}n")
+        section["docs_updated"] = updated_count
+        section["docs_new"] = new_count
+
+
 def main():
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
@@ -217,11 +304,13 @@ def main():
         print(f"Prompt loaded: {len(prompt):,} chars (combined mode)")
         client = anthropic.Anthropic(api_key=api_key)
         data = call_api(client, prompt)
+        data = validate_api_response(data, "single-call")
     else:
         sections = scaffold.get("sections", [])
+        scaffold_entry_count = sum(len(s.get("entries", [])) for s in sections)
         full_prompt = build_chunk_prompt(instructions, scaffold, sections)
         prompt_size = len(full_prompt)
-        print(f"Prompt size: {prompt_size:,} chars ({prompt_size // 4:,} estimated tokens)")
+        print(f"Prompt size: {prompt_size:,} chars ({prompt_size // 3:,} estimated tokens)")
 
         client = anthropic.Anthropic(api_key=api_key)
 
@@ -229,6 +318,7 @@ def main():
             # Single call — fits in context
             print("Single API call (within budget)")
             data = call_api(client, full_prompt)
+            data = validate_api_response(data, "single-call")
         else:
             # Split sections into chunks that fit
             chunks = split_into_chunks(instructions, sections)
@@ -241,17 +331,62 @@ def main():
                 cat_names = [s["category"] for s in chunk_sections]
                 print(f"Chunk {i + 1}/{len(chunks)}: {', '.join(cat_names)}")
                 chunk_prompt = build_chunk_prompt(instructions, scaffold, chunk_sections)
+
+                # Defense-in-depth: warn if chunk is close to context limit
+                est_tokens = len(chunk_prompt) // 3
+                if est_tokens > 900_000:
+                    print(f"  Warning: chunk is ~{est_tokens:,} tokens, close to 1M limit", file=sys.stderr)
+
                 chunk_data = call_api(client, chunk_prompt)
+                chunk_data = validate_api_response(chunk_data, f"chunk {i + 1}/{len(chunks)}")
 
                 all_sections.extend(chunk_data.get("sections", []))
                 all_highlights.extend(chunk_data.get("highlights", []))
 
-            # Merge: deduplicate highlights, cap at 6
-            seen = set()
+            # Data loss tracking
+            response_entry_count = sum(len(s.get("entries", [])) for s in all_sections)
+            if response_entry_count < scaffold_entry_count:
+                print(f"Warning: API returned {response_entry_count} entries, "
+                      f"scaffold had {scaffold_entry_count} "
+                      f"({scaffold_entry_count - response_entry_count} dropped)",
+                      file=sys.stderr)
+
+            # Merge sections with the same category
+            merged_sections: dict[str, dict] = {}
+            for section in all_sections:
+                cat = section["category"]
+                if cat in merged_sections:
+                    merged_sections[cat]["entries"].extend(section.get("entries", []))
+                else:
+                    merged_sections[cat] = {**section, "entries": list(section.get("entries", []))}
+
+            # Preserve original scaffold ordering
+            scaffold_order = [s["category"] for s in sections]
+            ordered_sections = []
+            seen_cats: set[str] = set()
+            for cat in scaffold_order:
+                if cat in merged_sections and cat not in seen_cats:
+                    ordered_sections.append(merged_sections[cat])
+                    seen_cats.add(cat)
+            for cat, sec in merged_sections.items():
+                if cat not in seen_cats:
+                    ordered_sections.append(sec)
+
+            # Recalculate counts from actual merged entries
+            recount_section_stats(ordered_sections)
+
+            # Data loss tracking (post-merge)
+            merged_entry_count = sum(len(s.get("entries", [])) for s in ordered_sections)
+            if merged_entry_count < response_entry_count:
+                print(f"Warning: merge reduced entries from {response_entry_count} "
+                      f"to {merged_entry_count}", file=sys.stderr)
+
+            # Deduplicate highlights, cap at 6
+            seen_h: set[str] = set()
             unique_highlights = []
             for h in all_highlights:
-                if h not in seen:
-                    seen.add(h)
+                if h not in seen_h:
+                    seen_h.add(h)
                     unique_highlights.append(h)
             unique_highlights = unique_highlights[:6]
 
@@ -259,13 +394,14 @@ def main():
                 "date": scaffold["date"],
                 "has_updates": True,
                 "highlights": unique_highlights,
-                "sections": all_sections,
+                "sections": ordered_sections,
             }
 
     # Strip _context fields (safety net)
     for section in data.get("sections", []):
         for entry in section.get("entries", []):
-            entry.pop("_context", None)
+            if isinstance(entry, dict):
+                entry.pop("_context", None)
 
     with open(OUTPUT_PATH, "w") as f:
         json.dump(data, f)

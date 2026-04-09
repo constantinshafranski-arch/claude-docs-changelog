@@ -91,6 +91,7 @@ def build_changelog_payload(data: dict) -> dict:
     highlights = data.get("highlights", [])
     sections = data.get("sections", [])
 
+    sections = [s for s in sections if isinstance(s, dict)]
     total_docs = sum(s.get("docs_updated", 0) + s.get("docs_new", 0) for s in sections)
 
     blocks = []
@@ -130,6 +131,8 @@ def build_changelog_payload(data: dict) -> dict:
 
     # ── Category sections ──
     for section in sections:
+        if not isinstance(section, dict):
+            continue
         cat = section.get("category", "Unknown")
         icon = get_icon(cat)
         docs_updated = section.get("docs_updated", 0)
@@ -150,10 +153,14 @@ def build_changelog_payload(data: dict) -> dict:
 
         # Each entry
         for entry in section.get("entries", []):
+            if not isinstance(entry, dict):
+                continue
             title = entry.get("title", "Untitled")
             is_new = entry.get("is_new", False)
             summary = entry.get("summary", "")
             changes = entry.get("changes", [])
+            if not isinstance(changes, list):
+                changes = []
             source_url = sanitize_url(entry.get("source_url", ""))
 
             tag = ":new:" if is_new else ":pencil:"

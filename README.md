@@ -1,8 +1,8 @@
 # Claude Docs Changelog
 
-Automated daily changelog of Anthropic's Claude documentation updates, delivered to Slack.
+Automated daily changelog of Anthropic's Claude documentation updates, delivered to Slack and archived as HTML.
 
-A GitHub Actions workflow runs daily at **08:00 IST**, detects documentation changes from the community-maintained [claude-code-docs](https://github.com/costiash/claude-code-docs) mirror, uses Claude to generate structured summaries, posts them to Slack, and archives styled HTML changelogs in this repo.
+A GitHub Actions workflow runs daily at **08:00 IST**, detects documentation changes from the community-maintained [claude-code-docs](https://github.com/costiash/claude-code-docs) mirror, uses Claude Sonnet 4.6 to generate structured summaries, posts them to Slack, and archives styled HTML changelogs in this repo.
 
 ## How It Works
 
@@ -10,10 +10,10 @@ A GitHub Actions workflow runs daily at **08:00 IST**, detects documentation cha
 GitHub Actions (daily cron)
     │
     ├─→ Clone costiash/claude-code-docs
-    ├─→ build-context.py pre-computes scaffold (categories, URLs, titles, diffs)
-    ├─→ Claude fills in summaries + highlights (1 turn, 0 tool calls)
-    ├─→ Format JSON → Slack Block Kit → POST webhook
-    └─→ Format JSON → HTML → commit to changelogs/
+    ├─→ build-context.py: scaffold with categories, titles, diffs, SDK grouping
+    ├─→ call-claude-api.py: Sonnet 4.6 fills summaries + highlights (chunked if >2M chars)
+    ├─→ format-slack-message.py: JSON → Slack Block Kit → POST webhook
+    └─→ format-html-changelog.py: JSON → styled HTML → commit to changelogs/
 ```
 
 ## Repository Structure
@@ -22,14 +22,21 @@ GitHub Actions (daily cron)
 ├── .github/workflows/daily-changelog.yml   ← Scheduled workflow
 ├── scripts/
 │   ├── build-context.py                    ← Pre-computes scaffold from mirror data
+│   ├── call-claude-api.py                  ← Anthropic API with chunking + merge
 │   ├── format-slack-message.py             ← JSON → Slack Block Kit payload
 │   └── format-html-changelog.py            ← JSON → styled HTML archive
-├── prompts/
-│   └── changelog-schema.json              ← Enforced output schema
 ├── changelogs/                             ← Auto-committed HTML archive
-├── CLAUDE.md                               ← Instructions for claude-code-action
+├── CLAUDE.md                               ← Instructions for the summarization model
 └── README.md
 ```
+
+## Key Features
+
+- **Automatic chunking**: Large doc updates (800+ files) are split into chunks that fit within Sonnet 4.6's 1M token context, then merged by category
+- **SDK grouping**: API endpoints documented in 7 SDKs are collapsed into single entries
+- **Deterministic titles**: API endpoint titles derived from markdown headings + endpoint paths (no content guessing)
+- **Defense-in-depth**: API responses validated per-chunk, section counts recalculated after merge, malformed entries logged and skipped
+- **Dual output**: Slack Block Kit messages + self-contained dark-theme HTML changelogs
 
 ## Setup
 
@@ -65,11 +72,11 @@ Use the `lookback` input to set a wider window (e.g., `72 hours ago`) to guarant
 
 ## Changelog Archive
 
-HTML changelogs are auto-committed to `changelogs/YYYY-MM-DD.html` — browsable directly on GitHub or locally.
+HTML changelogs are auto-committed to `changelogs/YYYY-MM-DD.html` and published via GitHub Pages.
 
 ## Cost
 
-~$3/month (Claude Haiku API). GitHub Actions minutes are free for public repos.
+~$5-15/run depending on doc volume (Claude Sonnet 4.6 API). GitHub Actions minutes are free for public repos.
 
 ## Timezone
 

@@ -142,15 +142,62 @@ def get_diff(filename: str, mirror_dir: str, lookback: str, limit: int) -> str:
 
 
 def extract_h1(filepath: str) -> str | None:
+    """Extract title from markdown headings only. No content guessing."""
     try:
         with open(filepath) as f:
-            for line in f:
-                m = re.match(r"^#\s+(.+)$", line.strip())
-                if m:
-                    return m.group(1)
+            lines = [l.rstrip() for l in f.readlines()[:10]]
     except FileNotFoundError:
-        pass
+        return None
+    for line in lines:
+        m = re.match(r"^#\s+(.+)$", line)
+        if m:
+            return m.group(1)
+    for line in lines:
+        m = re.match(r"^##\s+(.+)$", line)
+        if m:
+            return m.group(1)
     return None
+
+
+def extract_api_title(filepath: str) -> str | None:
+    """Build a deterministic title for API endpoint docs from heading + endpoint path.
+
+    Parses the ## heading (operation verb) and the HTTP method line (resource path),
+    then combines them: "Archive" + "/v1/agents/{id}/archive" → "Archive Agents".
+    """
+    try:
+        with open(filepath) as f:
+            lines = [l.rstrip() for l in f.readlines()[:10]]
+    except FileNotFoundError:
+        return None
+
+    heading = None
+    path = None
+    for line in lines:
+        if not heading:
+            m = re.match(r"^##\s+(.+)$", line)
+            if m:
+                heading = m.group(1).strip()
+        if not path:
+            m = re.match(r"^\*\*(?:get|post|put|patch|delete)\*\*\s+`(/[^`]+)`", line)
+            if m:
+                path = m.group(1)
+    if not heading:
+        return None
+    if not path:
+        return heading
+
+    # Extract resource segments: /v1/agents/{id}/archive → ["agents"]
+    segments = [s for s in path.split("/")
+                if s and s != "v1" and not s.startswith("{")]
+    # Drop trailing action that matches the heading
+    if segments and segments[-1].lower() == heading.lower():
+        segments = segments[:-1]
+    if not segments:
+        return heading
+
+    resource = segments[-1].replace("_", " ").replace("-", " ").title()
+    return f"{heading} {resource}"
 
 
 def humanize_filename(filename: str) -> str:
@@ -250,11 +297,16 @@ def group_api_entries(entries: list[dict]) -> list[dict]:
 
 def get_title(filename: str, search_index: dict, mirror_dir: str) -> str:
     entry = search_index.get(filename)
-    if entry and entry.get("title"):
+    if entry and entry.get("title") and entry["title"] != "Untitled":
         return entry["title"]
     filepath = os.path.join(mirror_dir, filename)
+    # For API endpoint docs, use deterministic heading+path title
+    if categorize(filename) == "API Reference":
+        api_title = extract_api_title(filepath)
+        if api_title:
+            return api_title
     h1 = extract_h1(filepath)
-    if h1:
+    if h1 and h1.strip():
         return h1
     return humanize_filename(filename)
 
@@ -382,6 +434,45 @@ all categories, same bullet format.
 Output ONLY the completed JSON. No markdown fences, no explanation."""
 
 
+def validate_scaffold(scaffold: dict) -> list[str]:
+    """Validate scaffold structure. Returns list of warnings (empty = clean)."""
+    warnings = []
+    if not scaffold.get("sections"):
+        warnings.append("Scaffold has no sections")
+        return warnings
+
+    for i, section in enumerate(scaffold["sections"]):
+        cat = section.get("category", "<missing>")
+        for field in ("category", "icon", "docs_updated", "docs_new", "entries"):
+            if field not in section:
+                warnings.append(f"Section {i} ({cat}): missing '{field}'")
+
+        entries = section.get("entries", [])
+        if not isinstance(entries, list):
+            warnings.append(f"Section {i} ({cat}): 'entries' is {type(entries).__name__}, not list")
+            continue
+
+        actual_new = sum(1 for e in entries if isinstance(e, dict) and e.get("is_new"))
+        actual_updated = len(entries) - actual_new
+        for j, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                warnings.append(f"Section {i} ({cat}), entry {j}: not a dict")
+                continue
+            title = entry.get("title", "")
+            if not title or title == "Untitled":
+                warnings.append(f"Section {i} ({cat}), entry {j}: title is {title!r}")
+            if "source_url" not in entry:
+                warnings.append(f"Section {i} ({cat}), entry {j} ({title}): missing source_url")
+
+        if section.get("docs_new", 0) != actual_new or section.get("docs_updated", 0) != actual_updated:
+            warnings.append(
+                f"Section {i} ({cat}): count mismatch — "
+                f"declared {section.get('docs_updated', 0)}u+{section.get('docs_new', 0)}n, "
+                f"actual {actual_updated}u+{actual_new}n"
+            )
+    return warnings
+
+
 def generate_prompt(scaffold: dict) -> str:
     scaffold_json = json.dumps(scaffold, indent=2, ensure_ascii=False)
     return f"""{PROMPT_INSTRUCTIONS}
@@ -422,6 +513,14 @@ def main():
             f.write(f"file_count={len(changed)}\n")
 
     scaffold = build_scaffold(changed, mirror_dir, lookback, search_index)
+
+    warnings = validate_scaffold(scaffold)
+    for w in warnings:
+        print(f"Warning: {w}", file=sys.stderr)
+    if warnings:
+        print(f"Scaffold validation: {len(warnings)} warnings")
+    else:
+        print("Scaffold validation: clean")
 
     with open("/tmp/changelog-scaffold.json", "w") as f:
         json.dump(scaffold, f, indent=2, ensure_ascii=False)

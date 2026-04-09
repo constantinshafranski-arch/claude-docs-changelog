@@ -379,11 +379,15 @@ def format_date_display(date_str: str) -> str:
 
 
 def render_entry(entry: dict) -> str:
-    title = escape(entry.get("title", "Untitled"))
-    is_new = entry.get("is_new", False)
-    summary = escape(entry.get("summary", ""))
+    if not isinstance(entry, dict):
+        return f"  <!-- skipped non-dict entry: {type(entry).__name__} -->"
+    title = escape(str(entry.get("title", "Untitled")))
+    is_new = bool(entry.get("is_new", False))
+    summary = sanitize_html(str(entry.get("summary", "")))
     changes = entry.get("changes", [])
-    source_url = entry.get("source_url", "")
+    if not isinstance(changes, list):
+        changes = []
+    source_url = str(entry.get("source_url", ""))
 
     tag_class = "tag-new" if is_new else "tag-updated"
     tag_text = "New" if is_new else "Updated"
@@ -391,8 +395,9 @@ def render_entry(entry: dict) -> str:
     changes_html = ""
     if changes:
         items = "\n".join(
-            f"      <li>{sanitize_html(change)}</li>"
+            f"      <li>{sanitize_html(str(change))}</li>"
             for change in changes
+            if isinstance(change, str)
         )
         changes_html = f"\n    <ul>\n{items}\n    </ul>"
 
@@ -424,6 +429,8 @@ def render_entry(entry: dict) -> str:
 
 
 def render_section(section: dict) -> str:
+    if not isinstance(section, dict):
+        return f"  <!-- skipped non-dict section: {type(section).__name__} -->"
     category = section.get("category", "Other")
     icon_char, icon_class, _ = ICON_MAP.get(
         category, ("📄", "icon-other", "other")
@@ -438,7 +445,10 @@ def render_section(section: dict) -> str:
         count_parts.append(f"{docs_updated} updated")
     count_str = " + ".join(count_parts) if count_parts else "0 docs"
 
-    entries_html = "\n\n".join(render_entry(e) for e in section.get("entries", []))
+    entries = section.get("entries", [])
+    if not isinstance(entries, list):
+        entries = []
+    entries_html = "\n\n".join(render_entry(e) for e in entries)
 
     return f"""  <div class="section-heading">
     <div class="icon {icon_class}">{icon_char}</div>
@@ -452,7 +462,9 @@ def render_section(section: dict) -> str:
 def render_html(data: dict) -> str:
     date_str = data.get("date", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
     highlights = data.get("highlights", [])
-    sections = data.get("sections", [])
+    if not isinstance(highlights, list):
+        highlights = []
+    sections = [s for s in data.get("sections", []) if isinstance(s, dict)]
 
     date_display = format_date_display(date_str)
     now_utc = datetime.now(timezone.utc).strftime("%b %d at %H:%M UTC")
@@ -568,6 +580,13 @@ def main():
     except json.JSONDecodeError as e:
         print(f"<!-- ERROR: Invalid JSON: {e} -->", file=sys.stderr)
         sys.exit(1)
+
+    if not isinstance(data, dict):
+        print(f"<!-- ERROR: Expected JSON object, got {type(data).__name__} -->", file=sys.stderr)
+        sys.exit(1)
+
+    if "sections" not in data:
+        print("Warning: JSON has no 'sections' key", file=sys.stderr)
 
     print(render_html(data))
 
