@@ -94,6 +94,120 @@ class TestGeneratePrompt:
         assert "```json" not in prompt
 
 
+class TestCategorizeManaged:
+    def test_managed_agents(self):
+        assert bc.categorize("docs/docs__en__managed-agents__overview.md") == "Managed Agents"
+        assert bc.categorize("docs/docs__en__managed-agents__sessions.md") == "Managed Agents"
+
+
+class TestExtractSdkKey:
+    def test_python_sdk(self):
+        result = bc.extract_sdk_key("docs/docs__en__api__python__beta__agents__create.md")
+        assert result == ("python", "beta__agents__create.md")
+
+    def test_typescript_sdk(self):
+        result = bc.extract_sdk_key("docs/docs__en__api__typescript__beta__sessions__list.md")
+        assert result == ("typescript", "beta__sessions__list.md")
+
+    def test_cli_sdk(self):
+        result = bc.extract_sdk_key("docs/docs__en__api__cli__beta__agents__create.md")
+        assert result == ("cli", "beta__agents__create.md")
+
+    def test_all_languages(self):
+        for lang in ("python", "typescript", "ruby", "go", "csharp", "java", "cli"):
+            result = bc.extract_sdk_key(f"docs/docs__en__api__{lang}__beta__agents.md")
+            assert result is not None
+            assert result[0] == lang
+
+    def test_core_api_returns_none(self):
+        assert bc.extract_sdk_key("docs/docs__en__api__beta__agents__create.md") is None
+
+    def test_non_api_returns_none(self):
+        assert bc.extract_sdk_key("docs/claude-code__hooks.md") is None
+
+    def test_single_segment_returns_none(self):
+        assert bc.extract_sdk_key("docs/docs__en__api__messages.md") is None
+
+
+class TestGroupApiEntries:
+    def _make_entry(self, lang, endpoint, is_new=False):
+        url = f"https://platform.claude.com/docs/en/api/{lang}/{endpoint.replace('__', '/').removesuffix('.md')}"
+        return {
+            "title": f"{endpoint.replace('__', ' ').removesuffix('.md').title()}",
+            "is_new": is_new,
+            "summary": "",
+            "changes": [],
+            "source_url": url,
+            "_context": {"diff": f"diff for {lang}", "keywords": ["test"]},
+        }
+
+    def _make_core_entry(self, name):
+        return {
+            "title": name,
+            "is_new": False,
+            "summary": "",
+            "changes": [],
+            "source_url": f"https://platform.claude.com/docs/en/api/{name}",
+            "_context": {"diff": "core diff"},
+        }
+
+    def test_groups_same_endpoint(self):
+        entries = [
+            self._make_entry("python", "beta__agents__create.md"),
+            self._make_entry("typescript", "beta__agents__create.md"),
+            self._make_entry("ruby", "beta__agents__create.md"),
+        ]
+        result = bc.group_api_entries(entries)
+        assert len(result) == 1
+        assert "(3 SDKs)" in result[0]["title"]
+
+    def test_preserves_core_entries(self):
+        entries = [
+            self._make_core_entry("messages"),
+            self._make_entry("python", "beta__agents__create.md"),
+            self._make_entry("typescript", "beta__agents__create.md"),
+        ]
+        result = bc.group_api_entries(entries)
+        # 1 core + 1 grouped
+        assert len(result) == 2
+        core = [e for e in result if "SDKs)" not in e["title"]]
+        assert len(core) == 1
+
+    def test_single_language_not_grouped(self):
+        entries = [self._make_entry("python", "beta__special.md")]
+        result = bc.group_api_entries(entries)
+        assert len(result) == 1
+        assert "SDKs)" not in result[0]["title"]
+
+    def test_representative_prefers_python(self):
+        entries = [
+            self._make_entry("ruby", "beta__agents.md"),
+            self._make_entry("python", "beta__agents.md"),
+            self._make_entry("go", "beta__agents.md"),
+        ]
+        result = bc.group_api_entries(entries)
+        assert len(result) == 1
+        assert "python" in result[0]["source_url"]
+
+    def test_is_new_any(self):
+        entries = [
+            self._make_entry("python", "beta__new.md", is_new=False),
+            self._make_entry("typescript", "beta__new.md", is_new=True),
+        ]
+        result = bc.group_api_entries(entries)
+        assert result[0]["is_new"] is True
+
+    def test_sdk_languages_in_context(self):
+        entries = [
+            self._make_entry("python", "beta__agents.md"),
+            self._make_entry("go", "beta__agents.md"),
+        ]
+        result = bc.group_api_entries(entries)
+        langs = result[0]["_context"]["sdk_languages"]
+        assert "go" in langs
+        assert "python" in langs
+
+
 class TestLoadSearchIndex:
     def test_missing_file_returns_empty(self, tmp_path):
         result = bc.load_search_index(str(tmp_path))

@@ -20,6 +20,7 @@ ICONS = {
     "Claude Code CLI": ">_",
     "Agent SDK": "{}",
     "API Reference": "\u26a1",
+    "Managed Agents": "\u25c8",
     "Platform": "\u25c8",
     "Resources": "\U0001f4da",
     "About Claude": "\u2139\ufe0f",
@@ -35,6 +36,8 @@ DIFF_LIMIT = 300
 DIFF_LIMIT_LARGE = 150
 SYNOPSIS_THRESHOLD = 10
 
+SDK_LANGUAGES = {"python", "typescript", "ruby", "go", "csharp", "java", "cli"}
+
 
 def categorize(filename: str) -> str:
     name = filename.removeprefix("docs/")
@@ -42,6 +45,8 @@ def categorize(filename: str) -> str:
         return "Claude Code CLI"
     if name.startswith("docs__en__agent-sdk__"):
         return "Agent SDK"
+    if name.startswith("docs__en__managed-agents__"):
+        return "Managed Agents"
     if name.startswith("docs__en__api__"):
         return "API Reference"
     if name.startswith("docs__en__build-with-claude__") or name.startswith("docs__en__build-"):
@@ -158,6 +163,91 @@ def humanize_filename(filename: str) -> str:
     return last_segment.replace("-", " ").replace("_", " ").title()
 
 
+def extract_sdk_key(filename: str) -> tuple[str, str] | None:
+    """Detect SDK-language API docs and return (language, endpoint_path).
+
+    Matches patterns like docs/docs__en__api__python__beta__agents__create.md
+    Returns None for core API docs or non-API files.
+    """
+    name = filename.removeprefix("docs/")
+    prefix = "docs__en__api__"
+    if not name.startswith(prefix):
+        return None
+    rest = name[len(prefix):]
+    # Extract the first segment (potential SDK language)
+    parts = rest.split("__", 1)
+    if len(parts) < 2:
+        return None
+    lang = parts[0]
+    if lang not in SDK_LANGUAGES:
+        return None
+    return (lang, parts[1])
+
+
+def group_api_entries(entries: list[dict]) -> list[dict]:
+    """Collapse SDK-language variants of the same endpoint into one entry.
+
+    For each unique endpoint path documented in multiple SDK languages,
+    keeps one representative entry (preferring Python, then TypeScript).
+    """
+    core = []
+    sdk_by_endpoint: dict[str, list[tuple[str, dict]]] = {}
+
+    for entry in entries:
+        # Recover filename from source_url to check SDK pattern
+        url = entry.get("source_url", "")
+        # Reconstruct filename from URL for matching
+        # Platform URLs: https://platform.claude.com/docs/en/api/...
+        path = url.replace("https://platform.claude.com/", "").replace("/", "__") + ".md"
+        sdk_key = extract_sdk_key("docs/" + path)
+
+        if sdk_key is None:
+            core.append(entry)
+        else:
+            lang, endpoint = sdk_key
+            sdk_by_endpoint.setdefault(endpoint, []).append((lang, entry))
+
+    grouped = []
+    singles = []
+
+    # Preferred representative order
+    pref = ["python", "typescript", "ruby", "go", "csharp", "java", "cli"]
+
+    for endpoint, variants in sorted(sdk_by_endpoint.items()):
+        if len(variants) == 1:
+            singles.append(variants[0][1])
+            continue
+
+        langs = {lang for lang, _ in variants}
+        # Pick representative
+        rep_entry = None
+        for p in pref:
+            for lang, entry in variants:
+                if lang == p:
+                    rep_entry = entry
+                    break
+            if rep_entry:
+                break
+        if rep_entry is None:
+            rep_entry = variants[0][1]
+
+        # Build grouped entry
+        grouped_entry = {
+            "title": f"{rep_entry['title']} ({len(variants)} SDKs)",
+            "is_new": any(e["is_new"] for _, e in variants),
+            "summary": "",
+            "changes": [],
+            "source_url": rep_entry["source_url"],
+            "_context": {
+                **rep_entry.get("_context", {}),
+                "sdk_languages": sorted(langs),
+            },
+        }
+        grouped.append(grouped_entry)
+
+    return core + grouped + singles
+
+
 def get_title(filename: str, search_index: dict, mirror_dir: str) -> str:
     entry = search_index.get(filename)
     if entry and entry.get("title"):
@@ -196,7 +286,15 @@ def build_scaffold(
     search_index: dict,
 ) -> dict:
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    diff_limit = DIFF_LIMIT_LARGE if len(changed_files) > 50 else DIFF_LIMIT
+    file_count = len(changed_files)
+    if file_count > 500:
+        diff_limit = 50
+    elif file_count > 200:
+        diff_limit = 75
+    elif file_count > 50:
+        diff_limit = DIFF_LIMIT_LARGE
+    else:
+        diff_limit = DIFF_LIMIT
 
     categories: dict[str, list[dict]] = {}
     for filename in changed_files:
@@ -229,6 +327,14 @@ def build_scaffold(
         }
         categories.setdefault(cat, []).append(entry)
 
+    # Group SDK-language duplicates within API Reference
+    if "API Reference" in categories:
+        before = len(categories["API Reference"])
+        categories["API Reference"] = group_api_entries(categories["API Reference"])
+        after = len(categories["API Reference"])
+        if before != after:
+            print(f"SDK grouping: {before} API entries → {after} grouped entries")
+
     sections = []
     for cat_name, entries in sorted(categories.items()):
         new_count = sum(1 for e in entries if e["is_new"])
@@ -248,9 +354,7 @@ def build_scaffold(
     }
 
 
-def generate_prompt(scaffold: dict) -> str:
-    scaffold_json = json.dumps(scaffold, indent=2, ensure_ascii=False)
-    return f"""You are a technical writer generating a changelog for a development team.
+PROMPT_INSTRUCTIONS = """You are a technical writer generating a changelog for a development team.
 
 # Task
 
@@ -271,12 +375,20 @@ all categories, same bullet format.
 - Write for senior engineers — be specific about APIs, configs, features
 - Use &mdash; (not --) for em dashes in bullets
 - Do NOT include _context fields in your output
+- For grouped SDK entries (title ending with "N SDKs"), summarize the endpoint
+  once and note which SDKs are covered. Do not write separate summaries per language.
+- If entries were omitted due to volume, mention this in highlights.
+
+Output ONLY the completed JSON. No markdown fences, no explanation."""
+
+
+def generate_prompt(scaffold: dict) -> str:
+    scaffold_json = json.dumps(scaffold, indent=2, ensure_ascii=False)
+    return f"""{PROMPT_INSTRUCTIONS}
 
 # Scaffold
 
-{scaffold_json}
-
-Output ONLY the completed JSON. No markdown fences, no explanation."""
+{scaffold_json}"""
 
 
 def main():
@@ -319,6 +431,10 @@ def main():
     with open("/tmp/changelog-prompt.md", "w") as f:
         f.write(prompt)
     print(f"Prompt written: {len(prompt)} chars")
+
+    with open("/tmp/changelog-instructions.md", "w") as f:
+        f.write(PROMPT_INSTRUCTIONS)
+    print(f"Instructions written: {len(PROMPT_INSTRUCTIONS)} chars")
 
 
 if __name__ == "__main__":

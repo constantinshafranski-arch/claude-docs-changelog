@@ -45,6 +45,7 @@ ICON_MAP = {
     "Claude Code CLI": ("&gt;_", "icon-cli", "cli"),
     "Agent SDK": ("{}", "icon-sdk", "sdk"),
     "API Reference": ("⚡", "icon-api", "api"),
+    "Managed Agents": ("◈", "icon-managed", "managed"),
     "Platform": ("◈", "icon-plat", "plat"),
     "Resources": ("📚", "icon-res", "res"),
     "About Claude": ("ℹ️", "icon-about", "about"),

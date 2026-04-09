@@ -66,6 +66,7 @@ CATEGORY_META = {
     "Claude Code CLI":      (":computer:", "CLI"),
     "Agent SDK":            (":gear:", "SDK"),
     "API Reference":        (":zap:", "API"),
+    "Managed Agents":       (":robot_face:", "Agents"),
     "Platform":             (":large_blue_diamond:", "Platform"),
     "Resources":            (":books:", "Resources"),
     "About Claude":         (":bulb:", "About"),
@@ -177,25 +178,46 @@ def build_changelog_payload(data: dict) -> dict:
             })
 
     # ── Footer ──
+    html_url = f"{PAGES_BASE}/{date_str}.html"
     blocks.append({"type": "divider"})
+    blocks.append({
+        "type": "section",
+        "text": {"type": "mrkdwn", "text": f":page_facing_up: *<{html_url}|View Full HTML Report>*"},
+        "accessory": {
+            "type": "button",
+            "text": {"type": "plain_text", "text": "Open Report", "emoji": True},
+            "url": html_url,
+            "action_id": "open_report",
+        },
+    })
     blocks.append({
         "type": "context",
         "elements": [{
             "type": "mrkdwn",
             "text": (
-                f":page_facing_up: <{PAGES_BASE}/{date_str}.html|*View full HTML report*>"
-                f"   •   Generated from <https://github.com/costiash/claude-code-docs|claude-code-docs>"
-                f"   •   {total_docs} docs analyzed"
+                f"Generated from <https://github.com/costiash/claude-code-docs|claude-code-docs>"
+                f"  •  {total_docs} docs analyzed"
             ),
         }],
     })
 
     # Enforce 50-block limit
     if len(blocks) > 50:
-        blocks = blocks[:49]
+        html_url = f"{PAGES_BASE}/{date_str}.html"
+        blocks = blocks[:48]
+        blocks.append({
+            "type": "section",
+            "text": {"type": "mrkdwn", "text": f"_…truncated_ — *<{html_url}|View Full HTML Report>*"},
+            "accessory": {
+                "type": "button",
+                "text": {"type": "plain_text", "text": "Open Report", "emoji": True},
+                "url": html_url,
+                "action_id": "open_report_truncated",
+            },
+        })
         blocks.append({
             "type": "context",
-            "elements": [{"type": "mrkdwn", "text": f"_…truncated — <{PAGES_BASE}/{date_str}.html|view full report>_"}],
+            "elements": [{"type": "mrkdwn", "text": f"Generated from <https://github.com/costiash/claude-code-docs|claude-code-docs>  •  {total_docs} docs analyzed"}],
         })
 
     return {"blocks": blocks}
