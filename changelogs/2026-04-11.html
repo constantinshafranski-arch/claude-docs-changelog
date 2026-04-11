@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 11, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 11, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 11 at 05:59 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">2</div>
+      <div class="label">API Reference</div>
+    </div>
+    <div class="stat about">
+      <div class="num">1</div>
+      <div class="label">About Claude</div>
+    </div>
+    <div class="stat tools">
+      <div class="num">2</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">19</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">1</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">6</div>
+      <div class="label">Platform (1 new)</div>
+    </div>
+    <div class="stat release">
+      <div class="num">1</div>
+      <div class="label">Release Notes</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>New doc: Claude in Amazon Bedrock (research preview)</strong> &mdash; Full guide for the new Messages API endpoint at <code>/anthropic/v1/messages</code> on AWS-managed infrastructure with zero operator access, available in <code>us-east-1</code> via invite; covers Bedrock service role, IAM assumed role, and bearer token auth paths across Python, TypeScript, Go, Java, C#, PHP, and Ruby SDKs.</li>
+      <li><strong>Code execution tool model matrix</strong> &mdash; Model compatibility table expanded to explicitly list supported models per tool version; <code>code_execution_20260120</code> (REPL state persistence + programmatic tool calling) is now documented as limited to Opus 4.5+ and Sonnet 4.5+, while <code>code_execution_20250825</code> covers a broader set including Haiku 4.5 and Opus 4.1.</li>
+      <li><strong>Enterprise network config: CA certificate store control</strong> &mdash; New <code>CLAUDE_CODE_CERT_STORE</code> environment variable added, accepting comma-separated <code>bundled</code> and/or <code>system</code> values to control which CA roots Claude Code trusts; documents that TLS-inspection proxies (CrowdStrike Falcon, Zscaler) work automatically when their root is in the OS store.</li>
+      <li><strong>Structured outputs: PHP class-based helper and TypeScript <code>jsonSchemaOutputFormat()</code></strong> &mdash; PHP SDK now supports <code>StructuredOutputModel</code> interface with <code>outputConfig: [&#x27;format&#x27; =&gt; MyClass::class]</code>; TypeScript SDK adds <code>jsonSchemaOutputFormat()</code> helper with compile-time type inference from <code>as const</code> JSON Schema literals.</li>
+      <li><strong>Homebrew two-cask split</strong> &mdash; <code>claude-code</code> now tracks the stable release channel (~1 week behind) and <code>claude-code@latest</code> tracks the latest channel; documented across Overview, Quickstart, Setup, and Troubleshooting pages.</li>
+      <li><strong>allowManagedHooksOnly exemption for force-enabled plugins</strong> &mdash; Hooks from plugins force-enabled via managed settings <code>enabledPlugins</code> are now exempt from the <code>allowManagedHooksOnly</code> block, enabling administrators to distribute vetted hooks through an organization marketplace.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Client SDKs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Amazon Bedrock platform link in the deployment options table to point to the renamed doc path.</p>
+    <ul>
+      <li><strong>Amazon Bedrock link</strong> &mdash; Updated internal link from <code>/claude-in-amazon-bedrock</code> to <code>/claude-on-amazon-bedrock</code> in the supported platforms table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/client-sdks" target="_blank" rel="noopener">platform.claude.com/docs/en/api/client-sdks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="client-sdks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>API Overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the Amazon Bedrock documentation link in the third-party platform table.</p>
+    <ul>
+      <li><strong>Amazon Bedrock link</strong> &mdash; Updated table entry from <code>claude-in-amazon-bedrock</code> to <code>claude-on-amazon-bedrock</code> to match the canonical doc path.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/api/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="api-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-about">ℹ️</div>
+    <h2>About Claude</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Pricing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed the AWS Bedrock link in the third-party platform pricing section to use the correct doc path.</p>
+    <ul>
+      <li><strong>AWS Bedrock link</strong> &mdash; Updated link from <code>/claude-in-amazon-bedrock</code> to <code>/claude-on-amazon-bedrock</code> in the third-party platform pricing section.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="pricing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the generic model compatibility statement with a full per-model table showing which tool versions each model supports.</p>
+    <ul>
+      <li><strong>Model compatibility table</strong> &mdash; Added explicit table listing supported tool versions per model: <code>code_execution_20260120</code> is available on Opus 4.5+, Sonnet 4.5+, Opus 4.6, and Sonnet 4.6 only; <code>code_execution_20250825</code> covers those plus Haiku 4.5, Opus 4.1, Opus 4, Sonnet 4, Sonnet 3.7, and Haiku 3.5.</li>
+      <li><strong>Version note clarification</strong> &mdash; Revised the version note to clearly state that <code>code_execution_20260120</code> (REPL state persistence and programmatic tool calling from within the sandbox) is restricted to Opus 4.5+ and Sonnet 4.5+, not all supported models.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Programmatic tool calling</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the generic tool reference pointer with an inline model compatibility table specifying which models support <code>code_execution_20260120</code> for programmatic tool calling.</p>
+    <ul>
+      <li><strong>Model compatibility table</strong> &mdash; Added explicit table showing that programmatic tool calling (requiring <code>code_execution_20260120</code>) is supported on Opus 4.6, Sonnet 4.6, Opus 4.5, and Sonnet 4.5 only.</li>
+      <li><strong>Cross-reference</strong> &mdash; Replaced the generic tool reference link with a direct link to the code execution tool model compatibility table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="programmatic-tool-calling" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">19 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a contact-sales CTA component and documented that <code>ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION</code> also applies to the Bedrock Mantle endpoint.</p>
+    <ul>
+      <li><strong>Contact sales CTA</strong> &mdash; Added an experiment-gated <code>ContactSalesCard</code> component linking to enterprise plans and sales contact for organizations deploying Claude Code via Bedrock.</li>
+      <li><strong>ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION</strong> &mdash; Clarified in both the environment variable comment and the Mantle variables table that this variable applies to the Bedrock Mantle endpoint in addition to standard Bedrock.</li>
+      <li><strong>Mantle variables table</strong> &mdash; Added <code>ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION</code> as a new row documenting its purpose of overriding the AWS region for the Haiku-class model, shared with Bedrock.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated cost estimates to reflect enterprise deployment data, replacing per-user averages with figures based on active-day usage patterns.</p>
+    <ul>
+      <li><strong>Cost estimates</strong> &mdash; Replaced the previous ~$6/day and $100-200/month estimates with updated enterprise figures: ~$13 per developer per active day and $150-250 per developer per month, with 90th-percentile cap raised from $12 to $30 per active day.</li>
+      <li><strong>Pilot guidance</strong> &mdash; Moved the recommendation to start with a small pilot group from the footer paragraph into the opening description, removing the redundant footer sentence.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Development containers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added and then reverted an <code>AgentInstructions</code> feedback block in the same update batch; net content change is neutral.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; A feedback-submission instructions block was added in one commit and removed in a subsequent commit within the same update batch, resulting in no net content change to the published page.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/devcontainer" target="_blank" rel="noopener">code.claude.com/docs/en/devcontainer &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="development-containers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a contact-sales CTA component at the top of the page for organizations deploying Claude Code via Vertex AI.</p>
+    <ul>
+      <li><strong>Contact sales CTA</strong> &mdash; Added an experiment-gated <code>ContactSalesCard</code> component (surface: <code>vertex</code>) linking to enterprise plans and the Anthropic sales contact form.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified how to add a second event type to an existing hooks configuration by providing a concrete multi-event JSON example.</p>
+    <ul>
+      <li><strong>Multi-event hooks example</strong> &mdash; Replaced the prose description of merging a <code>Notification</code> entry into an existing <code>hooks</code> block with an annotated JSON example showing <code>PostToolUse</code> and <code>Notification</code> as sibling keys within a single <code>hooks</code> object.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that plugins force-enabled via managed settings <code>enabledPlugins</code> are exempt from the <code>allowManagedHooksOnly</code> block.</p>
+    <ul>
+      <li><strong>allowManagedHooksOnly exemption</strong> &mdash; Clarified that hooks from plugins listed in managed settings <code>enabledPlugins</code> are loaded even when <code>allowManagedHooksOnly</code> is <code>true</code>, enabling administrators to distribute vetted hooks through an organization marketplace while blocking all other plugin hooks; trust is scoped by full <code>plugin@marketplace</code> ID.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Rewrote the MCP scope precedence section to define a clear 5-level hierarchy including plugins and claude.ai connectors, and clarified how duplicate detection differs between scopes.</p>
+    <ul>
+      <li><strong>Scope precedence hierarchy</strong> &mdash; Replaced prose description with a numbered list: local &gt; project &gt; user &gt; plugin-provided servers &gt; claude.ai connectors; when the same server exists at multiple scopes, Claude Code connects once using the highest-precedence definition.</li>
+      <li><strong>Duplicate detection</strong> &mdash; Clarified that the three named scopes match duplicates by server name, while plugins and connectors match by endpoint (URL or command), so a connector pointing to the same URL as an already-configured server is treated as a duplicate.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the cross-reference link to the sessions management page from the related resources section.</p>
+    <ul>
+      <li><strong>Related resources</strong> &mdash; Removed the bullet linking to the <code>Manage sessions</code> page from the bottom-of-page related links list.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a contact-sales CTA component at the top of the page for organizations deploying Claude Code via Microsoft Foundry.</p>
+    <ul>
+      <li><strong>Contact sales CTA</strong> &mdash; Added an experiment-gated <code>ContactSalesCard</code> component (surface: <code>foundry</code>) linking to enterprise plans and the Anthropic sales contact form.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/microsoft-foundry" target="_blank" rel="noopener">code.claude.com/docs/en/microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Extended <code>TRACEPARENT</code> propagation documentation to include PowerShell subprocesses in addition to Bash.</p>
+    <ul>
+      <li><strong>TRACEPARENT propagation</strong> &mdash; Updated the distributed tracing note to state that both Bash and PowerShell subprocesses automatically inherit the <code>TRACEPARENT</code> W3C trace context environment variable when tracing is active.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new CA certificate store section documenting the <code>CLAUDE_CODE_CERT_STORE</code> environment variable and its interaction with enterprise TLS-inspection proxies.</p>
+    <ul>
+      <li><strong>CLAUDE_CODE_CERT_STORE</strong> &mdash; New environment variable accepting comma-separated <code>bundled</code> and/or <code>system</code> values; default is <code>bundled,system</code>, merging Mozilla CA set with the OS trust store.</li>
+      <li><strong>TLS-inspection proxy support</strong> &mdash; Documented that enterprise proxies such as CrowdStrike Falcon and Zscaler work without additional configuration when their root certificate is installed in the OS trust store (native binary only; Node.js runtime requires <code>NODE_EXTRA_CA_CERTS</code>).</li>
+      <li><strong>Settings.json integration</strong> &mdash; Noted that <code>CLAUDE_CODE_CERT_STORE</code> has no dedicated schema key and must be set via the <code>env</code> block in <code>settings.json</code> or directly in the process environment.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented the two Homebrew casks (<code>claude-code</code> for stable, <code>claude-code@latest</code> for latest) and cleaned up duplicate <code>theme</code> attributes in code blocks.</p>
+    <ul>
+      <li><strong>Homebrew two-cask split</strong> &mdash; Added description that <code>claude-code</code> tracks the stable release channel (~1 week behind, skips regressions) and <code>claude-code@latest</code> tracks the latest channel; updated upgrade instructions accordingly.</li>
+      <li><strong>Code block cleanup</strong> &mdash; Removed duplicate <code>theme={null}</code> attributes from bash, powershell, and batch code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added documentation for the <code>claude-code@latest</code> Homebrew cask alongside the existing stable cask.</p>
+    <ul>
+      <li><strong>Homebrew cask options</strong> &mdash; Documented that <code>claude-code</code> tracks stable and <code>claude-code@latest</code> tracks the latest release channel; updated the upgrade command note to cover both casks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>allowManagedHooksOnly</code> setting description to reflect that force-enabled plugin hooks are exempt from the block.</p>
+    <ul>
+      <li><strong>allowManagedHooksOnly description</strong> &mdash; Updated the settings table entry and the Hook configuration behavior block to clarify that hooks from plugins force-enabled in managed settings <code>enabledPlugins</code> are still loaded; trust is granted by full <code>plugin@marketplace</code> ID, so same-named plugins from different marketplaces remain blocked.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Comprehensively updated installation, upgrade, and uninstall instructions to cover the new <code>claude-code@latest</code> Homebrew cask alongside the stable <code>claude-code</code> cask.</p>
+    <ul>
+      <li><strong>Homebrew two-cask split</strong> &mdash; Added explanation that <code>claude-code</code> tracks stable and <code>claude-code@latest</code> tracks latest; updated install, upgrade, cleanup, and uninstall commands for both casks.</li>
+      <li><strong>Release channel note</strong> &mdash; Added note that Homebrew installations choose a channel by cask name rather than the <code>autoUpdateChannel</code> setting.</li>
+      <li><strong>brew cleanup command</strong> &mdash; Simplified to <code>brew cleanup</code> (without specifying the cask name) in the disk-space reclaim note.</li>
+      <li><strong>Code block cleanup</strong> &mdash; Removed duplicate <code>theme={null}</code> attributes from bash, powershell, and batch code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that transient notifications such as the context-low warning cycle through the status line area, not just persistent system notifications.</p>
+    <ul>
+      <li><strong>Status line notifications</strong> &mdash; Updated description to specify that transient notifications (e.g., context-low warning) cycle through the right side of the status line row in addition to persistent system notifications like MCP server errors and auto-updates.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented subagent working-directory behavior, clarifying that <code>cd</code> commands do not persist between tool calls and do not affect the parent conversation&#x27;s working directory.</p>
+    <ul>
+      <li><strong>Working directory behavior</strong> &mdash; Added explanation that a subagent starts in the main conversation&#x27;s current working directory; <code>cd</code> commands within Bash or PowerShell tool calls do not persist between calls and do not propagate to the parent session.</li>
+      <li><strong>Isolation option</strong> &mdash; Cross-referenced <code>isolation: worktree</code> frontmatter field as the mechanism to give a subagent an isolated copy of the repository.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a contact-sales CTA component for organizations evaluating enterprise deployment options.</p>
+    <ul>
+      <li><strong>Contact sales CTA</strong> &mdash; Added an experiment-gated <code>ContactSalesCard</code> component (surface: <code>third_party_overview</code>) linking to enterprise plans and the Anthropic sales contact form.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a second Windows TLS error code to the certificate revocation workaround and updated Homebrew uninstall instructions for the new cask naming.</p>
+    <ul>
+      <li><strong>Windows TLS error codes</strong> &mdash; Added <code>CRYPT_E_NO_REVOCATION_CHECK (0x80092012)</code> alongside the existing <code>CRYPT_E_REVOCATION_OFFLINE (0x80092013)</code> as a trigger for applying the <code>--ssl-revoke-best-effort</code> workaround.</li>
+      <li><strong>Homebrew uninstall note</strong> &mdash; Updated the macOS Homebrew removal instruction to mention that <code>claude-code@latest</code> cask users should substitute the correct cask name.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Migration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated two internal links to the Claude Agent SDK overview to point to the correct <code>code.claude.com</code> domain.</p>
+    <ul>
+      <li><strong>Claude Agent SDK links</strong> &mdash; Changed two references to <code>/docs/en/agent-sdk/overview</code> from platform-relative paths to absolute <code>https://code.claude.com/docs/en/agent-sdk/overview</code> URLs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/migration" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/migration &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="migration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">1 new + 5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Amazon Bedrock (research preview)</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New guide for the Messages API research preview on Amazon Bedrock: covers the <code>/anthropic/v1/messages</code> endpoint with AWS-native SigV4 auth and SSE streaming, three authentication paths (Bedrock service role, IAM assumed role, bearer token), SDK installation for Python/TypeScript/Go/Java/C#/PHP/Ruby, and feature availability, quotas, regions, and observability details.</p>
+    <ul>
+      <li><strong>New endpoint</strong> &mdash; Documents <code>https://bedrock-mantle.{region}.api.aws/anthropic/v1/messages</code> as the research preview endpoint, using the same request shape as the first-party Claude API with zero operator access (Anthropic has no access to inference infrastructure).</li>
+      <li><strong>Authentication options</strong> &mdash; Three paths documented: Bedrock service role (recommended, AWS-managed keys), IAM assumed roles (12-hour max session, identity-federated), and bearer tokens (<code>aws-bedrock-token-generator</code> CLI, 12-hour max, least preferred).</li>
+      <li><strong>SDK support</strong> &mdash; Installation and code samples for all official SDKs using <code>AnthropicBedrockMantle</code> client classes; Python (<code>anthropic[bedrock]</code>), TypeScript (<code>@anthropic-ai/bedrock-sdk</code>), C# (<code>Anthropic.Bedrock</code>), Go (<code>bedrock.NewMantleClient</code>), Java (<code>BedrockMantleBackend</code>), PHP, and Ruby.</li>
+      <li><strong>Access requirements</strong> &mdash; Research preview requires a dedicated AWS account in <code>us-east-1</code>; account ID must be submitted by an Anthropic account executive for allowlisting (typically 24-hour turnaround).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock-research-preview" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock-research-preview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-amazon-bedrock-(research-preview)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the introductory Note to accurately describe this page as covering the current GA integration (not &quot;legacy&quot;) and to link to the new research preview doc.</p>
+    <ul>
+      <li><strong>Note block</strong> &mdash; Changed description from &quot;legacy Amazon Bedrock integration&quot; to &quot;Amazon Bedrock integration available today&quot; and updated the cross-reference link to point to the new <code>claude-in-amazon-bedrock-research-preview</code> page.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the Amazon Bedrock cross-reference link at the bottom of the page.</p>
+    <ul>
+      <li><strong>Amazon Bedrock link</strong> &mdash; Updated the &quot;also available through&quot; footer link from <code>/claude-in-amazon-bedrock</code> to <code>/claude-on-amazon-bedrock</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Compaction</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor TypeScript code sample reformatting with no semantic changes.</p>
+    <ul>
+      <li><strong>Code formatting</strong> &mdash; Reformatted a multi-line template literal in the TypeScript streaming example to split the <code>content.length</code> expression across lines for readability; no API or behavioral change.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/compaction" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/compaction &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="compaction" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context editing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor TypeScript code sample reformatting with no semantic changes.</p>
+    <ul>
+      <li><strong>Code formatting</strong> &mdash; Reformatted a multi-line template literal in the TypeScript token-counting example to split the savings calculation across lines for readability; no API or behavioral change.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-editing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-editing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-editing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the TypeScript <code>jsonSchemaOutputFormat()</code> helper with compile-time type inference, rewrote PHP examples to use the new <code>StructuredOutputModel</code> interface, updated several SDK code samples, and revised the helper-method note to accurately scope which SDKs accept <code>output_format</code> as a convenience parameter.</p>
+    <ul>
+      <li><strong>TypeScript jsonSchemaOutputFormat()</strong> &mdash; New helper in <code>@anthropic-ai/sdk/helpers/json-schema</code> accepts a JSON Schema object; when called with an <code>as const</code> literal, <code>parsed_output</code> is compile-time typed to match the schema; without <code>as const</code>, type collapses to <code>unknown</code>. Supports optional <code>{ transform: false }</code> to bypass schema normalization.</li>
+      <li><strong>PHP StructuredOutputModel interface</strong> &mdash; Replaced raw <code>OutputConfig</code>/<code>JSONOutputFormat</code> usage with new <code>StructuredOutputModel</code> interface and <code>StructuredOutputModelTrait</code>; pass <code>outputConfig: [&#x27;format&#x27; =&gt; ContactInfo::class]</code> and retrieve the typed result via <code>$message-&gt;parsedOutput()</code>.</li>
+      <li><strong>Helper-method note update</strong> &mdash; Revised note to clarify that only the Python SDK&#x27;s <code>client.messages.parse()</code> accepts <code>output_format</code> as a convenience shorthand; other SDKs require <code>output_config</code> directly.</li>
+      <li><strong>Language support table</strong> &mdash; Added PHP to the native schema helpers list and moved C#, Go, and CLI to the raw JSON schema group.</li>
+      <li><strong>SDK code cleanup</strong> &mdash; Simplified TypeScript client instantiation (<code>new Anthropic()</code>), updated PHP client instantiation (<code>new Client()</code>), used <code>Model.ClaudeOpus4_6</code> enum in C# example, replaced <code>map[string]interface{}</code> with <code>map[string]any</code> in Go, and updated C# content extraction to use <code>TryPickText</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-release">📋</div>
+    <h2>Release Notes</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the April 7, 2026 entry to link to the new research preview doc page instead of the old path.</p>
+    <ul>
+      <li><strong>Amazon Bedrock research preview link</strong> &mdash; Updated the April 7 release note entry to link to <code>claude-in-amazon-bedrock-research-preview</code> instead of the former <code>claude-in-amazon-bedrock</code> path.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/release-notes/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 32 docs analyzed &middot; 2026-04-11
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
