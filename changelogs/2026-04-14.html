@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 14, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 14, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 14 at 06:31 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">43</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">1</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">1</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>PreCompact hook blocking</strong> &mdash; <code>PreCompact</code> now supports exit code 2 and <code>decision: &quot;block&quot;</code> to block compaction; moved from the no-decision group to the top-level <code>decision</code> pattern group alongside <code>UserPromptSubmit</code>, <code>Stop</code>, and others</li>
+      <li><strong>asyncRewake hook field</strong> &mdash; New <code>asyncRewake</code> field on command hooks runs the hook in the background and wakes Claude immediately when the hook exits with code 2, enabling reactive long-running background failure handling</li>
+      <li><strong>Subagent status lines</strong> &mdash; New <code>subagentStatusLine</code> setting renders a custom row body for each subagent in the agent panel, accepting a command that receives task data via stdin and returns per-row JSON overrides</li>
+      <li><strong>Vertex AI EU multi-region endpoint</strong> &mdash; <code>eu</code> is now a supported multi-region identifier alongside <code>us</code>, routing to <code>https://aiplatform.eu.rep.googleapis.com</code> for EU data-residency deployments</li>
+      <li><strong>Plugin monitors support</strong> &mdash; Plugins can now declare a <code>monitors</code> field in <code>plugin.json</code> pointing to background Monitor configurations that auto-arm at session start or on skill invocation; default path is <code>monitors/monitors.json</code></li>
+      <li><strong>Skill <code>when_to_use</code> field &amp;amp; enlarged description cap</strong> &mdash; New optional <code>when_to_use</code> frontmatter field appends additional invocation context to skill listings; combined description cap raised from 250 to 1,536 characters</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">43 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Track team usage with analytics</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/analytics" target="_blank" rel="noopener">code.claude.com/docs/en/analytics &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="track-team-usage-with-analytics" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Checkpointing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/checkpointing" target="_blank" rel="noopener">code.claude.com/docs/en/checkpointing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="checkpointing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that <code>--resume</code> now accepts a custom session name in addition to a session ID.</p>
+    <ul>
+      <li><strong>Session resume</strong> &mdash; Updated <code>claude --resume</code> documentation to note that custom names set with <code>--name</code> or <code>/rename</code> are accepted alongside raw session IDs; updated argument placeholder to <code>&amp;lt;session-id-or-name&amp;gt;</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data usage</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">code.claude.com/docs/en/data-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-usage" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code Desktop</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-desktop" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Development containers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/devcontainer" target="_blank" rel="noopener">code.claude.com/docs/en/devcontainer &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="development-containers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitHub Actions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/github-actions" target="_blank" rel="noopener">code.claude.com/docs/en/github-actions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-github-actions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitLab CI/CD</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/gitlab-ci-cd" target="_blank" rel="noopener">code.claude.com/docs/en/gitlab-ci-cd &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-gitlab-ci/cd" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Significant updates to hook blocking semantics, the <code>PreCompact</code> event, <code>asyncRewake</code> for background hooks, <code>SessionEnd</code> timeout configuration, and <code>PreToolUse</code> permission evaluation clarifications.</p>
+    <ul>
+      <li><strong>PreCompact blocking</strong> &mdash; <code>PreCompact</code> now supports exit code 2 to block compaction and the top-level <code>decision: &quot;block&quot;</code> JSON pattern; moved from the no-decision group to the decision-capable group in the reference table</li>
+      <li><strong>PreCompact behavior detail</strong> &mdash; Added documentation explaining that blocking proactive compaction skips it silently, while blocking recovery compaction surfaces the underlying API context-limit error</li>
+      <li><strong>asyncRewake field</strong> &mdash; New <code>asyncRewake: true</code> field on command hooks runs in the background and wakes Claude immediately on exit code 2, with stderr shown to Claude as a system reminder</li>
+      <li><strong>PreToolUse permissionDecision clarification</strong> &mdash; Updated description of <code>permissionDecision</code> to clarify that deny and ask permission rules are still evaluated regardless of what the hook returns</li>
+      <li><strong>SessionEnd timeout</strong> &mdash; Replaced the global <code>CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS</code>-only approach with per-hook <code>timeout</code> settings; overall budget is now auto-raised to the highest per-hook timeout (up to 60 s), with plugin-provided hooks excluded from raising the budget</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>Ctrl+O</code> transcript viewer description to reflect consolidated MCP call display wording.</p>
+    <ul>
+      <li><strong>Ctrl+O description</strong> &mdash; Updated MCP call collapse description from &quot;Queried slack&quot; style to &quot;Called slack 3 times&quot; style, reflecting the new consolidated display format for MCP read and search calls</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>JetBrains IDEs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/jetbrains" target="_blank" rel="noopener">code.claude.com/docs/en/jetbrains &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="jetbrains-ides" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Legal and compliance</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/legal-and-compliance" target="_blank" rel="noopener">code.claude.com/docs/en/legal-and-compliance &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="legal-and-compliance" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>LLM gateway configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">code.claude.com/docs/en/llm-gateway &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="llm-gateway-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed the MCP server command generation to replace the deprecated <code>--transport streamable-http</code> flag with <code>--transport http</code>.</p>
+    <ul>
+      <li><strong>MCP transport flag</strong> &mdash; Updated <code>generateClaudeCodeCommand</code> to replace <code>--transport streamable-http</code> with <code>--transport http</code> in generated server connection commands</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that <code>CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD</code> now also loads <code>CLAUDE.local.md</code> from additional directories, with a note that it is skipped when <code>local</code> is excluded from <code>--setting-sources</code>.</p>
+    <ul>
+      <li><strong>CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD</strong> &mdash; Expanded description to include <code>CLAUDE.local.md</code> in the files loaded from additional directories; clarified that <code>CLAUDE.local.md</code> is skipped when <code>local</code> is excluded from <code>--setting-sources</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/microsoft-foundry" target="_blank" rel="noopener">code.claude.com/docs/en/microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>ANTHROPIC_CUSTOM_MODEL_OPTION</code> to the set of model environment variables that support <code>_NAME</code>, <code>_DESCRIPTION</code>, and <code>_SUPPORTED_CAPABILITIES</code> suffixes.</p>
+    <ul>
+      <li><strong>ANTHROPIC_CUSTOM_MODEL_OPTION</strong> &mdash; Added <code>ANTHROPIC_CUSTOM_MODEL_OPTION</code> as a third variable (alongside <code>ANTHROPIC_DEFAULT_SONNET_MODEL</code> and <code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code>) that supports the <code>_NAME</code>, <code>_DESCRIPTION</code>, and <code>_SUPPORTED_CAPABILITIES</code> suffix variants</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added two new OpenTelemetry events (<code>claude_code.plugin_installed</code> and <code>claude_code.skill_activated</code>), expanded <code>OTEL_LOG_TOOL_DETAILS</code> to cover trace span attributes, and updated span redaction documentation.</p>
+    <ul>
+      <li><strong>plugin_installed event</strong> &mdash; New <code>claude_code.plugin_installed</code> OpenTelemetry event fires when a plugin finishes installing via CLI or the interactive <code>/plugin</code> UI, with attributes for plugin name, version, marketplace, and install trigger</li>
+      <li><strong>skill_activated event</strong> &mdash; New <code>claude_code.skill_activated</code> OpenTelemetry event fires when a skill is invoked, with attributes for skill name, source, and owning plugin when applicable</li>
+      <li><strong>OTEL_LOG_TOOL_DETAILS span coverage</strong> &mdash; Updated description to note that when enabled, trace spans also include the <code>tool_input</code> attribute and input-derived attributes such as <code>file_path</code>, in addition to <code>tool_result</code> events</li>
+      <li><strong>Span redaction defaults</strong> &mdash; Updated span redaction note to include tool input details; enabling full content now requires setting <code>OTEL_LOG_USER_PROMPTS=1</code>, <code>OTEL_LOG_TOOL_DETAILS=1</code>, and <code>OTEL_LOG_TOOL_CONTENT=1</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a requirement to allowlist <code>bridge.claudeusercontent.com</code> for WebSocket connections when using the Chrome integration.</p>
+    <ul>
+      <li><strong>Chrome integration network allowlist</strong> &mdash; Added <code>bridge.claudeusercontent.com</code> as a required outbound WebSocket allowlist entry for organizations using Claude in Chrome</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Output styles</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/output-styles" target="_blank" rel="noopener">code.claude.com/docs/en/output-styles &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="output-styles" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the Git for Windows requirement applies only to native Windows setups, not WSL.</p>
+    <ul>
+      <li><strong>Windows Git requirement</strong> &mdash; Updated wording from &quot;Windows requires Git for Windows&quot; to &quot;Native Windows setups require Git for Windows&quot;; added explicit note that WSL setups do not need it</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>monitors</code> as a new plugin component field, updated <code>settings.json</code> supported keys to include <code>subagentStatusLine</code>, and refreshed the file locations reference table.</p>
+    <ul>
+      <li><strong>monitors field</strong> &mdash; New <code>monitors</code> component path field in <code>plugin.json</code> points to background Monitor configurations that auto-arm when the plugin is enabled or a plugin skill is invoked; default location is <code>monitors/monitors.json</code></li>
+      <li><strong>Path behavior rules</strong> &mdash; Updated to note that <code>monitors</code> follows the same replacement semantics as <code>skills</code>: specifying a custom path skips the default <code>monitors/monitors.json</code></li>
+      <li><strong>settings.json supported keys</strong> &mdash; Updated documentation to note that both <code>agent</code> and <code>subagentStatusLine</code> keys are now supported in plugin <code>settings.json</code></li>
+      <li><strong>File locations table</strong> &mdash; Added <strong>Monitors</strong> row with default location <code>monitors/monitors.json</code> to the plugin file locations reference</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated plugin <code>settings.json</code> documentation to note that <code>subagentStatusLine</code> is now a supported key alongside <code>agent</code>.</p>
+    <ul>
+      <li><strong>settings.json supported keys</strong> &mdash; Added <code>subagentStatusLine</code> as a second supported key in plugin <code>settings.json</code>, alongside the existing <code>agent</code> key</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the Git for Windows prerequisite applies only to native Windows, not WSL setups.</p>
+    <ul>
+      <li><strong>Windows Git requirement</strong> &mdash; Updated install prerequisite note to specify &quot;Native Windows setups&quot; rather than all Windows; added explicit statement that WSL setups do not need Git for Windows</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Sandboxing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="sandboxing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Security</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/security" target="_blank" rel="noopener">code.claude.com/docs/en/security &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="security" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new <code>viewMode</code> setting that pins a default transcript view mode on startup, overriding the sticky <code>Ctrl+O</code> selection.</p>
+    <ul>
+      <li><strong>viewMode setting</strong> &mdash; New setting accepts <code>&quot;default&quot;</code>, <code>&quot;verbose&quot;</code>, or <code>&quot;focus&quot;</code> to set the transcript view mode at startup; overrides the user&#x27;s sticky <code>Ctrl+O</code> selection when configured</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded Windows setup documentation with a comparison table of native vs. WSL options, clarified Git Bash launch behavior, and updated the Git for Windows prerequisite to apply only to native Windows.</p>
+    <ul>
+      <li><strong>Windows option comparison table</strong> &mdash; Added a new table comparing Native Windows, WSL 2, and WSL 1 options by requirements, sandboxing support, and recommended use cases</li>
+      <li><strong>Native Windows Git requirement</strong> &mdash; Clarified that Git for Windows is required only for native Windows setups; WSL setups do not need it</li>
+      <li><strong>WSL installation instructions</strong> &mdash; Replaced brief WSL mention with explicit instruction to open the WSL distribution and run the Linux installer inside it, not from PowerShell or CMD</li>
+      <li><strong>Shell requirements</strong> &mdash; Updated shell requirements line to distinguish native Windows (requires Git for Windows) from WSL (does not)</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added live change detection for skill directories, a new <code>when_to_use</code> frontmatter field, and raised the combined description cap from 250 to 1,536 characters.</p>
+    <ul>
+      <li><strong>Live change detection</strong> &mdash; Claude Code now watches skill directories (<code>~/.claude/skills/</code>, project <code>.claude/skills/</code>, and <code>--add-dir</code> skill dirs) for file changes; edits take effect within the current session without restarting</li>
+      <li><strong>when_to_use field</strong> &mdash; New optional frontmatter field appends additional invocation context (trigger phrases, example requests) to the skill listing and counts toward the description character cap</li>
+      <li><strong>Description cap increase</strong> &mdash; Combined <code>description</code> + <code>when_to_use</code> text is now capped at 1,536 characters per skill (up from 250), with the <code>SLASH_COMMAND_TOOL_CHAR_BUDGET</code> variable still available to raise the global budget</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new <code>subagentStatusLine</code> setting for rendering custom row bodies in the agent panel.</p>
+    <ul>
+      <li><strong>subagentStatusLine setting</strong> &mdash; New setting accepts a command configuration that receives all visible subagent rows as JSON on stdin and writes per-row override objects (<code>{&quot;id&quot;: &quot;...&quot;, &quot;content&quot;: &quot;...&quot;}</code>) to stdout; supports ANSI colors and OSC 8 hyperlinks</li>
+      <li><strong>subagentStatusLine input schema</strong> &mdash; Documents the stdin payload: base hook fields plus <code>columns</code> and a <code>tasks</code> array with fields including <code>id</code>, <code>name</code>, <code>type</code>, <code>status</code>, <code>tokenCount</code>, and <code>cwd</code></li>
+      <li><strong>Trust and plugin support</strong> &mdash; The same <code>disableAllHooks</code> gate that governs <code>statusLine</code> applies; plugins can ship a default <code>subagentStatusLine</code> in their <code>settings.json</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that frontmatter hooks in subagent files only fire when the agent is spawned via the Agent tool or an @-mention, not when it runs as the main session via <code>--agent</code> or the <code>agent</code> setting.</p>
+    <ul>
+      <li><strong>Frontmatter hook scope</strong> &mdash; Added a Note clarifying that subagent frontmatter hooks fire only when spawned as a subagent through the Agent tool or @-mention; for session-wide hooks, configure them in <code>settings.json</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Optimize your terminal setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the Shift+Enter configuration section with dedicated tmux instructions and reorganized the Option+Enter macOS setup into a tabbed interface.</p>
+    <ul>
+      <li><strong>Shift+Enter in tmux</strong> &mdash; Added a new section with <code>~/.tmux.conf</code> configuration (<code>set -s extended-keys on</code> and <code>set -as terminal-features</code>) required to make Shift+Enter insert a newline rather than submit inside tmux</li>
+      <li><strong>Option+Enter macOS tabs</strong> &mdash; Reorganized the Terminal.app, iTerm2, and VS Code Option+Enter instructions into a tabbed <code>&amp;lt;Tabs&amp;gt;</code> component for clearer navigation</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="optimize-your-terminal-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added new troubleshooting entries for the 32-bit Windows error and expanded macOS <code>dyld</code> error coverage; renamed and consolidated Windows shell confusion entries.</p>
+    <ul>
+      <li><strong>32-bit Windows error</strong> &mdash; Added new section for the &quot;Claude Code does not support 32-bit Windows&quot; error, explaining how to distinguish the x86 PowerShell entry from the 64-bit one and how to verify OS bitness</li>
+      <li><strong>Windows wrong install command</strong> &mdash; Renamed section from &quot;irm or &amp;&amp; not recognized&quot; to &quot;wrong install command&quot; and added coverage for <code>&#x27;bash&#x27; is not recognized as the name of a cmdlet</code> when users run the macOS/Linux installer on Windows</li>
+      <li><strong>macOS dyld errors</strong> &mdash; Expanded <code>dyld: cannot load</code> section to also cover <code>dyld: Symbol not found</code> referencing <code>libicucore</code>, adding a concrete example of the <code>_ubrk_clone</code> error that indicates an older macOS version</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the embedded <code>AgentInstructions</code> feedback block from the page source.</p>
+    <ul>
+      <li><strong>AgentInstructions block</strong> &mdash; Removed the inline agent feedback submission instructions that were embedded at the top of the document</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adding files</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the <code>files-api-2025-04-14</code> beta header from Files API examples scoped to managed-agent sessions; only <code>managed-agents-2026-04-01</code> is now required.</p>
+    <ul>
+      <li><strong>Beta header requirement</strong> &mdash; Removed <code>files-api-2025-04-14</code> from the <code>anthropic-beta</code> header in the list-files and download-file curl examples; <code>managed-agents-2026-04-01</code> alone is sufficient</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/files" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adding-files" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the EU multi-region endpoint (<code>eu</code>) as a now-available option alongside <code>us</code>, updating all SDK code samples and endpoint descriptions.</p>
+    <ul>
+      <li><strong>EU multi-region endpoint</strong> &mdash; <code>eu</code> is now a supported multi-region identifier that routes to <code>https://aiplatform.eu.rep.googleapis.com</code>, previously described as &quot;coming soon&quot;</li>
+      <li><strong>Multi-region description</strong> &mdash; Updated endpoint type description to include the European Union as an example geographic area alongside the United States</li>
+      <li><strong>SDK code samples</strong> &mdash; Updated comments in Python, TypeScript, C#, Go, Java, PHP, and Ruby SDK examples from &quot;routes within US regions&quot; to &quot;Multi-region identifier: \&quot;us\&quot; or \&quot;eu\&quot;&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 45 docs analyzed &middot; 2026-04-14
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
