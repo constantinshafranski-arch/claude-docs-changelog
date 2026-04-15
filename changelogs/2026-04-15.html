@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 15, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 15, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 15 at 06:55 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">2</div>
+      <div class="label">API Reference (1 new)</div>
+    </div>
+    <div class="stat about">
+      <div class="num">4</div>
+      <div class="label">About Claude</div>
+    </div>
+    <div class="stat tools">
+      <div class="num">1</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">37</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">9</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">8</div>
+      <div class="label">Platform</div>
+    </div>
+    <div class="stat release">
+      <div class="num">1</div>
+      <div class="label">Release Notes</div>
+    </div>
+    <div class="stat test">
+      <div class="num">1</div>
+      <div class="label">Testing &amp; Evaluation</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>New routine fire API</strong> &mdash; Experimental <code>POST /v1/claude_code/routines/{routine_id}/fire</code> endpoint lets CI pipelines and alerting systems trigger Claude Code routine sessions on demand; authenticates with a per-routine bearer token (<code>sk-ant-oat01-</code>) and returns the new session ID and URL.</li>
+      <li><strong>Model deprecations</strong> &mdash; <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> deprecated April 14, 2026, retiring June 15, 2026; recommended replacements are <code>claude-sonnet-4-6</code> and <code>claude-opus-4-6</code> respectively.</li>
+      <li><strong>Claude Code Desktop overhaul</strong> &mdash; Version 1.2581.0 adds drag-and-drop pane layout, integrated terminal (<code>Ctrl+`</code>), file editor pane, side chats (<code>Cmd+;</code>), three transcript view modes, and a usage ring; PR monitoring gains auto-archive support.</li>
+      <li><strong>CLI <code>--environment-id</code> flag</strong> &mdash; The <code>ant beta:sessions create</code> CLI flag was renamed from <code>--environment</code> to <code>--environment-id</code>; all Managed Agents docs and examples updated accordingly.</li>
+      <li><strong>Handling stop reasons tip updated</strong> &mdash; Tip for frequent <code>refusal</code> stop reasons now recommends <code>claude-haiku-4-5-20251001</code> instead of the deprecated <code>claude-sonnet-4-20250514</code> in both the stop-reasons guide and streaming-refusals guide.</li>
+      <li><strong>Claude Code CLI docs</strong> &mdash; 37 Claude Code CLI pages received whitespace-only code-block formatting fixes (<code>theme={null}</code> attribute normalization); no behavioral changes. Additional substantive updates to Desktop, overview, costs, settings, and plugins-reference are detailed in section entries.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">1 new + 1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Trigger a routine via API</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New experimental endpoint <code>POST /v1/claude_code/routines/{routine_id}/fire</code> that starts a Claude Code routine session on demand, returning the session ID and URL; requires a per-routine bearer token and the <code>anthropic-beta: experimental-cc-routine-2026-04-01</code> header.</p>
+    <ul>
+      <li><strong>Endpoint</strong> &mdash; <code>POST https://api.anthropic.com/v1/claude_code/routines/{routine_id}/fire</code> starts a new run of an existing routine synchronously (returns once the session is created, does not stream output).</li>
+      <li><strong>Authentication</strong> &mdash; Uses a per-routine bearer token (<code>sk-ant-oat01-…</code>) generated in the Claude Code web UI, not a standard Anthropic API key; token scope is limited to one routine with no read access.</li>
+      <li><strong>Beta header</strong> &mdash; Every request must include <code>anthropic-beta: experimental-cc-routine-2026-04-01</code>; missing header returns <code>400 invalid_request_error</code>.</li>
+      <li><strong>Request body</strong> &mdash; Optional <code>text</code> field (max 65,536 characters) passes freeform context such as an alert body or CI failure log to the routine alongside its saved prompt.</li>
+      <li><strong>Response</strong> &mdash; Returns <code>{type: &quot;routine_fire&quot;, claude_code_session_id, claude_code_session_url}</code> on success (<code>200 OK</code>).</li>
+      <li><strong>Error codes</strong> &mdash; Documents <code>400</code>, <code>401</code>, <code>403</code>, <code>404</code>, <code>429</code> (with <code>Retry-After</code>), <code>500</code>, and <code>503</code> (note: this endpoint returns <code>503</code> where the Claude Platform returns <code>529</code> for overloaded errors).</li>
+      <li><strong>SDK support</strong> &mdash; None; endpoint is Claude Code product surface only, billing against Claude Code subscription rather than Claude Platform API usage.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/claude-code/routines-fire" target="_blank" rel="noopener">platform.claude.com/docs/en/api/claude-code/routines-fire &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="trigger-a-routine-via-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed the <code>ant beta:sessions create</code> example flag from <code>--environment</code> to <code>--environment-id</code> in two separate code snippets.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; Renamed flag in both the structured-input example and the step-by-step tutorial from <code>--environment &amp;lt;id&amp;gt;</code> to <code>--environment-id &amp;lt;id&amp;gt;</code> to match the actual CLI interface.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/sdks/cli" target="_blank" rel="noopener">platform.claude.com/docs/en/api/sdks/cli &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-about">ℹ️</div>
+    <h2>About Claude</h2>
+    <span class="count">4 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model deprecations</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new April 14, 2026 deprecation announcement for <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code>, both retiring June 15, 2026.</p>
+    <ul>
+      <li><strong>Status update</strong> &mdash; <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> status changed from Active to Deprecated, with deprecation date April 14, 2026 and retirement date June 15, 2026.</li>
+      <li><strong>New deprecation entry</strong> &mdash; Added the 2026-04-14 section documenting both models, their retirement date, and recommended replacements (<code>claude-sonnet-4-6</code> and <code>claude-opus-4-6</code>).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/model-deprecations" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/model-deprecations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-deprecations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Migration guide</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated a sentence referring to Sonnet 4 to note that it is now deprecated.</p>
+    <ul>
+      <li><strong>Deprecated label</strong> &mdash; Text describing migration from Opus 4.1, Sonnet 4, or earlier now reads &quot;Sonnet 4 (deprecated)&quot; to reflect the April 14 deprecation.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/models/migration-guide" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/models/migration-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="migration-guide" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Models overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Marked <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> as deprecated in the legacy models comparison table and updated the deprecation warning banner.</p>
+    <ul>
+      <li><strong>Table labels</strong> &mdash; Column headers for Claude Sonnet 4 and Claude Opus 4 in the legacy models table now include &quot;(deprecated)&quot;.</li>
+      <li><strong>Warning banner</strong> &mdash; Replaced the Haiku 3-only warning with a two-item warning that also calls out Sonnet 4 and Opus 4 retiring June 15, 2026, with links to their replacement models.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/models/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="models-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Pricing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated two external pricing links to use anchor-targeted URLs and added deprecated labels for Sonnet 4 and Opus 4 in pricing scope text.</p>
+    <ul>
+      <li><strong>Google Vertex AI pricing link</strong> &mdash; URL updated from <code>/pricing</code> to <code>/pricing#claude-models</code> in two locations (third-party platforms list and data-residency note).</li>
+      <li><strong>Microsoft Foundry pricing link</strong> &mdash; URL updated from <code>ai-foundry/#pricing</code> to <code>microsoft-foundry/#pricing</code>.</li>
+      <li><strong>Scope note</strong> &mdash; References to Claude Sonnet 4 and Opus 4 in the regional pricing scope statement now include &quot;(deprecated)&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="pricing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added deprecated markers to Claude Opus 4 and Claude Sonnet 4 entries in the supported models table.</p>
+    <ul>
+      <li><strong>Deprecated model labels</strong> &mdash; <code>claude-opus-4-20250514</code> and <code>claude-sonnet-4-20250514</code> rows in the model support table now include a linked &quot;(deprecated)&quot; annotation pointing to the model deprecations page.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">37 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace inside code-block language specifiers across all credential and configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and similar specifiers (extra space before <code>theme</code>) to <code>```bash theme={null}</code> throughout all code blocks in the page.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Checkpointing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in the code-block language specifier for the bash limitations example.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> to <code>```bash theme={null}</code> in the file-tracking limitations code block.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/checkpointing" target="_blank" rel="noopener">code.claude.com/docs/en/checkpointing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="checkpointing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated internal links from <code>/web-scheduled-tasks</code> to <code>/routines</code> and fixed code-block whitespace throughout the page.</p>
+    <ul>
+      <li><strong>Routines link</strong> &mdash; Reference to <code>/schedule</code> and the &quot;Related resources&quot; section now link to <code>/routines</code> instead of <code>/web-scheduled-tasks</code>, reflecting the renamed feature.</li>
+      <li><strong>Formatting fix</strong> &mdash; Extra whitespace removed from <code>theme={null}</code> in multiple bash, text, and JSON code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all step examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```text  theme={null}</code> specifiers throughout all workflow step code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a reference to subscription plan pricing at <code>claude.com/pricing</code> and fixed code-block whitespace.</p>
+    <ul>
+      <li><strong>Pricing reference</strong> &mdash; Opening paragraph now links to <code>claude.com/pricing</code> for subscription plan pricing (Pro, Max, Team, Enterprise) before the per-token cost discussion.</li>
+      <li><strong>Formatting fix</strong> &mdash; Extra whitespace removed from <code>theme={null}</code> in text, markdown, and JSON code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code Desktop</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Major update documenting new workspace layout features in Desktop v1.2581.0, including drag-and-drop panes, integrated terminal, file editor, side chats, view modes, and a full keyboard shortcut table; also adds auto-archive for PR sessions.</p>
+    <ul>
+      <li><strong>New pane system</strong> &mdash; Desktop v1.2581.0 introduces draggable/resizable panes (chat, diff, preview, terminal, file, plan, tasks, subagent) opened via the Views menu; <code>Cmd+\\</code> closes the focused pane.</li>
+      <li><strong>Integrated terminal</strong> &mdash; <code>Ctrl+\`</code> opens a terminal in the session working directory sharing Claude&#x27;s environment; local sessions only.</li>
+      <li><strong>File editor pane</strong> &mdash; Click any file path in chat or diff to open it in the file pane for spot edits; HTML/PDF/image paths open in preview instead.</li>
+      <li><strong>Side chats</strong> &mdash; <code>Cmd+;</code> opens a side chat that branches off the main thread without affecting its context.</li>
+      <li><strong>Transcript view modes</strong> &mdash; New Normal / Verbose / Summary modes selectable from the Transcript view dropdown or <code>Ctrl+O</code> to cycle.</li>
+      <li><strong>Usage ring</strong> &mdash; Click the ring next to the model picker to see per-session context window usage and period-wide plan usage.</li>
+      <li><strong>Auto-archive</strong> &mdash; PR sessions can now auto-archive once the PR merges or closes via Settings → Claude Code.</li>
+      <li><strong>Model picker change</strong> &mdash; Model can now be changed mid-session (previously locked at session start).</li>
+      <li><strong>Keyboard shortcuts table</strong> &mdash; Full shortcut reference added (<code>Cmd+/</code> to view all); includes session cycling, pane toggles, permission/model/effort menus.</li>
+      <li><strong>Formatting fix</strong> &mdash; Extra whitespace removed from <code>theme={null}</code> code-block specifiers.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-desktop" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitHub Actions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers throughout the GitHub Actions configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```yaml  theme={null}</code> and <code>```text  theme={null}</code> specifiers to remove extra space in all workflow and usage example code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/github-actions" target="_blank" rel="noopener">code.claude.com/docs/en/github-actions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-github-actions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitLab CI/CD</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers throughout the GitLab CI/CD configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```yaml  theme={null}</code> and <code>```text  theme={null}</code> specifiers throughout all pipeline and provider configuration code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/gitlab-ci-cd" target="_blank" rel="noopener">code.claude.com/docs/en/gitlab-ci-cd &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-gitlab-ci/cd" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across credential and model configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> specifiers in environment variable setup, model pinning, and customization code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all headless/programmatic usage examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> specifiers in all CLI, output-format, streaming, tool-control, and session-continuation examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all hook configuration and example code blocks.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```json  theme={null}</code> and <code>```bash  theme={null}</code> specifiers in notification, PostToolUse, PreToolUse, SessionStart, ConfigChange, CwdChanged, FileChanged, and PermissionRequest hook examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers throughout the hooks reference page.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```json  theme={null}</code>, <code>```bash  theme={null}</code>, and <code>```yaml  theme={null}</code> specifiers in hook configuration, script, input/output, and decision-control examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers in the bash pass-through and environment variable examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> specifiers in the shell pass-through and <code>CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION</code> examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>JetBrains IDEs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers in the IDE connection examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```text  theme={null}</code> specifiers in the <code>claude</code> launch and <code>/ide</code> command blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/jetbrains" target="_blank" rel="noopener">code.claude.com/docs/en/jetbrains &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="jetbrains-ides" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>LLM gateway configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all LiteLLM and gateway configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```json  theme={null}</code> specifiers in static key, helper script, config, and endpoint examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">code.claude.com/docs/en/llm-gateway &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="llm-gateway-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers throughout the MCP configuration and scope examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```json  theme={null}</code> specifiers in HTTP, SSE, stdio transport, server management, plugin, scope, and variable-expansion examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all CLAUDE.md, rules, and auto-memory configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```text  theme={null}</code>, <code>```bash  theme={null}</code>, <code>```markdown  theme={null}</code>, and <code>```json  theme={null}</code> specifiers throughout file-reference, rules, path-specific, symlink, and auto-memory configuration blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across authentication and environment variable configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```json  theme={null}</code> specifiers in API key, Azure CLI, environment variables, model pinning, and custom-role examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/microsoft-foundry" target="_blank" rel="noopener">code.claude.com/docs/en/microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all model configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```json  theme={null}</code> specifiers in CLI flags, settings file, <code>availableModels</code>, combined control, <code>[1m]</code> suffix, custom model option, and model-override examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all OpenTelemetry configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```json  theme={null}</code> specifiers in OTEL environment variable, managed settings, dynamic headers helper, custom attributes, and exporter configuration blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across proxy, certificate, and client authentication examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> specifiers in HTTPS_PROXY, proxy authentication, certificate store, custom CA, and client certificate configuration blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Output styles</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers in the settings and custom style examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```json  theme={null}</code> and <code>```markdown  theme={null}</code> specifiers in the <code>outputStyle</code> settings and custom style frontmatter examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/output-styles" target="_blank" rel="noopener">code.claude.com/docs/en/output-styles &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="output-styles" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Improved Windows CMD shell detection error message, updated &quot;Cloud scheduled tasks&quot; references to &quot;Routines&quot;, and fixed code-block whitespace.</p>
+    <ul>
+      <li><strong>Windows CMD detection</strong> &mdash; Error-message guidance now distinguishes both directions: users who see <code>&#x27;irm&#x27; is not recognized</code> are told they&#x27;re in CMD (not PowerShell), in addition to the existing PowerShell separator error guidance.</li>
+      <li><strong>Routines references</strong> &mdash; Two occurrences of &quot;Cloud scheduled tasks&quot; replaced with &quot;Routines&quot; (overview table and scheduled-task accordion), reflecting the renamed feature and noting API-trigger and GitHub-event support.</li>
+      <li><strong>Formatting fix</strong> &mdash; Extra whitespace removed from <code>theme={null}</code> in install, quickstart, and example code blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers throughout the marketplace creation and schema examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code>, <code>```shell  theme={null}</code>, and <code>```json  theme={null}</code> specifiers across directory creation, install, schema, and source-type examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a note that Glob and Grep tools skip orphaned plugin version directories, and fixed code-block whitespace throughout.</p>
+    <ul>
+      <li><strong>Orphaned directory search exclusion</strong> &mdash; Documented that Claude&#x27;s Glob and Grep tools skip orphaned version directories in the plugin cache, preventing stale plugin code from appearing in file search results.</li>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```text  theme={null}</code>, <code>```markdown  theme={null}</code>, <code>```json  theme={null}</code> specifiers throughout skill, agent, hook, MCP, LSP, schema, userConfig, channels, paths, and variable examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated SKILL.md frontmatter requirement note and fixed code-block whitespace throughout.</p>
+    <ul>
+      <li><strong>SKILL.md frontmatter</strong> &mdash; Description of required <code>SKILL.md</code> frontmatter fields simplified; the <code>name</code> field is no longer listed as required alongside <code>description</code> in the introductory note.</li>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code>, <code>```shell  theme={null}</code>, <code>```text  theme={null}</code>, and <code>```yaml  theme={null}</code> specifiers throughout quickstart, skills, testing, and migration examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Improved Windows CMD shell detection error guidance and fixed code-block whitespace.</p>
+    <ul>
+      <li><strong>Windows CMD detection</strong> &mdash; Same bidirectional shell-detection clarification as the overview page: users who see <code>&#x27;irm&#x27; is not recognized</code> are now told they&#x27;re in CMD, not PowerShell.</li>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code>, <code>```powershell  theme={null}</code>, <code>```batch  theme={null}</code>, and <code>```text  theme={null}</code> specifiers throughout install, login, and first-task examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Sandboxing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across sandboxing setup and configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code>, <code>```text  theme={null}</code>, and <code>```json  theme={null}</code> specifiers in Ubuntu/Fedora install, <code>/sandbox</code> command, filesystem allow/deny, custom network, and sandbox-runtime examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="sandboxing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>minimumVersion</code> setting documentation and fixed code-block whitespace throughout the settings reference.</p>
+    <ul>
+      <li><strong><code>minimumVersion</code> setting</strong> &mdash; New setting documented: prevents the auto-updater from downgrading below a specific version; automatically set when switching to the stable channel and choosing to stay on the current version.</li>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```json  theme={null}</code>, <code>```text  theme={null}</code>, and <code>```bash  theme={null}</code> specifiers across sandbox, attribution, fileSuggestion, allowedHttpHookUrls, permissions, and plugin settings examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Improved Windows CMD shell detection guidance and fixed code-block whitespace throughout the setup page.</p>
+    <ul>
+      <li><strong>Windows CMD detection</strong> &mdash; Same bidirectional shell-detection clarification: added guidance for users who see <code>&#x27;irm&#x27; is not recognized</code> identifying them as CMD rather than PowerShell.</li>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code>, <code>```powershell  theme={null}</code>, <code>```batch  theme={null}</code>, and <code>```json  theme={null}</code> specifiers throughout install, Windows, Alpine, verification, and update-channel examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers throughout all skill creation and configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code>, <code>```yaml  theme={null}</code>, <code>```text  theme={null}</code>, and <code>```markdown  theme={null}</code> specifiers in directory creation, SKILL.md, reference, task, frontmatter, substitution, multi-file, and argument examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all status line configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```text  theme={null}</code>, <code>```json  theme={null}</code>, <code>```bash  theme={null}</code>, and <code>```powershell  theme={null}</code> specifiers in <code>/statusline</code> command, settings, inline command, script, subagentStatusLine, and hyperlink examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all subagent definition, tool, MCP, memory, and hook examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```text  theme={null}</code>, <code>```bash  theme={null}</code>, <code>```markdown  theme={null}</code>, <code>```yaml  theme={null}</code>, and <code>```json  theme={null}</code> specifiers throughout the subagent reference page.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Optimize your terminal setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in the code-block language specifier for the tmux extended-keys configuration example.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```text  theme={null}</code> specifier in the <code>~/.tmux.conf</code> extended-key configuration block.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="optimize-your-terminal-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers across all Bedrock, Foundry, and Vertex AI proxy/gateway configuration examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> specifiers in all six environment-variable configuration tabs (Bedrock corporate proxy, Bedrock LLM gateway, Foundry corporate proxy, Foundry LLM gateway, Vertex corporate proxy, Vertex LLM gateway).</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed extraneous whitespace in code-block language specifiers throughout all installation and PATH troubleshooting examples.</p>
+    <ul>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code>, <code>```powershell  theme={null}</code>, and <code>```batch  theme={null}</code> specifiers in proxy, PATH verification, multiple-installation, permission, and uninstall diagnostic blocks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed image indentation in the quickstart steps and removed extraneous whitespace in code-block language specifiers.</p>
+    <ul>
+      <li><strong>Image indentation fix</strong> &mdash; Three <code>&amp;lt;img&amp;gt;</code> tags inside step components had extra leading whitespace removed so they render correctly in the docs.</li>
+      <li><strong>Formatting fix</strong> &mdash; Corrected <code>```bash  theme={null}</code> and <code>```text  theme={null}</code> specifiers in @-mention, browser, URI handler, MCP, git, and worktree examples.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">9 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define outcomes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI example to use the renamed <code>--environment-id</code> flag when creating a session.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; Shell example for creating a session with <code>ant beta:sessions create</code> updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/define-outcomes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/define-outcomes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-outcomes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adding files</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI session creation example to use <code>--environment-id</code>, added a CLI code block for mounting multiple files, and added CLI examples for listing and downloading session files.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; CLI example updated from <code>--environment</code> to <code>--environment-id</code> in the session creation block.</li>
+      <li><strong>Multi-file mount CLI example</strong> &mdash; Added a <code>yaml CLI</code> code block showing how to mount multiple files via the <code>resources</code> array, matching the existing Python and TypeScript examples.</li>
+      <li><strong>File listing and download CLI examples</strong> &mdash; Added <code>bash CLI</code> snippets for <code>ant beta:files list --scope-id</code> and <code>ant beta:files download --file-id</code>, matching the existing Python and TypeScript examples.</li>
+      <li><strong>TypeScript trailing comma</strong> &mdash; Removed trailing comma after the last property in a <code>betas</code> array in the TypeScript example.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/files" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adding-files" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Accessing GitHub</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI example to use the renamed <code>--environment-id</code> flag when creating a session.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; CLI example for creating a session with a GitHub repository resource updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/github" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/github &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="accessing-github" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP connector</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI example to use the renamed <code>--environment-id</code> flag when creating a session.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; CLI example for creating a session with vault and MCP connector updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/mcp-connector" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/mcp-connector &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-connector" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Migration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI example to use the renamed <code>--environment-id</code> flag when creating a session in the migration walkthrough.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; CLI session creation in the SDK-to-Managed-Agents migration script updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/migration" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/migration &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="migration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multiagent sessions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI example to use the renamed <code>--environment-id</code> flag when creating a multiagent session.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; CLI example for creating an orchestrator session updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/multi-agent" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/multi-agent &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multiagent-sessions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prototype in Console</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI quickstart example to use the renamed <code>--environment-id</code> flag.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; &quot;My first session&quot; CLI example updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/onboarding" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/onboarding &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prototype-in-console" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Start a session</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI session creation example to use the renamed <code>--environment-id</code> flag.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; Basic session creation CLI example updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/sessions" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/sessions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="start-a-session" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Authenticate with vaults</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the CLI example to use the renamed <code>--environment-id</code> flag when creating a session with a vault.</p>
+    <ul>
+      <li><strong><code>--environment-id</code> flag</strong> &mdash; CLI example for creating a session with <code>--vault-id</code> updated from <code>--environment</code> to <code>--environment-id</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/vaults" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/vaults &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="authenticate-with-vaults" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">8 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Marked Claude Sonnet 4 and Claude Opus 4 as deprecated in the Bedrock model table, and updated references to those models in context window and regional pricing notes.</p>
+    <ul>
+      <li><strong>Deprecated model labels</strong> &mdash; <code>claude-sonnet-4-20250514-v1:0</code> and <code>claude-opus-4-20250514-v1:0</code> table rows now include a ⚠️ tooltip noting deprecation April 14, 2026 and retirement October 14, 2026.</li>
+      <li><strong>Context window note</strong> &mdash; Reference to &quot;Sonnet 4&quot; updated to &quot;Sonnet 4 (deprecated)&quot; in the 200k context window description.</li>
+      <li><strong>Regional pricing note</strong> &mdash; References to Sonnet 4 and Opus 4 in global-vs-regional endpoint pricing notes updated to include &quot;(deprecated)&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Marked Claude Sonnet 4 and Claude Opus 4 as deprecated in the Vertex AI model table, and updated references to those models in context window and pricing notes.</p>
+    <ul>
+      <li><strong>Deprecated model labels</strong> &mdash; <code>claude-sonnet-4@20250514</code> and <code>claude-opus-4@20250514</code> table rows now include a ⚠️ tooltip noting deprecation April 14, 2026 and retirement September 14, 2026.</li>
+      <li><strong>Context window and pricing notes</strong> &mdash; References to &quot;Sonnet 4&quot; and &quot;Opus 4&quot; in the 200k context and regional pricing notes updated to include &quot;(deprecated)&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context windows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the 200k context window description to note that Sonnet 4 is deprecated.</p>
+    <ul>
+      <li><strong>Deprecated label</strong> &mdash; &quot;Sonnet 4&quot; in the context window size description updated to &quot;Sonnet 4 (deprecated)&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-windows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-windows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated two references to Opus 4 and Sonnet 4 in the interleaved thinking compatibility notes to include &quot;(deprecated)&quot;.</p>
+    <ul>
+      <li><strong>Deprecated labels</strong> &mdash; Both the &quot;Other Claude 4 models&quot; list and the third-party platform compatibility note now read &quot;Opus 4 (deprecated)&quot; and &quot;Sonnet 4 (deprecated)&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Handling stop reasons</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the refusal stop-reason tip to recommend <code>claude-haiku-4-5-20251001</code> instead of the now-deprecated <code>claude-sonnet-4-20250514</code>.</p>
+    <ul>
+      <li><strong>Refusal workaround tip</strong> &mdash; Tip for frequent <code>refusal</code> stop reasons now recommends switching to Haiku 4.5 (<code>claude-haiku-4-5-20251001</code>) instead of Sonnet 4, and adds a link to the Sonnet 4.5 safety filters support article.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/handling-stop-reasons &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="handling-stop-reasons" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multilingual support</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the multilingual benchmark table column headers to mark Claude Opus 4 and Claude Sonnet 4 as deprecated.</p>
+    <ul>
+      <li><strong>Deprecated labels</strong> &mdash; Column headers for Claude Opus 4 and Claude Sonnet 4 in the zero-shot CoT evaluation table now read &quot;Claude Opus 4 (deprecated)&quot; and &quot;Claude Sonnet 4 (deprecated)&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/multilingual-support" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/multilingual-support &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multilingual-support" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Search results</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Marked Claude Opus 4 and Claude Sonnet 4 entries in the supported models list as deprecated with links to the deprecations page.</p>
+    <ul>
+      <li><strong>Deprecated model labels</strong> &mdash; <code>claude-opus-4-20250514</code> and <code>claude-sonnet-4-20250514</code> now display as &quot;Claude Opus 4 ([deprecated](…))&quot; and &quot;Claude Sonnet 4 ([deprecated](…))&quot; in the supported models list.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/search-results" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/search-results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="search-results" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed the workspace creation step button label from &quot;Add Workspace&quot; to &quot;Create workspace&quot;.</p>
+    <ul>
+      <li><strong>Button label</strong> &mdash; Step title and instruction text updated from &quot;Add a new workspace&quot; / &quot;Click Add Workspace&quot; to &quot;Create a workspace&quot; / &quot;Click Create workspace&quot; to match the current Console UI.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/workspaces" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/workspaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-release">📋</div>
+    <h2>Release Notes</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the April 14, 2026 release note announcing deprecation of Claude Sonnet 4 and Claude Opus 4 with a June 15, 2026 retirement date.</p>
+    <ul>
+      <li><strong>April 14, 2026 entry</strong> &mdash; New release note documents deprecation of <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code>, retirement June 15, 2026 on the Claude API, with recommended migration targets of Claude Sonnet 4.6 and Claude Opus 4.6.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/release-notes/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-test">🧪</div>
+    <h2>Testing &amp; Evaluation</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Streaming refusals</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the refusal stop-reason tip to recommend Haiku 4.5 instead of the deprecated Sonnet 4, and added a link to the Sonnet 4.5 safety filters article.</p>
+    <ul>
+      <li><strong>Refusal workaround tip</strong> &mdash; Recommendation for handling frequent <code>refusal</code> stop reasons changed from Sonnet 4 (<code>claude-sonnet-4-20250514</code>) to Haiku 4.5 (<code>claude-haiku-4-5-20251001</code>); added link to understanding Sonnet 4.5 API safety filters support article.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals" target="_blank" rel="noopener">platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="streaming-refusals" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 63 docs analyzed &middot; 2026-04-15
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
