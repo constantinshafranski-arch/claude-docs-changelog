@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 16, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 16, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 16 at 06:55 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">12</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">1</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Cloud session traceability</strong> &mdash; Claude Code web sessions now expose <code>CLAUDE_CODE_REMOTE_SESSION_ID</code>, enabling traceable links to session transcripts in PR bodies, commit messages, and reports.</li>
+      <li><strong>InstallConfigurator overhaul</strong> &mdash; The Quickstart and Overview install widget gained a <code>defaultSurface</code> prop, per-target taglines, a redesigned shell switcher (PowerShell/CMD toggle), and polished handoff card styling.</li>
+      <li><strong>Cost estimate clarity</strong> &mdash; The <code>/cost</code> command and <code>cost.total_cost_usd</code> statusline field are now explicitly documented as client-side estimates that may differ from actual billing; the Claude Console Usage page is cited for authoritative figures.</li>
+      <li><strong>Sandbox network settings clarified</strong> &mdash; <code>network.allowUnixSockets</code> is now marked macOS-only; Linux/WSL2 users must use <code>allowAllUnixSockets</code> (which bypasses the seccomp filter blocking <code>AF_UNIX</code> sockets).</li>
+      <li><strong>Extended thinking progress hints</strong> &mdash; During extended thinking, progress hints now appear below the indicator so users can see that Claude is actively working.</li>
+      <li><strong>JetBrains diff tool options</strong> &mdash; The <code>/config</code> diff tool setting now documents both <code>auto</code> (show diffs in IDE) and <code>terminal</code> (keep diffs in terminal) as explicit choices.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">12 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the A/B testing component to support server-side pre-bucketing via a dataset attribute, short-circuiting client-side bucket computation when a variant is already assigned.</p>
+    <ul>
+      <li><strong>preBucketed</strong> &mdash; Added reading of <code>document.documentElement.dataset[&#x27;gb_&#x27; + flag]</code> to detect server-assigned experiment buckets before falling back to client-side hashing.</li>
+      <li><strong>variant resolution</strong> &mdash; Replaced inline <code>bucket(flag, vid)</code> call with a ternary that respects the pre-bucketed value (<code>&#x27;1&#x27;</code> → treatment, <code>&#x27;0&#x27;</code> → control) when present.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new &quot;Link artifacts back to the session&quot; section documenting how to construct a traceable claude.ai transcript URL from the <code>CLAUDE_CODE_REMOTE_SESSION_ID</code> environment variable.</p>
+    <ul>
+      <li><strong>CLAUDE_CODE_REMOTE_SESSION_ID</strong> &mdash; Documented the new environment variable available in cloud sessions that contains the session ID, enabling linkable transcript URLs.</li>
+      <li><strong>Session linking</strong> &mdash; Added guidance and a bash snippet (<code>echo &quot;https://claude.ai/code/${CLAUDE_CODE_REMOTE_SESSION_ID}&quot;</code>) for embedding session links in PR bodies, commit messages, Slack posts, and reports.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified the extended thinking UI by noting that progress hints appear below the indicator while Claude is actively reasoning.</p>
+    <ul>
+      <li><strong>Extended thinking progress hints</strong> &mdash; Added that during extended thinking, progress hints are displayed below the indicator to confirm Claude is actively working, not stalled.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the dollar figure shown by <code>/cost</code> is a locally computed estimate and may differ from actual billing, with a pointer to the Claude Console Usage page for authoritative data.</p>
+    <ul>
+      <li><strong>/cost estimate disclaimer</strong> &mdash; Added an explicit note that the dollar figure is computed client-side from token counts and may differ from the actual bill.</li>
+      <li><strong>Claude Console</strong> &mdash; Directed users to the Usage page at <code>platform.claude.com/usage</code> for authoritative billing information.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the A/B testing component to support server-side pre-bucketing via a dataset attribute, consistent with the same change applied across other cloud provider pages.</p>
+    <ul>
+      <li><strong>preBucketed</strong> &mdash; Added reading of <code>document.documentElement.dataset[&#x27;gb_&#x27; + flag]</code> to detect server-assigned experiment buckets.</li>
+      <li><strong>variant resolution</strong> &mdash; Replaced inline <code>bucket(flag, vid)</code> call with a ternary that respects the pre-bucketed value when present.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>JetBrains IDEs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the diff tool configuration step to document both <code>auto</code> (IDE diffs) and <code>terminal</code> (terminal diffs) as explicit options rather than describing only <code>auto</code>.</p>
+    <ul>
+      <li><strong>diff tool setting</strong> &mdash; Clarified that <code>auto</code> displays diffs inside the IDE and <code>terminal</code> keeps them in the terminal, giving users an explicit choice between the two modes.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/jetbrains" target="_blank" rel="noopener">code.claude.com/docs/en/jetbrains &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="jetbrains-ides" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the A/B testing component to support server-side pre-bucketing via a dataset attribute, consistent with the same change applied across other cloud provider pages.</p>
+    <ul>
+      <li><strong>preBucketed</strong> &mdash; Added reading of <code>document.documentElement.dataset[&#x27;gb_&#x27; + flag]</code> to detect server-assigned experiment buckets.</li>
+      <li><strong>variant resolution</strong> &mdash; Replaced inline <code>bucket(flag, vid)</code> call with a ternary that respects the pre-bucketed value when present.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/microsoft-foundry" target="_blank" rel="noopener">code.claude.com/docs/en/microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Embedded a full interactive <code>InstallConfigurator</code> component into the overview page, offering surface selection (Terminal, Desktop, VS Code, JetBrains), provider selection (Anthropic, Bedrock, Foundry, Vertex), and team/enterprise toggles.</p>
+    <ul>
+      <li><strong>InstallConfigurator component</strong> &mdash; Added the complete interactive install widget to the overview page with <code>defaultSurface</code> prop support and surface tabs for Terminal, Desktop, VS Code, and JetBrains.</li>
+      <li><strong>Provider selection</strong> &mdash; Widget includes Anthropic, Amazon Bedrock, Microsoft Foundry, and Google Vertex AI provider pills with contextual setup notices for each cloud provider.</li>
+      <li><strong>Team mode toggle</strong> &mdash; Added a team checkbox that reveals enterprise sales and self-serve team links when enabled.</li>
+      <li><strong>Shell switcher</strong> &mdash; Windows installs now show a PowerShell/CMD tab toggle (<code>cc-ic-shell-switch</code>) replacing the previous checkbox approach.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Refactored the <code>InstallConfigurator</code> component with a <code>defaultSurface</code> prop, per-target taglines, a redesigned PowerShell/CMD shell switcher, and a polished handoff card layout with gradient backgrounds.</p>
+    <ul>
+      <li><strong>defaultSurface prop</strong> &mdash; <code>InstallConfigurator</code> now accepts a <code>defaultSurface</code> parameter (defaulting to <code>&#x27;terminal&#x27;</code>) so the widget can open pre-selected to a specific install target.</li>
+      <li><strong>Target taglines</strong> &mdash; Desktop, VS Code, and JetBrains targets now include descriptive taglines shown in the handoff card (e.g., &quot;The full agent in a native app for macOS and Windows.&quot;).</li>
+      <li><strong>Shell switcher redesign</strong> &mdash; The Windows CMD/PowerShell toggle was replaced with a segmented <code>cc-ic-shell-switch</code> tab control with explicit PowerShell and CMD buttons.</li>
+      <li><strong>Handoff card styling</strong> &mdash; The alternative-install handoff card gained a title/subtitle structure (<code>cc-ic-handoff-title</code>, <code>cc-ic-handoff-sub</code>), gradient background, and drop shadow for both light and dark themes.</li>
+      <li><strong>Experiment flag</strong> &mdash; The install configurator is now wrapped in an <code>install-configurator-default-surface</code> experiment that can serve the widget pre-selected to the Desktop surface as a treatment.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified platform-specific behavior of sandbox Unix socket settings, marking <code>network.allowUnixSockets</code> as macOS-only and explaining why Linux and WSL2 must use <code>allowAllUnixSockets</code> instead.</p>
+    <ul>
+      <li><strong>network.allowUnixSockets</strong> &mdash; Now documented as macOS-only; on Linux and WSL2 the seccomp filter cannot inspect socket paths, so this setting is ignored.</li>
+      <li><strong>network.allowAllUnixSockets</strong> &mdash; Expanded description clarifies that on Linux and WSL2 this is the only way to permit Unix sockets, as it skips the seccomp filter that otherwise blocks <code>socket(AF_UNIX, ...)</code> calls.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>cost.total_cost_usd</code> field description to clarify it is a client-side estimate that may differ from the actual bill.</p>
+    <ul>
+      <li><strong>cost.total_cost_usd</strong> &mdash; Field description updated from &quot;Total session cost in USD&quot; to &quot;Estimated session cost in USD, computed client-side. May differ from your actual bill&quot;.</li>
+      <li><strong>Cost tracking prose</strong> &mdash; Updated the cost and duration tracking section to use &quot;estimated cost&quot; language consistently.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the A/B testing component to support server-side pre-bucketing via a dataset attribute, consistent with the same change applied across other Claude Code pages.</p>
+    <ul>
+      <li><strong>preBucketed</strong> &mdash; Added reading of <code>document.documentElement.dataset[&#x27;gb_&#x27; + flag]</code> to detect server-assigned experiment buckets.</li>
+      <li><strong>variant resolution</strong> &mdash; Replaced inline <code>bucket(flag, vid)</code> call with a ternary that respects the pre-bucketed value when present.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Consolidated the &quot;Try in Console&quot; button into the preceding <code>CodeGroup</code> block using the <code>tryInConsole</code> prop, removing the standalone <code>TryInConsoleButton</code> component.</p>
+    <ul>
+      <li><strong>tryInConsole prop</strong> &mdash; The streaming <code>CodeGroup</code> block now carries <code>tryInConsole={{ userPrompt: &quot;What is the greatest common divisor of 1071 and 462?&quot;, thinkingBudgetTokens: 16000 }}</code> directly, embedding the console launch action in the code block.</li>
+      <li><strong>TryInConsoleButton removed</strong> &mdash; The standalone <code>&amp;lt;TryInConsoleButton&amp;gt;</code> element below the streaming example was deleted in favor of the integrated <code>tryInConsole</code> prop on the <code>CodeGroup</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 13 docs analyzed &middot; 2026-04-16
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
