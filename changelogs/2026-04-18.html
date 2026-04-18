@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 18, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 18, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 18 at 06:12 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">8</div>
+      <div class="label">API Reference</div>
+    </div>
+    <div class="stat about">
+      <div class="num">2</div>
+      <div class="label">About Claude</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">4</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">6</div>
+      <div class="label">Platform</div>
+    </div>
+    <div class="stat release">
+      <div class="num">1</div>
+      <div class="label">Release Notes</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Claude in Amazon Bedrock GA</strong> &mdash; The Messages-API Bedrock endpoint (<code>/anthropic/v1/messages</code>) is now open to all Amazon Bedrock customers; Claude Opus 4.7 and Haiku 4.5 are available self-serve across 27 AWS regions, ending the invite-only research preview.</li>
+      <li><strong>New Bedrock Mantle clients across all SDKs</strong> &mdash; Python, TypeScript, Go, Java, Ruby, C#, and PHP SDKs all introduce dedicated <code>AnthropicBedrockMantle</code>/<code>BedrockMantleBackend</code>/<code>bedrock.NewMantleClient</code> clients for the Messages-API endpoint; existing <code>AnthropicBedrock</code>/<code>BedrockBackend</code> clients are retained for <code>InvokeModel</code>-based applications.</li>
+      <li><strong>Amazon Bedrock doc restructure</strong> &mdash; &quot;Claude in Amazon Bedrock&quot; is promoted from research-preview status to the primary integration page; the previous page is renamed &quot;Claude on Amazon Bedrock (legacy)&quot; and the research-preview page is removed.</li>
+      <li><strong>Claude Code npm install clarified</strong> &mdash; npm installation is no longer labeled deprecated; the package is documented as delivering the native binary via per-platform optional dependencies, with new troubleshooting guidance for missing-binary scenarios.</li>
+      <li><strong>Claude Code hooks <code>once</code> field scoping</strong> &mdash; The <code>once</code> hook field is now documented as honored only in skill frontmatter; it is explicitly ignored in settings files and agent frontmatter.</li>
+      <li><strong>Model config <code>opusplan</code> context limit</strong> &mdash; Clarified that the automatic 1M context upgrade does not apply to the <code>opusplan</code> alias; the plan-mode Opus phase runs within the standard 200K context window.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">8 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Client SDKs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Amazon Bedrock platform link to point to the new &quot;Claude in Amazon Bedrock&quot; page instead of the legacy &quot;Claude on Amazon Bedrock&quot; page.</p>
+    <ul>
+      <li><strong>Amazon Bedrock link</strong> &mdash; Deployment options table now links to <code>/docs/en/build-with-claude/claude-in-amazon-bedrock</code> instead of the legacy <code>claude-on-amazon-bedrock</code> path.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/client-sdks" target="_blank" rel="noopener">platform.claude.com/docs/en/api/client-sdks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="client-sdks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>API Overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Amazon Bedrock third-party platform link to point to the new &quot;Claude in Amazon Bedrock&quot; page.</p>
+    <ul>
+      <li><strong>Amazon Bedrock link</strong> &mdash; Third-party platforms table entry for Amazon Bedrock now links to <code>claude-in-amazon-bedrock</code> and is labeled &quot;Claude in Amazon Bedrock&quot; instead of &quot;Claude on Amazon Bedrock&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/api/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="api-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>C# SDK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Introduced the new <code>AnthropicBedrockMantleClient</code> for the Messages-API Bedrock endpoint alongside the existing <code>AnthropicBedrockClient</code>, and added a legacy Bedrock link in the platform setup note.</p>
+    <ul>
+      <li><strong>AnthropicBedrockMantleClient</strong> &mdash; New <code>Anthropic.Bedrock</code> client targeting the Messages-API Bedrock endpoint; accepts an optional <code>MantleAwsClientOptions</code> config object and is recommended for new projects.</li>
+      <li><strong>AnthropicBedrockClient</strong> &mdash; Retained for existing applications using the Bedrock <code>InvokeModel</code> (<code>bedrock-runtime</code>) API; documentation updated to distinguish it from the Mantle client.</li>
+      <li><strong>Amazon Bedrock (legacy) link</strong> &mdash; Platform setup note now includes a separate link to the legacy Bedrock integration page alongside the new primary link.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/sdks/csharp" target="_blank" rel="noopener">platform.claude.com/docs/en/api/sdks/csharp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="c#-sdk" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Go SDK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Introduced <code>bedrock.NewMantleClient</code> for the Messages-API Bedrock endpoint, clarified SSE streaming behavior for both Bedrock paths, and made minor documentation wording fixes.</p>
+    <ul>
+      <li><strong>bedrock.NewMantleClient</strong> &mdash; New constructor for the Messages-API Bedrock endpoint (streams over SSE); recommended for new projects over <code>WithLoadDefaultConfig</code>/<code>WithConfig</code>.</li>
+      <li><strong>bedrock-runtime path retained</strong> &mdash; <code>bedrock.WithLoadDefaultConfig</code> and <code>bedrock.WithConfig</code> remain for existing applications using the Bedrock <code>InvokeModel</code> API.</li>
+      <li><strong>Event-stream decoder note</strong> &mdash; Clarified that importing the <code>bedrock</code> package registers the <code>application/vnd.amazon.eventstream</code> decoder via <code>init()</code> for both the runtime and Mantle paths.</li>
+      <li><strong>Amazon Bedrock (legacy) link</strong> &mdash; Platform setup note now includes a link to the legacy Bedrock integration alongside the new primary link.</li>
+      <li><strong>Documentation wording</strong> &mdash; Minor prose fixes: removed redundant &quot;simply&quot; and &quot;easily&quot; from JSON field and file-helper descriptions.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/sdks/go" target="_blank" rel="noopener">platform.claude.com/docs/en/api/sdks/go &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="go-sdk" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Java SDK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Introduced <code>BedrockMantleBackend</code> for the Messages-API Bedrock endpoint alongside the existing <code>BedrockBackend</code>, and added a legacy Bedrock link in the platform setup note.</p>
+    <ul>
+      <li><strong>BedrockMantleBackend</strong> &mdash; New <code>com.anthropic:anthropic-java-bedrock</code> backend targeting the Messages-API Bedrock endpoint via <code>BedrockMantleBackend.fromEnv()</code>; recommended for new projects.</li>
+      <li><strong>BedrockBackend</strong> &mdash; Retained for existing applications using the Bedrock <code>InvokeModel</code> (<code>bedrock-runtime</code>) API.</li>
+      <li><strong>Amazon Bedrock (legacy) link</strong> &mdash; Platform setup note now includes a link to the legacy Bedrock integration alongside the new primary link.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/sdks/java" target="_blank" rel="noopener">platform.claude.com/docs/en/api/sdks/java &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="java-sdk" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Python SDK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Introduced <code>AnthropicBedrockMantle</code> as a fourth client class for the Messages-API Bedrock endpoint, retaining <code>AnthropicBedrock</code> for the legacy <code>bedrock-runtime</code> path.</p>
+    <ul>
+      <li><strong>AnthropicBedrockMantle</strong> &mdash; New client class (<code>from anthropic import AnthropicBedrockMantle</code>, requires <code>pip install anthropic[bedrock]</code>) targeting the Messages-API Bedrock endpoint; recommended for new projects.</li>
+      <li><strong>AnthropicBedrock</strong> &mdash; Retained as a separate entry in the client table for existing applications using the Bedrock <code>InvokeModel</code> (<code>bedrock-runtime</code>) path.</li>
+      <li><strong>Client table updated</strong> &mdash; Provider table now lists four client classes instead of three, with explicit rows for both Bedrock paths.</li>
+      <li><strong>Amazon Bedrock (legacy) link</strong> &mdash; Platform setup note now includes a link to the legacy Bedrock integration alongside the new primary link.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/sdks/python" target="_blank" rel="noopener">platform.claude.com/docs/en/api/sdks/python &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="python-sdk" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Ruby SDK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Introduced <code>Anthropic::BedrockMantleClient</code> for the Messages-API Bedrock endpoint, with a lighter <code>aws-sdk-core</code> gem dependency, alongside the existing <code>Anthropic::BedrockClient</code>.</p>
+    <ul>
+      <li><strong>Anthropic::BedrockMantleClient</strong> &mdash; New client class targeting the Messages-API Bedrock endpoint; requires the <code>aws-sdk-core</code> gem (lighter than <code>aws-sdk-bedrockruntime</code>); recommended for new projects.</li>
+      <li><strong>Anthropic::BedrockClient</strong> &mdash; Retained for existing applications using the Bedrock <code>InvokeModel</code> (<code>bedrock-runtime</code>) API; still requires <code>aws-sdk-bedrockruntime</code>.</li>
+      <li><strong>Amazon Bedrock (legacy) link</strong> &mdash; Platform setup note now includes a link to the legacy Bedrock integration alongside the new primary link.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/sdks/ruby" target="_blank" rel="noopener">platform.claude.com/docs/en/api/sdks/ruby &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="ruby-sdk" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>TypeScript SDK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>@anthropic-ai/bedrock-sdk</code> package now exports both <code>AnthropicBedrockMantle</code> (Messages-API endpoint) and <code>AnthropicBedrock</code> (legacy <code>bedrock-runtime</code> path).</p>
+    <ul>
+      <li><strong>AnthropicBedrockMantle</strong> &mdash; New client exported from <code>@anthropic-ai/bedrock-sdk</code> targeting the Messages-API Bedrock endpoint; recommended for new projects.</li>
+      <li><strong>AnthropicBedrock</strong> &mdash; Retained within the same package for existing applications using the Bedrock <code>InvokeModel</code> (<code>bedrock-runtime</code>) path.</li>
+      <li><strong>Amazon Bedrock (legacy) link</strong> &mdash; Platform setup note now includes a link to the legacy Bedrock integration alongside the new primary link.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/sdks/typescript" target="_blank" rel="noopener">platform.claude.com/docs/en/api/sdks/typescript &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="typescript-sdk" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-about">ℹ️</div>
+    <h2>About Claude</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Models overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the footnote for Claude Opus 4.7 on AWS to reflect general availability via the Messages-API Bedrock endpoint, removing the research-preview caveat.</p>
+    <ul>
+      <li><strong>Opus 4.7 AWS availability footnote</strong> &mdash; Footnote now states Opus 4.7 is available through &quot;Claude in Amazon Bedrock&quot; (the Messages-API Bedrock endpoint) rather than the deprecated research-preview page.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/models/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="models-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Pricing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated AWS Bedrock links to point to the new &quot;Claude in Amazon Bedrock&quot; page and added guidance distinguishing regional endpoint pricing for newer versus legacy models.</p>
+    <ul>
+      <li><strong>Third-party platform pricing link</strong> &mdash; AWS Bedrock link in the third-party pricing section now points to <code>claude-in-amazon-bedrock</code>.</li>
+      <li><strong>Regional endpoint pricing note</strong> &mdash; The note on global vs. regional endpoints now links to <code>claude-in-amazon-bedrock#regions</code> for Opus 4.7, Haiku 4.5, and newer models, and separately to the legacy integration for all other Bedrock models.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="pricing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">4 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the <code>once</code> hook field is only honored in skill frontmatter and is explicitly ignored in settings files and agent frontmatter.</p>
+    <ul>
+      <li><strong>once field scoping</strong> &mdash; <code>once: true</code> is now documented as effective only for hooks declared in skill frontmatter; hooks with <code>once</code> set in settings files or agent frontmatter are silently ignored.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that the automatic 1M context window upgrade does not apply to the <code>opusplan</code> alias; its plan-mode Opus phase is capped at the standard 200K context window.</p>
+    <ul>
+      <li><strong>opusplan context limit</strong> &mdash; Added explicit note that <code>opusplan</code>&#x27;s plan-mode Opus phase uses the standard 200K context window; the automatic 1M upgrade applies only to the standalone <code>opus</code> model setting.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Reinstated npm as a fully supported installation method by removing the deprecation notice, and documented that the npm package delivers the native binary via per-platform optional dependencies.</p>
+    <ul>
+      <li><strong>npm deprecation removed</strong> &mdash; The &quot;Deprecated npm installation&quot; section and migration-from-npm instructions have been removed; npm is now documented as a standard install path under &quot;Install with npm&quot;.</li>
+      <li><strong>Native binary via optional dependencies</strong> &mdash; Documented that <code>@anthropic-ai/claude-code</code> pulls the native binary through per-platform optional packages (e.g. <code>@anthropic-ai/claude-code-darwin-arm64</code>); the installed <code>claude</code> binary does not itself invoke Node.</li>
+      <li><strong>Supported npm platforms</strong> &mdash; Listed eight supported platform identifiers: <code>darwin-arm64</code>, <code>darwin-x64</code>, <code>linux-x64</code>, <code>linux-arm64</code>, <code>linux-x64-musl</code>, <code>linux-arm64-musl</code>, <code>win32-x64</code>, and <code>win32-arm64</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new troubleshooting section for the &quot;native binary not found after npm install&quot; error, covering disabled optional dependencies, unsupported platforms, and corporate mirror gaps.</p>
+    <ul>
+      <li><strong>Native binary not found section</strong> &mdash; New section documents the <code>Could not find native binary package</code> error and its three root causes: optional dependencies disabled by package manager flags or <code>.npmrc</code>, unsupported platform, and corporate npm mirror missing platform packages.</li>
+      <li><strong>--ignore-scripts behavior</strong> &mdash; Documented that installing with <code>--ignore-scripts</code> skips the postinstall link step, causing a slower wrapper-launch path; reinstalling with scripts enabled restores direct execution.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">6 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adaptive thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the thinking-signature cross-platform compatibility note to link to the new &quot;Claude in Amazon Bedrock&quot; page instead of the legacy Bedrock page.</p>
+    <ul>
+      <li><strong>Bedrock signature compatibility link</strong> &mdash; The note stating that <code>signature</code> values are portable across Claude API, Amazon Bedrock, and Vertex AI now links to <code>claude-in-amazon-bedrock</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/adaptive-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adaptive-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Promoted from research preview to general availability: Claude Opus 4.7 and Haiku 4.5 are now open to all Bedrock customers across 27 regions, with updated prerequisites, SDK versions, code examples, and PHP client constructor.</p>
+    <ul>
+      <li><strong>General availability</strong> &mdash; Research-preview status removed; Claude Opus 4.7 and Claude Haiku 4.5 are now open to all Amazon Bedrock customers without allowlisting (Claude Mythos Preview remains invitation-only).</li>
+      <li><strong>Prerequisites updated</strong> &mdash; Replaced the dedicated-account/allowlisting requirement with standard Bedrock model-access console enablement; Mythos Preview still requires a dedicated allowlisted account.</li>
+      <li><strong>Service role authentication</strong> &mdash; Removed the placeholder note about SDK examples being pending; now links to the Amazon Bedrock documentation for associating the service role with requests.</li>
+      <li><strong>aws-bedrock-token-generator</strong> &mdash; Removed &quot;link pending publication&quot; caveat; the CLI is now referenced without qualification.</li>
+      <li><strong>Java SDK version bumped</strong> &mdash; <code>com.anthropic:anthropic-java-bedrock</code> version updated from <code>2.18.0</code> to <code>2.20.0</code> in Gradle and Maven examples.</li>
+      <li><strong>Ruby gem dependency</strong> &mdash; Gemfile now requires <code>aws-sdk-core</code> instead of <code>aws-sigv4</code> for the Bedrock Mantle client.</li>
+      <li><strong>Code examples converted to Tabs</strong> &mdash; First-request examples migrated from <code>CodeGroup</code> to per-language <code>Tabs</code>; each language now has its own tab including a new cURL tab.</li>
+      <li><strong>Model IDs in examples</strong> &mdash; Placeholder <code>CLAUDE_MODEL_ID</code> replaced with concrete <code>anthropic.claude-opus-4-7</code> across all SDK examples.</li>
+      <li><strong>PHP MantleClient constructor</strong> &mdash; Changed from <code>MantleClient::fromEnvironment(region: &#x27;us-east-1&#x27;)</code> to <code>new MantleClient(awsRegion: &#x27;us-east-1&#x27;)</code>.</li>
+      <li><strong>Standard Anthropic client tip</strong> &mdash; Updated tip to remove &quot;if the dedicated client is not yet available&quot; qualifier; bearer-token-only fallback via base URL is now presented as a general option.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock (legacy)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed from &quot;Claude on Amazon Bedrock&quot; to &quot;Claude on Amazon Bedrock (legacy)&quot; and updated the intro note and Opus 4.7 callout to reflect the new integration hierarchy.</p>
+    <ul>
+      <li><strong>Page renamed</strong> &mdash; Title and description updated to &quot;Claude on Amazon Bedrock (legacy)&quot; covering the <code>InvokeModel</code> and <code>Converse</code> APIs with ARN-versioned model identifiers.</li>
+      <li><strong>Intro note updated</strong> &mdash; Note now cross-references &quot;Claude in Amazon Bedrock&quot; as the primary Messages-API endpoint rather than a research preview.</li>
+      <li><strong>Opus 4.7 availability note</strong> &mdash; Updated to state that Opus 4.7 is reachable via <code>InvokeModel</code> on <code>bedrock-runtime</code> but is omitted from the model table because it lacks an ARN-versioned model ID; directs users to the new integration page for full feature parity.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock-(legacy)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the cross-reference link to Amazon Bedrock at the bottom of the page to point to the new &quot;Claude in Amazon Bedrock&quot; page.</p>
+    <ul>
+      <li><strong>Bedrock cross-reference link</strong> &mdash; &quot;Claude is also available through Amazon Bedrock&quot; link updated from <code>claude-on-amazon-bedrock</code> to <code>claude-in-amazon-bedrock</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated two Amazon Bedrock links to point to the new &quot;Claude in Amazon Bedrock&quot; page in the interleaved-thinking compatibility note and the thinking-signature cross-platform note.</p>
+    <ul>
+      <li><strong>Interleaved thinking platform note</strong> &mdash; Bedrock link in the <code>interleaved-thinking-2025-05-14</code> beta header warning updated to <code>claude-in-amazon-bedrock</code>.</li>
+      <li><strong>Signature cross-platform note</strong> &mdash; Bedrock link in the thinking-signature portability note updated to <code>claude-in-amazon-bedrock</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the availability note to reflect that Claude Opus 4.7 and Claude Mythos Preview are accessible on Bedrock via the Messages-API endpoint, replacing the research-preview reference.</p>
+    <ul>
+      <li><strong>Bedrock availability note</strong> &mdash; Opus 4.7 and Claude Mythos Preview on Bedrock are now described as available through &quot;Claude in Amazon Bedrock&quot; (the Messages-API endpoint) rather than the deprecated research-preview page; the standard Bedrock model list is unchanged.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-release">📋</div>
+    <h2>Release Notes</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added an April 16, 2026 entry announcing that Claude in Amazon Bedrock is now open to all Bedrock customers, and updated the April 7 entry to link to the current (non-preview) Bedrock page.</p>
+    <ul>
+      <li><strong>Claude in Amazon Bedrock GA entry</strong> &mdash; New April 16 changelog entry documents general availability of the Messages-API Bedrock endpoint for Claude Opus 4.7 and Claude Haiku 4.5 across 27 AWS regions.</li>
+      <li><strong>April 7 research preview link updated</strong> &mdash; The existing April 7 entry linking to the research-preview page now links to <code>claude-in-amazon-bedrock</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/release-notes/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 21 docs analyzed &middot; 2026-04-18
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
