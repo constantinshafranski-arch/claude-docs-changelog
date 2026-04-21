@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 21, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 21, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 21 at 06:58 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">35</div>
+      <div class="label">API Reference</div>
+    </div>
+    <div class="stat about">
+      <div class="num">5</div>
+      <div class="label">About Claude</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">11</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">3</div>
+      <div class="label">Platform</div>
+    </div>
+    <div class="stat release">
+      <div class="num">1</div>
+      <div class="label">Release Notes</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Claude Haiku 3 retired</strong> &mdash; <code>claude-3-haiku-20240307</code> was officially retired on April 20, 2026; all requests now return an error — migrate to Claude Haiku 4.5.</li>
+      <li><strong>workspace_restricted_developer role</strong> &mdash; New <code>&quot;workspace_restricted_developer&quot;</code> role added to workspace member create, retrieve, list, and update endpoints across all relevant Admin API docs.</li>
+      <li><strong>Admin API curl examples</strong> &mdash; <code>curl</code> request examples added to all 35 Admin API reference pages covering organizations, invites, users, API keys, workspaces, members, cost reports, and usage reports.</li>
+      <li><strong>SSH pre-configuration for teams</strong> &mdash; Administrators can now distribute SSH connections to team members via <code>sshConfigs</code> in managed settings; connections appear as read-only in each user&#x27;s environment dropdown.</li>
+      <li><strong>Hooks system improvements</strong> &mdash; <code>SessionStart</code> hook added alongside <code>CwdChanged</code> for direnv integration; agent hooks marked experimental; <code>if</code> field now matches against Bash subcommands and removed <code>PermissionDenied</code> from supported tool events.</li>
+      <li><strong>Terminal configuration guide overhauled</strong> &mdash; The terminal setup doc was restructured into symptom-driven sections covering Shift+Enter, Option key shortcuts, notifications, tmux, and Vim mode, with expanded terminal compatibility tables.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">35 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Admin</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added curl request examples to the Organizations, Invites, and Users sections of the consolidated Admin API reference, and added the InviteDeleteResponse domain type.</p>
+    <ul>
+      <li><strong>curl examples</strong> &mdash; Added <code>GET /v1/organizations/me</code>, <code>POST /v1/organizations/invites</code>, <code>GET /v1/organizations/invites/{invite_id}</code>, <code>GET /v1/organizations/invites</code>, <code>DELETE /v1/organizations/invites/{invite_id}</code>, <code>GET /v1/organizations/users/{user_id}</code>, and <code>POST /v1/organizations/users/{user_id}</code> example requests.</li>
+      <li><strong>InviteDeleteResponse type</strong> &mdash; Added new <code>InviteDeleteResponse = object { id, type }</code> domain type documenting the <code>&quot;invite_deleted&quot;</code> response shape.</li>
+      <li><strong>UserDeleteResponse type</strong> &mdash; Added new <code>UserDeleteResponse = object { id, type }</code> domain type documenting the <code>&quot;user_deleted&quot;</code> response shape.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="admin" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>API Keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added curl request examples to the Retrieve, List, and Update API Keys endpoints.</p>
+    <ul>
+      <li><strong>curl examples</strong> &mdash; Added example requests for <code>GET /v1/organizations/api_keys/{api_key_id}</code>, <code>GET /v1/organizations/api_keys</code>, and <code>POST /v1/organizations/api_keys/{api_key_id}</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/api_keys" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/api_keys &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="api-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List Api Keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the List API Keys endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/api_keys</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/api_keys/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/api_keys/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-api-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Api Keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Retrieve API Key endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/api_keys/$API_KEY_ID</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/api_keys/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/api_keys/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-api-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Api Keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Update API Key endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/api_keys/$API_KEY_ID</code> example with JSON body and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/api_keys/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/api_keys/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-api-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Cost Report</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Retrieve Cost Report endpoint in the consolidated Cost Report reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/cost_report</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/cost_report" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/cost_report &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cost-report" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Cost Report</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the standalone Retrieve Cost Report endpoint page.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/cost_report</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/cost_report/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/cost_report/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-cost-report" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Invites</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added curl request examples to all four Invites operations and added the InviteDeleteResponse domain type to the consolidated Invites reference.</p>
+    <ul>
+      <li><strong>curl examples</strong> &mdash; Added examples for <code>POST /v1/organizations/invites</code>, <code>GET /v1/organizations/invites/{invite_id}</code>, <code>GET /v1/organizations/invites</code>, and <code>DELETE /v1/organizations/invites/{invite_id}</code>.</li>
+      <li><strong>InviteDeleteResponse type</strong> &mdash; Added <code>InviteDeleteResponse = object { id, type }</code> domain type with <code>&quot;invite_deleted&quot;</code> discriminant.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/invites" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/invites &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="invites" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create Invites</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Create Invite endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/invites</code> example with <code>email</code> and <code>role</code> JSON body.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/invites/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/invites/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-invites" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Delete Invites</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Delete Invite endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>DELETE /v1/organizations/invites/$INVITE_ID</code> example with <code>-X DELETE</code> flag and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/invites/delete" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/invites/delete &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="delete-invites" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List Invites</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the List Invites endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/invites</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/invites/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/invites/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-invites" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Invites</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Retrieve Invite endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/invites/$INVITE_ID</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/invites/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/invites/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-invites" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Organizations</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the GET /v1/organizations/me endpoint in the Organizations reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/me</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/organizations" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/organizations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="organizations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Me Organizations</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the standalone GET /v1/organizations/me endpoint page.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/me</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/organizations/me" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/organizations/me &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="me-organizations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Usage Report</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added curl request examples to both the Retrieve Messages and Retrieve Claude Code usage report endpoints in the consolidated Usage Report reference.</p>
+    <ul>
+      <li><strong>curl examples</strong> &mdash; Added <code>GET /v1/organizations/usage_report/messages</code> and <code>GET /v1/organizations/usage_report/claude_code</code> examples with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/usage_report" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/usage_report &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="usage-report" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Claude Code Claude Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the standalone Retrieve Claude Code usage report endpoint page.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/usage_report/claude_code</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/usage_report/retrieve_claude_code" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/usage_report/retrieve_claude_code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-claude-code-claude-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Messages Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the standalone Retrieve Messages usage report endpoint page.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/usage_report/messages</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/usage_report/retrieve_messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/usage_report/retrieve_messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-messages-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Users</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added curl request examples to all four Users operations and added the UserDeleteResponse domain type to the consolidated Users reference.</p>
+    <ul>
+      <li><strong>curl examples</strong> &mdash; Added examples for <code>GET /v1/organizations/users/{user_id}</code>, <code>GET /v1/organizations/users</code>, <code>POST /v1/organizations/users/{user_id}</code> (with <code>role</code> body), and <code>DELETE /v1/organizations/users/{user_id}</code>.</li>
+      <li><strong>UserDeleteResponse type</strong> &mdash; Added <code>UserDeleteResponse = object { id, type }</code> domain type with <code>&quot;user_deleted&quot;</code> discriminant.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/users" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/users &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="users" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Delete Users</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Delete User endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>DELETE /v1/organizations/users/$USER_ID</code> example with <code>-X DELETE</code> flag and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/users/delete" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/users/delete &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="delete-users" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List Users</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the List Users endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/users</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/users/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/users/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-users" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Users</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Retrieve User endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/users/$USER_ID</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/users/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/users/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-users" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Users</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Update User endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/users/$USER_ID</code> example with <code>{&quot;role&quot;: &quot;user&quot;}</code> body and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/users/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/users/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-users" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added curl examples to all Workspace CRUD operations and introduced the new workspace_restricted_developer role for workspace member management.</p>
+    <ul>
+      <li><strong>curl examples</strong> &mdash; Added examples for <code>POST /v1/organizations/workspaces</code>, <code>GET /v1/organizations/workspaces/{workspace_id}</code>, <code>GET /v1/organizations/workspaces</code>, <code>POST /v1/organizations/workspaces/{workspace_id}</code> (update), <code>POST /v1/organizations/workspaces/{workspace_id}/archive</code>, and <code>POST /v1/organizations/workspaces/{workspace_id}/members</code>.</li>
+      <li><strong>workspace_restricted_developer role</strong> &mdash; Added <code>&quot;workspace_restricted_developer&quot;</code> as a valid value for <code>workspace_role</code> in the Create Workspace Member body parameters and the returned <code>workspace_role</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Archive Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Archive Workspace endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/workspaces/$WORKSPACE_ID/archive</code> example with <code>-X POST</code> flag and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/archive" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/archive &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="archive-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Create Workspace endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/workspaces</code> example with <code>{&quot;name&quot;: &quot;x&quot;}</code> JSON body and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the List Workspaces endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/workspaces</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Members</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added curl examples to all Workspace Members operations and introduced workspace_restricted_developer as a valid role throughout the members reference.</p>
+    <ul>
+      <li><strong>workspace_restricted_developer role</strong> &mdash; Added <code>&quot;workspace_restricted_developer&quot;</code> to the <code>workspace_role</code> enum in Create, Retrieve, List, and Update operations for both request and response bodies.</li>
+      <li><strong>curl examples</strong> &mdash; Added examples for <code>POST /v1/organizations/workspaces/{workspace_id}/members</code>, <code>GET /v1/organizations/workspaces/{workspace_id}/members/{user_id}</code>, and <code>GET /v1/organizations/workspaces/{workspace_id}/members</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/members" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/members &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="members" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create Members</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added workspace_restricted_developer as a valid workspace_role and added a curl example to the Create Workspace Member endpoint.</p>
+    <ul>
+      <li><strong>workspace_restricted_developer role</strong> &mdash; Added <code>&quot;workspace_restricted_developer&quot;</code> as a valid input and returned value for <code>workspace_role</code>.</li>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/workspaces/$WORKSPACE_ID/members</code> example with <code>user_id</code> and <code>workspace_role</code> JSON body.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/members/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/members/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-members" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Delete Members</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Delete Workspace Member endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>DELETE /v1/organizations/workspaces/$WORKSPACE_ID/members/$USER_ID</code> example with <code>-X DELETE</code> flag and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/members/delete" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/members/delete &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="delete-members" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List Members</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added workspace_restricted_developer to the workspace_role enum and added a curl example to the List Workspace Members endpoint.</p>
+    <ul>
+      <li><strong>workspace_restricted_developer role</strong> &mdash; Added <code>&quot;workspace_restricted_developer&quot;</code> as a valid value in the returned <code>workspace_role</code> enum.</li>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/workspaces/$WORKSPACE_ID/members</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/members/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/members/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-members" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Members</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added workspace_restricted_developer to the workspace_role enum and added a curl example to the Retrieve Workspace Member endpoint.</p>
+    <ul>
+      <li><strong>workspace_restricted_developer role</strong> &mdash; Added <code>&quot;workspace_restricted_developer&quot;</code> as a valid value in the returned <code>workspace_role</code> enum.</li>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/workspaces/$WORKSPACE_ID/members/$USER_ID</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/members/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/members/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-members" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Members</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added workspace_restricted_developer to the workspace_role enum for both the request body and response, and added a curl example to the Update Workspace Member endpoint.</p>
+    <ul>
+      <li><strong>workspace_restricted_developer role</strong> &mdash; Added <code>&quot;workspace_restricted_developer&quot;</code> as a valid value in the <code>workspace_role</code> body parameter and returned enum.</li>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/workspaces/$WORKSPACE_ID/members/$USER_ID</code> example with <code>{&quot;workspace_role&quot;: &quot;workspace_user&quot;}</code> body.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/members/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/members/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-members" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Retrieve Workspace endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>GET /v1/organizations/workspaces/$WORKSPACE_ID</code> example with <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a curl request example to the Update Workspace endpoint reference.</p>
+    <ul>
+      <li><strong>curl example</strong> &mdash; Added <code>POST /v1/organizations/workspaces/$WORKSPACE_ID</code> example with <code>{&quot;name&quot;: &quot;x&quot;}</code> JSON body and <code>ANTHROPIC_ADMIN_API_KEY</code> header.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Rate limits</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed Claude Haiku 3 from the rate limits tables across all tier tabs following its retirement.</p>
+    <ul>
+      <li><strong>Claude Haiku 3 removed</strong> &mdash; Removed <code>claude-3-haiku-20240307</code> rate limit rows from the Tier 1, Tier 2, Tier 3, and Tier 4 rate limit tables.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/rate-limits" target="_blank" rel="noopener">platform.claude.com/docs/en/api/rate-limits &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="rate-limits" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-about">ℹ️</div>
+    <h2>About Claude</h2>
+    <span class="count">5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model deprecations</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated Claude Haiku 3 status from Deprecated to Retired and added a retirement notice note to its deprecation history entry.</p>
+    <ul>
+      <li><strong>Claude Haiku 3 status</strong> &mdash; Changed <code>claude-3-haiku-20240307</code> status from <code>Deprecated</code> to <code>Retired</code> in the model status table.</li>
+      <li><strong>Retirement note</strong> &mdash; Added a <code>&amp;lt;Note&amp;gt;</code> callout to the 2026-02-19 deprecation history entry confirming retirement occurred April 20, 2026.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/model-deprecations" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/model-deprecations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-deprecations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Migration guide</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the Haiku 3 migration code snippet and updated the rate limits note to reflect that Haiku 4.5 only has separate limits from Haiku 3.5.</p>
+    <ul>
+      <li><strong>Haiku 3 snippet removed</strong> &mdash; Removed the <code># From Haiku 3</code> code example showing migration from <code>claude-3-haiku-20240307</code> to <code>claude-haiku-4-5-20251001</code>.</li>
+      <li><strong>Rate limits note</strong> &mdash; Updated the review note to state Haiku 4.5 has separate rate limits from Haiku 3.5 only, removing the Haiku 3 reference.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/models/migration-guide" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/models/migration-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="migration-guide" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Models overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed Claude Haiku 3 from the legacy models table and its associated deprecation warning and footnote.</p>
+    <ul>
+      <li><strong>Claude Haiku 3 removed from table</strong> &mdash; Removed the <code>claude-3-haiku-20240307</code> column from the legacy models comparison table across all providers (Anthropic API, AWS Bedrock, GCP Vertex AI).</li>
+      <li><strong>Deprecation warning updated</strong> &mdash; Removed the Claude Haiku 3 deprecation and retirement notice from the warning callout.</li>
+      <li><strong>Footnote removed</strong> &mdash; Removed footnote <code>&amp;lt;sup&amp;gt;2&amp;lt;/sup&amp;gt;</code> that described single training data cutoff dates for some Haiku models.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/models/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="models-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Content moderation</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated all code examples and cost estimates to use Claude Haiku 4.5 instead of the retired Claude Haiku 3.</p>
+    <ul>
+      <li><strong>Model updated</strong> &mdash; Replaced <code>claude-3-haiku-20240307</code> with <code>claude-haiku-4-5-20251001</code> in four separate <code>client.messages.create()</code> call examples.</li>
+      <li><strong>Cost estimates updated</strong> &mdash; Revised the Haiku cost section from Claude Haiku 3 pricing ($0.25/$1.25 per MTok) to Claude Haiku 4.5 pricing ($1.00/$5.00 per MTok), updating monthly total from $2,590 to $10,360.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/use-case-guides/content-moderation" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/use-case-guides/content-moderation &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="content-moderation" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Legal summarization</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the cost comparison example to use Claude Haiku 4.5 pricing instead of the retired Claude Haiku 3.</p>
+    <ul>
+      <li><strong>Cost estimate updated</strong> &mdash; Replaced Claude Haiku 3 cost estimate ($21.96 total at $0.25/$1.25 per MTok) with Claude Haiku 4.5 estimate ($87.75 total at $1.00/$5.00 per MTok) for summarizing 1,000 legal documents.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/about-claude/use-case-guides/legal-summarization" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/use-case-guides/legal-summarization &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="legal-summarization" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">11 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new workflow section describing how to use Claude Code in non-code directories such as notes vaults and documentation folders.</p>
+    <ul>
+      <li><strong>Non-code folder workflow</strong> &mdash; Added &quot;Work in notes and non-code folders&quot; section explaining that Claude Code works in any directory including markdown vaults, reads files fresh on each tool call, and coexists with other tools&#x27; config directories without conflict.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code Desktop</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added support for pre-configuring SSH connections for teams via managed settings and documented the new sshConfigs managed setting key.</p>
+    <ul>
+      <li><strong>sshConfigs managed setting</strong> &mdash; Administrators can now distribute SSH connections by adding <code>sshConfigs</code> to a managed settings file; connections appear read-only in each user&#x27;s environment dropdown.</li>
+      <li><strong>sshConfigs schema</strong> &mdash; Each entry requires <code>id</code>, <code>name</code>, and <code>sshHost</code>; optional fields are <code>sshPort</code>, <code>sshIdentityFile</code>, and <code>startDirectory</code>.</li>
+      <li><strong>Managed settings table updated</strong> &mdash; Added <code>sshConfigs</code> row to the enterprise managed settings reference table.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-desktop" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the direnv integration to pair SessionStart with CwdChanged, clarified Bash subcommand matching for the if field, removed PermissionDenied from supported tool events, and marked agent hooks as experimental.</p>
+    <ul>
+      <li><strong>SessionStart + CwdChanged pattern</strong> &mdash; Added a <code>SessionStart</code> hook alongside <code>CwdChanged</code> for direnv so variables are loaded on launch and reloaded on directory change; changed append (<code>&gt;&gt;</code>) to overwrite (<code>&gt;</code>) for <code>CLAUDE_ENV_FILE</code>.</li>
+      <li><strong>direnv allow note</strong> &mdash; Added instruction to run <code>direnv allow</code> once per directory; documented devbox and nix equivalents.</li>
+      <li><strong>if field subcommand matching</strong> &mdash; Clarified that <code>if</code> fires when any subcommand of a compound Bash command matches (e.g., <code>npm test &amp;&amp; git push</code> triggers a <code>Bash(git *)</code> hook), and always fires when a command is too complex to parse.</li>
+      <li><strong>PermissionDenied removed</strong> &mdash; Removed <code>PermissionDenied</code> from the list of tool events where the <code>if</code> field is evaluated.</li>
+      <li><strong>Agent hooks experimental</strong> &mdash; Added warning that <code>type: &quot;agent&quot;</code> hooks are experimental and may change; recommends command hooks for production.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the if field documentation to reflect Bash subcommand matching semantics, removed PermissionDenied from supported events, added an experimental warning for agent hooks, and expanded the if field description in the common fields table.</p>
+    <ul>
+      <li><strong>Bash subcommand matching</strong> &mdash; Updated the hook resolution example and matcher description to clarify that <code>if: &quot;Bash(rm *)&quot;</code> matches any subcommand of the Bash input, not just commands that start with <code>rm</code>.</li>
+      <li><strong>if field semantics expanded</strong> &mdash; Added a prose block specifying that <code>if</code> holds exactly one rule (no <code>&amp;&amp;</code>/<code>||</code> syntax), strips leading <code>VAR=value</code> assignments before matching, and always fires when a command is too complex to parse.</li>
+      <li><strong>PermissionDenied removed</strong> &mdash; Removed <code>PermissionDenied</code> from the list of tool events where <code>if</code> is evaluated in the common fields table.</li>
+      <li><strong>Agent hooks experimental</strong> &mdash; Added warning callout that agent hooks (<code>type: &quot;agent&quot;</code>) are experimental and may change.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated terminal names, expanded Shift+Enter compatibility, added Undo (u) to vim keybindings, and corrected Option+Enter documentation.</p>
+    <ul>
+      <li><strong>Terminal names corrected</strong> &mdash; Updated &quot;Terminal.app&quot; to &quot;Apple Terminal&quot; and fixed iTerm2 settings path to Settings → Profiles → Keys → General.</li>
+      <li><strong>Shift+Enter support expanded</strong> &mdash; Added Warp and Apple Terminal to the list of terminals where Shift+Enter works natively; added VS Code, Cursor, and Windsurf to the list requiring <code>/terminal-setup</code>.</li>
+      <li><strong>Option+Enter clarified</strong> &mdash; Updated description to reference the Option as Meta terminal configuration requirement rather than calling it a macOS default.</li>
+      <li><strong>Vim undo added</strong> &mdash; Added <code>u</code> (Undo) keybinding to the vim NORMAL mode table.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added sshConfigs as a documented setting in the global settings reference table.</p>
+    <ul>
+      <li><strong>sshConfigs setting added</strong> &mdash; Added <code>sshConfigs</code> row documenting the SSH connection array; each entry requires <code>id</code>, <code>name</code>, <code>sshHost</code> with optional <code>sshPort</code>, <code>sshIdentityFile</code>, <code>startDirectory</code>; read from managed and user settings only.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Cleaned up duplicate theme attributes on installation code block fences.</p>
+    <ul>
+      <li><strong>Code block cleanup</strong> &mdash; Removed duplicate <code>theme={null}</code> attributes from installation command blocks for macOS/Linux, Windows PowerShell, Windows CMD, Homebrew, and WinGet tabs.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed internal anchor links for the /statusline command section to use URL-encoded fragment identifiers.</p>
+    <ul>
+      <li><strong>Anchor link encoding</strong> &mdash; Fixed links to the <code>/statusline</code> command section by replacing <code>#use-the-statusline-command</code> with <code>#use-the-%2Fstatusline-command</code> to correctly handle the slash character in the heading.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed the internal anchor link for the /btw command reference to use a URL-encoded fragment identifier.</p>
+    <ul>
+      <li><strong>Anchor link encoding</strong> &mdash; Fixed link to the <code>/btw</code> interactive mode section by replacing <code>#side-questions-with-btw</code> with <code>#side-questions-with-%2Fbtw</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure your terminal for Claude Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Completely restructured the terminal configuration guide into symptom-driven sections with expanded terminal compatibility tables, renamed from &quot;Optimize your terminal setup&quot;.</p>
+    <ul>
+      <li><strong>Page renamed and restructured</strong> &mdash; Renamed from &quot;Optimize your terminal setup&quot; to &quot;Configure your terminal for Claude Code&quot;; reorganized into six symptom-driven sections: multiline input, Option key shortcuts, notifications, tmux, fullscreen rendering, and Vim keybindings.</li>
+      <li><strong>Shift+Enter compatibility table</strong> &mdash; Added explicit table listing terminal support: Ghostty/Kitty/iTerm2/WezTerm/Warp/Apple Terminal work without setup; VS Code/Cursor/Windsurf/Alacritty/Zed need <code>/terminal-setup</code>; Windows Terminal and JetBrains IDEs are unsupported.</li>
+      <li><strong>Notification hook example</strong> &mdash; Added <code>afplay</code>-based Notification hook JSON example for macOS; documented that Warp and Apple Terminal rely on hooks rather than desktop notifications.</li>
+      <li><strong>iTerm2 notification setup clarified</strong> &mdash; Expanded to step-by-step instructions for enabling &quot;Send escape sequence-generated alerts&quot; in iTerm2.</li>
+      <li><strong>Option key section added</strong> &mdash; Added a dedicated section with Tabs for Apple Terminal, iTerm2, and VS Code explaining how to enable Option as Meta, including note about Claude Code&#x27;s first-run prompt for Apple Terminal.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-your-terminal-for-claude-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added documentation for the Ctrl+O keyboard shortcut to expand or collapse all extended thinking blocks in a VS Code session.</p>
+    <ul>
+      <li><strong>Extended thinking keyboard shortcut</strong> &mdash; Added note that Claude&#x27;s reasoning appears as collapsed blocks in the conversation and pressing <code>Ctrl+O</code> expands or collapses every thinking block in the session.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock (legacy)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the retired Claude Haiku 3 entry from the Bedrock model availability table.</p>
+    <ul>
+      <li><strong>Claude Haiku 3 removed</strong> &mdash; Removed <code>anthropic.claude-3-haiku-20240307-v1:0</code> row from the legacy model availability table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock-(legacy)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the retired Claude Haiku 3 entry from the Vertex AI model availability table.</p>
+    <ul>
+      <li><strong>Claude Haiku 3 removed</strong> &mdash; Removed <code>claude-3-haiku@20240307</code> row from the legacy model availability table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed Claude Haiku 3 from the minimum cacheable prompt length list following its retirement.</p>
+    <ul>
+      <li><strong>Claude Haiku 3 removed</strong> &mdash; Removed Claude Haiku 3 from the 2048-token minimum cacheable prompt length entry; the entry now applies only to Claude Haiku 3.5.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-release">📋</div>
+    <h2>Release Notes</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added April 20, 2026 release note documenting the retirement of Claude Haiku 3.</p>
+    <ul>
+      <li><strong>Claude Haiku 3 retirement</strong> &mdash; Added entry stating that <code>claude-3-haiku-20240307</code> was retired on April 20, 2026; all requests now return an error and users should migrate to Claude Haiku 4.5.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/release-notes/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 55 docs analyzed &middot; 2026-04-21
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
