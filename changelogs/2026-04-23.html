@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 23, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 23, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 23 at 07:00 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">17</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">1</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Linux package manager support</strong> &mdash; Claude Code now publishes signed apt, dnf, and apk repositories for Debian, Fedora, RHEL, and Alpine; install and uninstall instructions added to setup, quickstart, and overview docs</li>
+      <li><strong>Session resume from summary</strong> &mdash; <code>--resume</code>, <code>--continue</code>, and <code>/resume</code> now offer to resume large old sessions from a summary instead of reloading the full transcript (unavailable on Bedrock, Vertex AI, and Foundry)</li>
+      <li><strong>Monitoring: effort-level telemetry</strong> &mdash; The <code>effort</code> attribute is now emitted on cost counter, token counter, API request, and API error events; <code>command_name</code> and <code>command_source</code> fields added to <code>user_prompt</code> events</li>
+      <li><strong>Vertex AI multi-region endpoints</strong> &mdash; <code>CLOUD_ML_REGION</code> now accepts multi-region values such as <code>eu</code> or <code>us</code>, routing to the correct <code>aiplatform.*.rep.googleapis.com</code> hostname automatically</li>
+      <li><strong>Network config URL table</strong> &mdash; Required URLs restructured as a reference table with new entries for <code>downloads.claude.ai</code> and <code>bridge.claudeusercontent.com</code>; Bedrock/Vertex/Foundry provider traffic routing clarified</li>
+      <li><strong>Voice dictation settings refactored</strong> &mdash; <code>voiceEnabled</code> deprecated in favour of a new <code>voice</code> object supporting <code>enabled</code>, <code>mode</code> (<code>hold</code>/<code>tap</code>), and <code>autoSubmit</code> fields; interactive mode shortcut table updated to reflect tap-to-toggle support</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">17 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents that --resume, --continue, and /resume now offer to restore large old sessions from a summary rather than the full transcript, and notes this prompt is unavailable on Amazon Bedrock, Google Cloud Vertex AI, and Microsoft Foundry.</p>
+    <ul>
+      <li><strong>Session resume from summary</strong> &mdash; When a selected session is old and large, <code>--resume</code>, <code>--continue</code>, and <code>/resume</code> offer to load a compact summary instead of the full transcript to avoid exhausting usage limits</li>
+      <li><strong>Platform caveat</strong> &mdash; The summary-resume prompt is not available on Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code Desktop</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the `autoMode` managed settings reference link from the old permissions anchor to the new standalone /en/auto-mode-config page.</p>
+    <ul>
+      <li><strong>autoMode reference link</strong> &mdash; The <code>autoMode</code> managed settings entry now links to the new dedicated <code>/en/auto-mode-config</code> page instead of the old <code>/en/permissions#configure-the-auto-mode-classifier</code> anchor</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-desktop" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expands region configuration to cover multi-region Vertex AI endpoints, documents the correct hostnames for each endpoint type, and updates 404 troubleshooting guidance accordingly.</p>
+    <ul>
+      <li><strong>Multi-region endpoint support</strong> &mdash; <code>CLOUD_ML_REGION</code> now accepts <code>global</code>, multi-region values (<code>eu</code>, <code>us</code>), or specific region strings; Claude Code selects the correct hostname including <code>aiplatform.eu.rep.googleapis.com</code> and <code>aiplatform.us.rep.googleapis.com</code></li>
+      <li><strong>Model availability note</strong> &mdash; Clarified that model availability varies across specific regions, multi-region locations, and global endpoints rather than just regions vs. global</li>
+      <li><strong>404 troubleshooting</strong> &mdash; &quot;Verify region access&quot; guidance updated to note that some models are only available on <code>global</code> or multi-region locations; <code>VERTEX_REGION_&lt;MODEL_NAME&gt;</code> description updated to include multi-region locations</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a note that deferred sessions are subject to the cleanupPeriodDays retention sweep, which deletes session files after 30 days by default.</p>
+    <ul>
+      <li><strong>Deferred session retention</strong> &mdash; Deferred sessions stored on disk are now subject to the <code>cleanupPeriodDays</code> retention sweep (default 30 days); sessions older than this limit are deleted at startup</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the voice input shortcut table to reflect tap-to-toggle support alongside hold-to-record, and updates the rebind link to the new key name.</p>
+    <ul>
+      <li><strong>Voice dictation shortcut</strong> &mdash; Space bar shortcut now documented as &quot;Hold or tap&quot; to support both hold-to-record and tap-to-toggle modes; description updated from &quot;Push-to-talk dictation&quot; to &quot;Voice dictation&quot;</li>
+      <li><strong>Tap-to-toggle</strong> &mdash; References <code>/voice tap</code> command for enabling tap-to-toggle mode</li>
+      <li><strong>Rebind link</strong> &mdash; Updated anchor from <code>#rebind-the-push-to-talk-key</code> to <code>#rebind-the-dictation-key</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaces the interactive GitHub MCP authentication flow with explicit personal access token header injection via --header.</p>
+    <ul>
+      <li><strong>GitHub MCP authentication</strong> &mdash; Replaced the interactive <code>/mcp</code> &quot;Authenticate&quot; prompt flow with an explicit <code>--header &quot;Authorization: Bearer YOUR_GITHUB_PAT&quot;</code> flag; users must generate a fine-grained PAT in GitHub token settings first</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies that @path imports do not reduce context window usage since they load at launch, and promotes path-scoped rules as the preferred strategy for keeping CLAUDE.md files small.</p>
+    <ul>
+      <li><strong>CLAUDE.md size guidance</strong> &mdash; Recommends path-scoped rules as the primary approach to limit context consumption; clarifies that <code>@path</code> imports are for organization only and still load at launch, not a context-reduction technique</li>
+      <li><strong>Troubleshooting update</strong> &mdash; &quot;My CLAUDE.md is too large&quot; troubleshooting entry revised with the same clarification: imports do not reduce context, only path-scoped rules load conditionally</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents that /model selections now persist to .claude/settings.local.json as of v2.1.117 when a project settings file pins a different model, and simplifies the default effort level description.</p>
+    <ul>
+      <li><strong>Model selection persistence (v2.1.117)</strong> &mdash; When a project&#x27;s <code>.claude/settings.json</code> pins a model, the user&#x27;s <code>/model</code> choice is now written to <code>.claude/settings.local.json</code> so it persists across restarts; managed settings still take highest precedence</li>
+      <li><strong>Startup model attribution</strong> &mdash; The startup header now indicates which settings file set the active model when it comes from project or managed settings</li>
+      <li><strong>Default effort levels</strong> &mdash; Simplified: <code>xhigh</code> on Opus 4.7, <code>high</code> on Opus 4.6 and Sonnet 4.6 (plan/provider-based distinctions removed as of v2.1.117)</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the effort attribute to cost counter, token counter, API request, and API error telemetry events, and introduces command_name and command_source fields on user_prompt events with OTEL_LOG_TOOL_DETAILS behaviour extended to cover custom/plugin/MCP command names.</p>
+    <ul>
+      <li><strong>effort attribute</strong> &mdash; New <code>effort</code> attribute (<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>) added to cost counter, token counter, API request event, and API error event; absent when the model does not support effort</li>
+      <li><strong>command_name field</strong> &mdash; New <code>command_name</code> field on <code>user_prompt</code> events; built-in commands emit canonical names, custom/plugin/MCP commands collapse to <code>custom</code> or <code>mcp</code> unless <code>OTEL_LOG_TOOL_DETAILS=1</code></li>
+      <li><strong>command_source field</strong> &mdash; New <code>command_source</code> field on <code>user_prompt</code> events: <code>builtin</code>, <code>custom</code>, or <code>mcp</code>; plugin-provided commands report as <code>custom</code></li>
+      <li><strong>OTEL_LOG_TOOL_DETAILS extended</strong> &mdash; When enabled, also surfaces verbatim custom, plugin, and MCP command names on <code>user_prompt</code> events in addition to existing tool parameter logging</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Restructures required URLs into a reference table, adds new entries for downloads.claude.ai, storage.googleapis.com, and bridge.claudeusercontent.com, and clarifies provider traffic routing for Bedrock, Vertex AI, and Foundry.</p>
+    <ul>
+      <li><strong>URL allowlist table</strong> &mdash; Required URLs now presented as a structured table with purpose column; previously a bullet list</li>
+      <li><strong>New URL entries</strong> &mdash; Explicitly documents <code>downloads.claude.ai</code> (plugin downloads, installer, auto-updater), <code>storage.googleapis.com</code> (legacy, versions prior to 2.1.116), and <code>bridge.claudeusercontent.com</code> (Claude in Chrome WebSocket bridge)</li>
+      <li><strong>Provider traffic routing</strong> &mdash; Clarified that Amazon Bedrock, Google Vertex AI, and Microsoft Foundry replace <code>api.anthropic.com</code>, <code>claude.ai</code>, and <code>platform.claude.com</code> for model traffic and authentication</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a note to the installation section pointing users to Linux package manager (apt, dnf, apk) installation instructions.</p>
+    <ul>
+      <li><strong>Linux package manager notice</strong> &mdash; Overview installation section now references apt, dnf, and apk installation on Debian, Fedora, RHEL, and Alpine via a link to the setup page</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Strengthens the marketplace restriction enforcement description to cover plugin install, update, refresh, and auto-update operations, not just initial marketplace addition.</p>
+    <ul>
+      <li><strong>Restriction enforcement scope</strong> &mdash; Marketplace restrictions are now enforced on marketplace add and on plugin install, update, refresh, and auto-update; a marketplace added before a policy was configured cannot be used to fetch plugins once its source no longer matches the allowlist</li>
+      <li><strong>blockedMarketplaces enforcement</strong> &mdash; Same lifecycle enforcement explicitly documented for <code>blockedMarketplaces</code> in addition to <code>strictKnownMarketplaces</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a reference to Linux package manager installation (apt, dnf, apk) for Debian, Fedora, RHEL, and Alpine after the main install step.</p>
+    <ul>
+      <li><strong>Linux package manager notice</strong> &mdash; Quickstart install step now notes that apt, dnf, and apk options are available for Debian, Fedora, RHEL, and Alpine, linking to the setup page for full instructions</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Deprecates the voiceEnabled setting in favour of a new voice object, tightens marketplace restriction enforcement descriptions for blockedMarketplaces and strictKnownMarketplaces, and updates autoMode reference links.</p>
+    <ul>
+      <li><strong>voice setting (new)</strong> &mdash; New <code>voice</code> object setting with <code>enabled</code>, <code>mode</code> (<code>hold</code>/<code>tap</code>), and <code>autoSubmit</code> fields replaces the old boolean <code>voiceEnabled</code></li>
+      <li><strong>voiceEnabled deprecation</strong> &mdash; <code>voiceEnabled</code> retained as a legacy alias for <code>voice.enabled</code>; docs recommend using the <code>voice</code> object instead</li>
+      <li><strong>blockedMarketplaces enforcement</strong> &mdash; Description updated to clarify enforcement runs on marketplace add and on install, update, refresh, and auto-update, not only at add time</li>
+      <li><strong>strictKnownMarketplaces enforcement</strong> &mdash; Same lifecycle enforcement language added; description clarifies this applies to both adding marketplaces and fetching plugins from them</li>
+      <li><strong>autoMode reference link</strong> &mdash; Updated to point to <code>/en/auto-mode-config</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds full installation, upgrade, and uninstall instructions for Linux package managers (apt, dnf, apk) including signed repository configuration, GPG key verification, and uninstall cleanup commands.</p>
+    <ul>
+      <li><strong>Linux package manager installation</strong> &mdash; New section documents signed apt (Debian/Ubuntu), dnf (Fedora/RHEL), and apk (Alpine) repository setup with GPG/RSA key verification fingerprints</li>
+      <li><strong>Stable vs. latest channel</strong> &mdash; Replace <code>stable</code> with <code>latest</code> in repository URLs to follow the rolling release channel</li>
+      <li><strong>No auto-update</strong> &mdash; Linux package manager installations do not auto-update through Claude Code; upgrades happen via normal system package workflow (<code>apt upgrade</code>, <code>dnf upgrade</code>, <code>apk upgrade</code>)</li>
+      <li><strong>Binary integrity note</strong> &mdash; Updated Linux signing note: apt/dnf/apk installs have signatures verified automatically by the package manager; direct binary downloads still require manual manifest verification</li>
+      <li><strong>Uninstall instructions</strong> &mdash; New apt, dnf, and apk uninstall steps added including removal of repository config files and signing keys</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a note clarifying that mcpServers defined in an agent file apply both when the agent runs as a subagent and when it is launched as the main session via --agent.</p>
+    <ul>
+      <li><strong>mcpServers in main session</strong> &mdash; New note clarifies that <code>mcpServers</code> definitions in an agent file take effect in both subagent and main-session contexts; when the agent is the main session, inline server definitions connect at startup alongside <code>.mcp.json</code> and settings-file servers</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the GitHub MCP server example to use explicit PAT header authentication instead of the interactive /mcp authenticate flow.</p>
+    <ul>
+      <li><strong>GitHub MCP authentication</strong> &mdash; VS Code MCP example updated to pass a GitHub personal access token via <code>--header &quot;Authorization: Bearer YOUR_GITHUB_PAT&quot;</code>, replacing the previous interactive authentication prompt approach</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Vision</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds guidance on image compression trade-offs, noting that lossy formats like JPEG and WebP can reduce request latency but may degrade model performance if compression artifacts are severe.</p>
+    <ul>
+      <li><strong>Image compression guidance</strong> &mdash; New best-practice bullet advises that lossy formats (JPEG, WebP) reduce request size and latency but can introduce artifacts that harm model performance, particularly for text-heavy images with multiple compression passes; recommends inspecting actual images sent to the API to validate compression settings</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/vision" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/vision &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="vision" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 18 docs analyzed &middot; 2026-04-23
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
