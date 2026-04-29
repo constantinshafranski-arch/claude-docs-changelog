@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; April 29, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">April 29, 2026</div>
+    <span class="badge">Up to date &mdash; synced Apr 29 at 07:22 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">18</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat other">
+      <div class="num">1</div>
+      <div class="label">Other (1 new)</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Setup hook event</strong> &mdash; New <code>Setup</code> lifecycle hook fires when Claude Code is launched with <code>--init-only</code>, <code>--init</code>, or <code>--maintenance</code> in print mode, enabling one-time CI preparation and scheduled maintenance scripts separate from normal session startup.</li>
+      <li><strong>Bedrock service tiers</strong> &mdash; New <code>ANTHROPIC_BEDROCK_SERVICE_TIER</code> environment variable lets you select <code>default</code>, <code>flex</code>, or <code>priority</code> latency tiers via the <code>X-Amzn-Bedrock-Service-Tier</code> header on each request.</li>
+      <li><strong>Git for Windows now optional</strong> &mdash; On native Windows, Git for Windows is now recommended rather than required; Claude Code falls back to PowerShell as the shell tool when Git Bash is absent.</li>
+      <li><strong>JetBrains WSL2 networking guide</strong> &mdash; Detailed step-by-step instructions added for resolving WSL2 IDE-detection failures via Windows Firewall rules or mirrored networking mode, replacing the prior stub.</li>
+      <li><strong>additionalContext field</strong> &mdash; Hooks reference comprehensively documents how the <code>additionalContext</code> output field injects context into Claude&#x27;s window, covering delivery point, 10,000-character overflow behavior, resume replay semantics, and guidance on what to include.</li>
+      <li><strong>Glossary</strong> &mdash; New reference page defining key ML and API concepts including context window, fine-tuning, HHH, LLM, MCP, RAG, RLHF, temperature, TTFT, and tokens.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">18 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added documentation for Amazon Bedrock service tiers, allowing cost-versus-latency trade-offs via a new environment variable.</p>
+    <ul>
+      <li><strong>Service tiers</strong> &mdash; New <code>ANTHROPIC_BEDROCK_SERVICE_TIER</code> environment variable accepts <code>default</code>, <code>flex</code>, or <code>priority</code>; Claude Code sends the value as the <code>X-Amzn-Bedrock-Service-Tier</code> header on every request.</li>
+      <li><strong>Tier availability</strong> &mdash; Documented that tier availability varies by model and region, and that reserved capacity uses a provisioned throughput ARN as the model ID instead of this setting.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified the behavior of the <code>--init</code>, <code>--init-only</code>, and <code>--maintenance</code> flags to reflect their new relationship with the Setup hook event and print mode.</p>
+    <ul>
+      <li><strong>--init flag</strong> &mdash; Redefined to run Setup hooks with the <code>init</code> matcher in print mode only (<code>claude -p --init &quot;query&quot;</code>); no longer starts interactive mode.</li>
+      <li><strong>--init-only flag</strong> &mdash; Redefined to run Setup and <code>SessionStart</code> hooks with the <code>startup</code> matcher, then exit without starting a conversation.</li>
+      <li><strong>--maintenance flag</strong> &mdash; Redefined to run Setup hooks with the <code>maintenance</code> matcher in print mode only (<code>claude -p --maintenance &quot;query&quot;</code>); no longer starts interactive mode.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Extended the session picker and PR-resume workflows with URL-based search support and new MCP elicitation notification matchers.</p>
+    <ul>
+      <li><strong>PR URL resume</strong> &mdash; Sessions linked to a PR can now be found by pasting a GitHub, GitHub Enterprise, GitLab, or Bitbucket pull/merge request URL directly into the <code>/resume</code> picker search field.</li>
+      <li><strong>--from-pr shortcut</strong> &mdash; Documented that PR sessions can be resumed via <code>claude --from-pr &amp;lt;number&amp;gt;</code> or by pasting the PR URL into the session picker.</li>
+      <li><strong>elicitation_complete matcher</strong> &mdash; New notification matcher fires when an MCP elicitation form is submitted or dismissed.</li>
+      <li><strong>elicitation_response matcher</strong> &mdash; New notification matcher fires when an MCP elicitation response is sent back to the server.</li>
+      <li><strong>elicitation_dialog description</strong> &mdash; Updated description to clarify the matcher fires when an MCP server opens an elicitation form (not a generic Claude question).</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new Setup hook event and expanded matcher tables with MCP elicitation notification types and updated SubagentStart agent type names.</p>
+    <ul>
+      <li><strong>Setup event</strong> &mdash; New <code>Setup</code> lifecycle event added to the event table; fires when Claude Code is launched with <code>--init-only</code>, <code>--init</code>, or <code>--maintenance</code> in <code>-p</code> mode for CI/script preparation.</li>
+      <li><strong>Setup matcher</strong> &mdash; New matcher row added to the event-matcher table; filters on the CLI flag that triggered setup (<code>init</code> or <code>maintenance</code>).</li>
+      <li><strong>Notification matchers</strong> &mdash; Added <code>elicitation_complete</code> and <code>elicitation_response</code> to the Notification event matcher values.</li>
+      <li><strong>SubagentStart agent type</strong> &mdash; Built-in agent type name changed from <code>Bash</code> to <code>general-purpose</code> in matcher examples.</li>
+      <li><strong>Exit code 2 for Setup</strong> &mdash; Clarified that exit 2 on non-blockable events (including <code>Setup</code>, <code>SessionStart</code>, <code>Notification</code>) shows stderr to the user and continues execution.</li>
+      <li><strong>Bash tool file-change coverage note</strong> &mdash; Added a note explaining that Claude can modify files via <code>Bash</code> and recommending a <code>Stop</code> hook or <code>Bash</code> matcher with <code>git status --porcelain</code> for full coverage.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new Setup hook event with full input/output/decision-control documentation, introduced the <code>additionalContext</code> field guide, and updated matcher tables for Notification and SubagentStart events.</p>
+    <ul>
+      <li><strong>Setup hook event</strong> &mdash; New <code>Setup</code> event documented end-to-end: when it fires, matcher values (<code>init</code>/<code>maintenance</code>), JSON input with <code>trigger</code> field, decision control (non-blockable), <code>additionalContext</code> output, and <code>CLAUDE_ENV_FILE</code> access.</li>
+      <li><strong>additionalContext guide</strong> &mdash; New dedicated section documents how the field delivers content into Claude&#x27;s context window, 10,000-character overflow-to-file behavior, where reminders appear per event type, resume replay semantics, and guidance on phrasing to avoid prompt-injection defenses.</li>
+      <li><strong>Lifecycle diagram</strong> &mdash; Updated to show optional Setup feeding into SessionStart.</li>
+      <li><strong>Notification matchers</strong> &mdash; Added <code>elicitation_complete</code> and <code>elicitation_response</code> to the Notification event matcher table and the prose description.</li>
+      <li><strong>SubagentStart agent type</strong> &mdash; Built-in agent name changed from <code>Bash</code> to <code>general-purpose</code> in the matcher table, prose description, and input field documentation.</li>
+      <li><strong>Exit code 2 table</strong> &mdash; Added <code>Setup</code> row: non-blockable, shows stderr to user only.</li>
+      <li><strong>SessionStart additionalContext</strong> &mdash; Clarified that plain stdout already reaches Claude for SessionStart; JSON form is needed only when combining context with other fields like <code>suppressOutput</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>JetBrains IDEs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded WSL2 IDE-detection troubleshooting with detailed firewall and mirrored-networking fixes, and updated several feature descriptions and section headings.</p>
+    <ul>
+      <li><strong>WSL2 firewall fix</strong> &mdash; New step-by-step instructions for creating a Windows Firewall inbound rule to allow WSL2 subnet traffic, resolving &quot;No available IDEs detected&quot; without changing networking mode.</li>
+      <li><strong>WSL2 mirrored networking</strong> &mdash; Added alternative fix using <code>networkingMode=mirrored</code> in <code>.wslconfig</code> (requires Windows 11 22H2+).</li>
+      <li><strong>File reference shortcut example</strong> &mdash; Updated example from generic <code>@File#L1-99</code> to concrete <code>@src/auth.ts#L1-99</code> format.</li>
+      <li><strong>Plugin not working</strong> &mdash; Added context sentence explaining when this issue appears.</li>
+      <li><strong>IDE not detected</strong> &mdash; Added context sentence and updated WSL link to point to the new inline WSL configuration section instead of the general troubleshooting guide.</li>
+      <li><strong>Command not found</strong> &mdash; Changed verification step from <code>npm list -g @anthropic-ai/claude-code</code> to <code>claude --version</code>.</li>
+      <li><strong>Security considerations link</strong> &mdash; Footer link updated to <code>/en/troubleshoot-install</code> for installation/login problems outside the IDE.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/jetbrains" target="_blank" rel="noopener">code.claude.com/docs/en/jetbrains &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="jetbrains-ides" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>LLM gateway configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented the attribution block Claude Code prepends to system prompts and introduced the <code>CLAUDE_CODE_ATTRIBUTION_HEADER</code> env var to suppress it for gateways with their own prompt caching.</p>
+    <ul>
+      <li><strong>Attribution block</strong> &mdash; Claude Code now prepends a short attribution block (client version + conversation fingerprint) to the system prompt; the Anthropic API strips it before processing so it does not affect first-party prompt caching.</li>
+      <li><strong>CLAUDE_CODE_ATTRIBUTION_HEADER</strong> &mdash; Set to <code>0</code> to omit the attribution block when your gateway implements its own prompt cache keyed on the full request body.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">code.claude.com/docs/en/llm-gateway &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="llm-gateway-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified precedence behavior when a locally added MCP server URL conflicts with a claude.ai connector.</p>
+    <ul>
+      <li><strong>Server precedence over connectors</strong> &mdash; A server added in Claude Code takes precedence over a claude.ai connector pointing at the same URL; <code>/mcp</code> lists the connector as hidden and shows how to remove the duplicate.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new <code>claude_code.at_mention</code> telemetry event, corrected <code>status_code</code> type from string to number, and clarified the opt-in scope of OpenTelemetry export.</p>
+    <ul>
+      <li><strong>at_mention event</strong> &mdash; New <code>claude_code.at_mention</code> OTel event logged when Claude Code resolves an <code>@</code>-mention; attributes include <code>mention_type</code> (<code>file</code>, <code>directory</code>, <code>agent</code>, <code>mcp_resource</code>) and <code>success</code>.</li>
+      <li><strong>status_code type</strong> &mdash; Changed from string to number in both <code>api_error</code> and <code>api_retries_exhausted</code> events; field is now absent (not <code>&quot;undefined&quot;</code>) for non-HTTP errors.</li>
+      <li><strong>Telemetry opt-in scope</strong> &mdash; Clarified that only OpenTelemetry export to your backend is opt-in; added reference to the Data usage page for Anthropic&#x27;s separate operational telemetry and how to disable it.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated Windows installation guidance to clarify that Git for Windows is recommended (not required) and that PowerShell is used as a fallback shell.</p>
+    <ul>
+      <li><strong>Git for Windows requirement</strong> &mdash; Downgraded from required to recommended on native Windows; Claude Code falls back to PowerShell as the shell tool when Git Bash is absent.</li>
+      <li><strong>Troubleshooting link</strong> &mdash; Updated reference from <code>/en/troubleshooting</code> to <code>/en/troubleshoot-install</code> for installation troubleshooting.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new <code>Setup</code> hook event to the plugin hooks event table.</p>
+    <ul>
+      <li><strong>Setup event</strong> &mdash; <code>Setup</code> added to the plugin hooks lifecycle event table; fires when Claude Code is launched with <code>--init-only</code>, <code>--init</code>, or <code>--maintenance</code> in <code>-p</code> mode for CI/script preparation.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added guidance on hosting a plugin marketplace in a private repository to keep plugins internal to a team.</p>
+    <ul>
+      <li><strong>Private marketplace distribution</strong> &mdash; Added note that teams can keep plugins internal by hosting the marketplace in a private repository, with a link to the private repositories section of the plugin marketplaces guide.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated Windows installation instructions to reflect that Git for Windows is recommended rather than required, with PowerShell as a fallback.</p>
+    <ul>
+      <li><strong>Git for Windows requirement</strong> &mdash; Changed from required to recommended on native Windows; documented that Claude Code uses PowerShell as the shell tool when Git Bash is absent.</li>
+      <li><strong>Troubleshooting link</strong> &mdash; Updated reference from <code>/en/troubleshooting</code> to <code>/en/troubleshoot-install</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Sandboxing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added WSL1/WSL2 sandboxing limitations, clarified proxy TLS behavior, and strengthened the domain-fronting security warning.</p>
+    <ul>
+      <li><strong>WSL1 unsupported</strong> &mdash; Added note that WSL1 lacks the Linux namespace primitives required for sandboxing; users seeing <code>Sandboxing requires WSL2</code> must upgrade or run without sandboxing.</li>
+      <li><strong>WSL2 Windows binary restriction</strong> &mdash; Documented that sandboxed commands cannot invoke Windows binaries (e.g., <code>cmd.exe</code>, <code>powershell.exe</code>, paths under <code>/mnt/c/</code>) and recommends adding such commands to <code>excludedCommands</code>.</li>
+      <li><strong>Proxy TLS inspection note</strong> &mdash; Added callout clarifying the built-in proxy enforces the allowlist by hostname without terminating or inspecting TLS traffic.</li>
+      <li><strong>Domain fronting warning</strong> &mdash; Expanded security warning to explain that the proxy&#x27;s hostname-only allow decision can be bypassed via domain fronting or similar techniques, and recommends a TLS-terminating custom proxy for stronger guarantees.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="sandboxing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the footer cross-reference link to point to the new dedicated installation troubleshooting page.</p>
+    <ul>
+      <li><strong>Troubleshooting link</strong> &mdash; Updated footer reference from <code>/en/troubleshooting</code> to <code>/en/troubleshoot-install</code> for installation, authentication, and platform issues.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Revised Windows shell requirements to mark Git for Windows as recommended rather than required, updated the Windows comparison table, and added a post-install verification hint.</p>
+    <ul>
+      <li><strong>Git for Windows requirement</strong> &mdash; Downgraded from required to recommended on native Windows across the shell requirements section and Windows comparison table; PowerShell is now documented as the fallback shell.</li>
+      <li><strong>PowerShell tool rollout note</strong> &mdash; Clarified that the PowerShell tool rolls out progressively as an additional option only when Git Bash is installed.</li>
+      <li><strong>Post-install verification</strong> &mdash; Added inline prompt to run <code>claude --version</code> after installation and visit <code>/en/troubleshoot-install</code> if it fails.</li>
+      <li><strong>Troubleshooting links</strong> &mdash; Updated multiple references from <code>/en/troubleshooting</code> to <code>/en/troubleshoot-install</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated Windows status line documentation to reflect that commands now run through PowerShell when Git Bash is absent.</p>
+    <ul>
+      <li><strong>Windows shell fallback</strong> &mdash; Documented that status line commands run through Git Bash when installed, or through PowerShell when Git Bash is absent; updated the PowerShell invocation example to note it works from either shell.</li>
+      <li><strong>Bash script note</strong> &mdash; Clarified that running a Bash script directly requires Git Bash to be installed.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Refocused the troubleshooting page on performance and stability issues, replacing the detailed installation/authentication content with a routing table that directs users to the appropriate dedicated pages.</p>
+    <ul>
+      <li><strong>Page scope narrowed</strong> &mdash; Installation, authentication, settings/hooks/MCP, API errors, and IDE-specific issues are now handled by dedicated pages; this page focuses on performance, stability, and search problems.</li>
+      <li><strong>Routing table added</strong> &mdash; New symptom-to-page routing table guides users to <code>/en/troubleshoot-install</code>, <code>/en/debug-your-config</code>, <code>/en/errors</code>, <code>/en/vs-code</code>, and <code>/en/jetbrains</code> based on their error.</li>
+      <li><strong>Installation content removed</strong> &mdash; Detailed sections covering PATH, network connectivity, conflicting installations, permission errors, and platform-specific install issues have been moved to <code>/en/troubleshoot-install</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">1 new</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Glossary</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New reference page defining 13 foundational ML and API concepts — including context window, fine-tuning, HHH, LLM, MCP, MCP connector, pretraining, RAG, RLHF, temperature, TTFT, and tokens — with links to deeper documentation where applicable.</p>
+    <ul>
+      <li><strong>Context window</strong> &mdash; Defines the model&#x27;s working memory for active inference, distinguished from training-time corpus; links to the context windows guide.</li>
+      <li><strong>Fine-tuning</strong> &mdash; Explains post-pretraining specialization; notes Anthropic&#x27;s API does not currently offer fine-tuning.</li>
+      <li><strong>HHH</strong> &mdash; Documents Anthropic&#x27;s Helpful, Honest, and Harmless alignment goals for Claude.</li>
+      <li><strong>LLM / Pretraining / RLHF</strong> &mdash; Covers the model training pipeline from pretraining through RLHF, with a link to Anthropic&#x27;s RLHF paper.</li>
+      <li><strong>MCP / MCP connector</strong> &mdash; Defines the Model Context Protocol and the Messages API connector beta feature; links to MCP and connector documentation.</li>
+      <li><strong>RAG</strong> &mdash; Explains retrieval-augmented generation including runtime retrieval mechanics, tool use integration, and tradeoffs.</li>
+      <li><strong>Temperature / TTFT / Tokens</strong> &mdash; Defines inference-time parameters and performance metrics, including a note on non-determinism even at temperature 0.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/glossary" target="_blank" rel="noopener">platform.claude.com/docs/en/glossary &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="glossary" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 19 docs analyzed &middot; 2026-04-29
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
