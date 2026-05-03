@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; May 03, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">May 03, 2026</div>
+    <span class="badge">Up to date &mdash; synced May 03 at 07:16 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">18</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Common workflows restructured</strong> &mdash; Major reorganization moved Plan Mode, extended thinking, subagent workflows, and worktree guidance into dedicated pages; the remaining doc now focuses on prompt recipes and cross-linking to those new references</li>
+      <li><strong>Model configuration: extended thinking section added</strong> &mdash; New <code>Extended thinking</code> section documents the <code>Option+T</code>/<code>Alt+T</code> toggle, <code>MAX_THINKING_TOKENS=0</code> disable path, <code>showThinkingSummaries</code> behavior, and the clarified <code>ultrathink</code> keyword semantics</li>
+      <li><strong>Headless mode: pipe and build-script examples added</strong> &mdash; New <code>Pipe data through Claude</code> and <code>Add Claude to a build script</code> sections show stdin piping with cost tracking via <code>--output-format json</code> and a <code>package.json</code> lint script pattern</li>
+      <li><strong>Hooks guide: Notification matcher table added</strong> &mdash; Six named matchers (<code>permission_prompt</code>, <code>idle_prompt</code>, <code>auth_success</code>, <code>elicitation_dialog</code>, <code>elicitation_complete</code>, <code>elicitation_response</code>) documented for filtering <code>Notification</code> hook events</li>
+      <li><strong>GitHub Actions &amp;amp; GitLab CI/CD: provider rename</strong> &mdash; All references to &quot;AWS Bedrock&quot; updated to &quot;Amazon Bedrock&quot; across section headings, accordion titles, workflow examples, and the <code>use_bedrock</code> parameter description</li>
+      <li><strong>Skills: first-skill example replaced and security note added</strong> &mdash; The introductory skill example replaced with a <code>/summarize-changes</code> git-diff skill; <code>allowed-tools</code> workspace-trust caveat added; visualizer example updated to Python 3 with XSS escaping fixes</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">18 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Checkpointing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated an internal cross-reference to point the fork-session tip from the old common-workflows anchor to the new dedicated sessions page.</p>
+    <ul>
+      <li><strong>Internal link</strong> &mdash; Fork-session tip now links to <code>/en/sessions#branch-a-session</code> instead of the deprecated <code>/en/how-claude-code-works#resume-or-fork-sessions</code> anchor</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/checkpointing" target="_blank" rel="noopener">code.claude.com/docs/en/checkpointing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="checkpointing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>--worktree</code> / <code>-w</code> flag description to link to the new dedicated worktrees page.</p>
+    <ul>
+      <li><strong><code>--worktree</code> flag</strong> &mdash; Link target changed from <code>/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees</code> to <code>/en/worktrees</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Major restructuring: the page now serves as a prompt-recipe index, with Plan Mode, extended thinking, subagent, and worktree content moved to dedicated pages and replaced by a structured table of contents.</p>
+    <ul>
+      <li><strong>Page scope</strong> &mdash; Intro rewritten to position the page as short prompt recipes; higher-level guidance deferred to Best practices</li>
+      <li><strong>Table of contents</strong> &mdash; New inline TOC added covering prompt recipes, session resume, worktrees, plan mode, subagents, piping, and scripting</li>
+      <li><strong>Section hierarchy</strong> &mdash; All top-level workflow sections demoted one heading level under a new <code>Prompt recipes</code> parent</li>
+      <li><strong>Removed sections</strong> &mdash; &quot;Use specialized subagents&quot;, &quot;Use Plan Mode for safe code analysis&quot;, and &quot;Use extended thinking&quot; sections removed entirely; content moved to dedicated pages</li>
+      <li><strong>Internal links</strong> &mdash; PR picker link updated to <code>/en/sessions#use-the-session-picker</code>; worktree references updated to <code>/en/worktrees</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the plan mode cross-reference link to point to the new permission-modes page.</p>
+    <ul>
+      <li><strong>Plan mode link</strong> &mdash; Link updated from <code>/en/common-workflows#use-plan-mode-for-safe-code-analysis</code> to <code>/en/permission-modes#analyze-before-you-edit-with-plan-mode</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code Desktop</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated three internal links to point worktree and extended thinking references at their new dedicated pages.</p>
+    <ul>
+      <li><strong>Worktree links</strong> &mdash; Parallel-session worktree link updated to <code>/en/worktrees</code>; <code>.worktreeinclude</code> link updated to <code>/en/worktrees#copy-gitignored-files-into-worktrees</code></li>
+      <li><strong>Extended thinking link</strong> &mdash; Link updated from <code>/en/common-workflows#use-extended-thinking-thinking-mode</code> to <code>/en/model-config#extended-thinking</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-desktop" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitHub Actions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed all &quot;AWS Bedrock&quot; occurrences to &quot;Amazon Bedrock&quot; across section headings, accordion titles, configuration tables, and inline notes.</p>
+    <ul>
+      <li><strong>Provider name</strong> &mdash; &quot;AWS Bedrock&quot; renamed to &quot;Amazon Bedrock&quot; in the quickstart note, section heading, accordion titles, setup steps, workflow prerequisites, and the <code>use_bedrock</code> parameter description</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/github-actions" target="_blank" rel="noopener">code.claude.com/docs/en/github-actions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-github-actions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitLab CI/CD</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed all &quot;AWS Bedrock&quot; occurrences to &quot;Amazon Bedrock&quot; throughout the GitLab CI/CD integration docs, including feature bullets, provider tabs, variable comments, and job example headings.</p>
+    <ul>
+      <li><strong>Provider name</strong> &mdash; &quot;AWS Bedrock&quot; renamed to &quot;Amazon Bedrock&quot; in feature list, provider abstraction list, setup note, manual setup steps, tab titles, variable comments, and the OIDC job example heading</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/gitlab-ci-cd" target="_blank" rel="noopener">code.claude.com/docs/en/gitlab-ci-cd &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-gitlab-ci/cd" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added two new headless usage patterns: piping stdin data into Claude with cost tracking, and embedding a non-interactive Claude call as a project-level lint script.</p>
+    <ul>
+      <li><strong>Pipe data through Claude</strong> &mdash; New section shows how to pipe files into Claude via stdin and redirect output; notes that <code>--output-format json</code> includes <code>total_cost_usd</code> and per-model cost breakdown</li>
+      <li><strong>Add Claude to a build script</strong> &mdash; New section demonstrates a <code>package.json</code> <code>lint:claude</code> script that pipes <code>git diff main</code> into Claude as a typo linter, with notes on portability and avoiding Bash permission requirements</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a Notification matcher reference table documenting the six named event matchers available for filtering hook triggers.</p>
+    <ul>
+      <li><strong>Notification matchers table</strong> &mdash; Added table of six matchers: <code>permission_prompt</code>, <code>idle_prompt</code>, <code>auth_success</code>, <code>elicitation_dialog</code>, <code>elicitation_complete</code>, and <code>elicitation_response</code>, each with a plain-language description of when they fire</li>
+      <li><strong>Verification tip</strong> &mdash; Added instruction to use <code>/hooks</code> and select <code>Notification</code> to confirm hook registration</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>.worktreeinclude</code> cross-reference link to point to the new dedicated worktrees page.</p>
+    <ul>
+      <li><strong>WorktreeCreate hook</strong> &mdash; <code>.worktreeinclude</code> link updated from <code>/en/common-workflows#copy-gitignored-files-to-worktrees</code> to <code>/en/worktrees#copy-gitignored-files-into-worktrees</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Legal and compliance</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated one provider name reference from &quot;AWS Bedrock&quot; to &quot;Amazon Bedrock&quot; in the commercial agreements section.</p>
+    <ul>
+      <li><strong>Provider name</strong> &mdash; &quot;AWS Bedrock&quot; renamed to &quot;Amazon Bedrock&quot; in the commercial agreements paragraph</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/legal-and-compliance" target="_blank" rel="noopener">code.claude.com/docs/en/legal-and-compliance &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="legal-and-compliance" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new Extended thinking section with a control reference table and display behavior details, clarified the <code>ultrathink</code> keyword as a named heading, and updated internal links to point to the new anchor.</p>
+    <ul>
+      <li><strong><code>ultrathink</code> keyword</strong> &mdash; Promoted to a named subsection heading; clarified that other phrases like &quot;think hard&quot; are passed as ordinary prompt text and are not recognized keywords</li>
+      <li><strong>Extended thinking section</strong> &mdash; New section added with a three-row control table covering session toggle (<code>Option+T</code>/<code>Alt+T</code>), global default via <code>/config</code>, and <code>MAX_THINKING_TOKENS=0</code> disable; documents that thinking output is collapsed by default, <code>Ctrl+O</code> reveals it, and <code>showThinkingSummaries: true</code> is required to see full summaries in interactive API sessions</li>
+      <li><strong>Internal links</strong> &mdash; Extended thinking links updated from <code>/en/common-workflows#use-extended-thinking-thinking-mode</code> to the new <code>#extended-thinking</code> anchor throughout the page</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the cost metrics note to use the correct provider name &quot;Amazon Bedrock&quot; instead of &quot;AWS Bedrock&quot;.</p>
+    <ul>
+      <li><strong>Provider name</strong> &mdash; Cost metrics note updated from &quot;AWS Bedrock&quot; to &quot;Amazon Bedrock&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated overview copy to refer to packaged workflows as &quot;skills&quot; rather than &quot;custom commands&quot;.</p>
+    <ul>
+      <li><strong>Terminology</strong> &mdash; &quot;custom commands&quot; replaced with &quot;skills&quot; in the Customize accordion description; link updated to <code>/en/skills</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated multiple internal links in the settings reference table to point to new dedicated pages for worktrees, extended thinking, deep links, and session management.</p>
+    <ul>
+      <li><strong><code>alwaysThinkingEnabled</code></strong> &mdash; Link updated to <code>/en/model-config#extended-thinking</code></li>
+      <li><strong><code>cleanupPeriodDays</code></strong> &mdash; Orphaned-worktree cleanup link updated to <code>/en/worktrees#clean-up-worktrees</code></li>
+      <li><strong><code>disableDeepLinkRegistration</code></strong> &mdash; Description simplified; now links to <code>/en/deep-links</code> for the full deep-link spec rather than inlining URL parameter details</li>
+      <li><strong><code>showThinkingSummaries</code></strong> &mdash; Both extended-thinking links updated to <code>/en/model-config#extended-thinking</code></li>
+      <li><strong>Worktree settings note</strong> &mdash; <code>.worktreeinclude</code> link updated to <code>/en/worktrees#copy-gitignored-files-into-worktrees</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the introductory skill example with a git-diff summarizer, added an <code>allowed-tools</code> workspace-trust security note, fixed the codebase-visualizer example to use Python 3 with XSS escaping, and clarified multiple terminology and link references.</p>
+    <ul>
+      <li><strong>First-skill example</strong> &mdash; Replaced <code>/explain-code</code> with a <code>/summarize-changes</code> skill that uses dynamic context injection (<code>!`git diff HEAD`</code>) to inline the live diff before Claude sees the skill content</li>
+      <li><strong><code>allowed-tools</code> security note</strong> &mdash; Added warning that project skills in <code>.claude/skills/</code> grant <code>allowed-tools</code> permissions only after workspace trust is accepted; advises reviewing project skills before trusting a repo</li>
+      <li><strong>Codebase-visualizer example</strong> &mdash; Updated <code>allowed-tools</code> from <code>Bash(python *)</code> to <code>Bash(python3 *)</code>; script path changed to use <code>${CLAUDE_SKILL_DIR}</code>; added <code>from html import escape</code> import; applied <code>escape()</code> and inline JS <code>esc()</code> function to prevent XSS in generated HTML</li>
+      <li><strong><code>ultrathink</code> link</strong> &mdash; Tip updated to link to <code>/en/model-config#use-ultrathink-for-one-off-deep-reasoning</code></li>
+      <li><strong>Terminology</strong> &mdash; &quot;playbook&quot; changed to &quot;instructions&quot; in skill creation guidance; &quot;bundled skills&quot; description updated from &quot;playbook&quot; to &quot;detailed instructions&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated internal links for the Plan built-in subagent and the <code>isolation: worktree</code> field to point to their new dedicated page locations.</p>
+    <ul>
+      <li><strong>Plan subagent link</strong> &mdash; Link updated from <code>/en/common-workflows#use-plan-mode-for-safe-code-analysis</code> to <code>/en/permission-modes#analyze-before-you-edit-with-plan-mode</code></li>
+      <li><strong><code>isolation: worktree</code> link</strong> &mdash; Link updated from <code>/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees</code> to <code>/en/worktrees</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated cross-references for extended thinking and session management, expanded the URI handler section with per-OS code examples for macOS, Linux, and Windows, and added a pointer to the CLI deep-links page.</p>
+    <ul>
+      <li><strong>Extended thinking link</strong> &mdash; Prompt-box reference updated from <code>/en/common-workflows#use-extended-thinking-thinking-mode</code> to <code>/en/model-config#extended-thinking</code></li>
+      <li><strong>Session history link</strong> &mdash; Resume-sessions reference updated from <code>/en/common-workflows#resume-previous-conversations</code> to <code>/en/sessions</code></li>
+      <li><strong>URI handler examples</strong> &mdash; macOS-only <code>open</code> snippet expanded into a tabbed section with explicit Linux (<code>xdg-open</code>), PowerShell (<code>Start-Process</code>), and <code>cmd.exe</code> (<code>start &quot;&quot; &quot;url&quot;</code>) examples; notes that <code>cmd.exe</code> requires an empty title argument</li>
+      <li><strong>Worktree link</strong> &mdash; Parallel-worktrees reference updated to <code>/en/worktrees</code></li>
+      <li><strong>Deep-links pointer</strong> &mdash; Added note directing users to <code>/en/deep-links</code> for the <code>claude-cli://</code> terminal-session handler</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 18 docs analyzed &middot; 2026-05-03
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
