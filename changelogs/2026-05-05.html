@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; May 05, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">May 05, 2026</div>
+    <span class="badge">Up to date &mdash; synced May 05 at 07:15 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">2</div>
+      <div class="label">API Reference (2 new)</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">6</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">7</div>
+      <div class="label">Platform (7 new)</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Workload Identity Federation (WIF)</strong> &mdash; New authentication system lets production workloads on AWS, GCP, Azure, GitHub Actions, Kubernetes, and Okta exchange short-lived OIDC tokens for Claude API access, eliminating the need for long-lived static API keys</li>
+      <li><strong>Authentication overview</strong> &mdash; New top-level API reference page documents both authentication methods (API keys and WIF), credential precedence, and SDK setup examples across 8 languages</li>
+      <li><strong>WIF reference</strong> &mdash; New comprehensive reference page covers environment variables, credential precedence, profile configuration, OAuth scopes, JWT validation rules, rule-matching semantics, JWKS source modes, and token exchange error codes</li>
+      <li><strong>Hooks &mdash; <code>ok: false</code> semantics</strong> &mdash; LLM hooks now apply event-specific blocking behavior: <code>PreToolUse</code> denies the tool call and returns the reason to Claude as a tool error, while <code>PostToolUse</code>, <code>PostToolBatch</code>, <code>UserPromptSubmit</code>, and <code>UserPromptExpansion</code> end the turn with a warning line</li>
+      <li><strong>Monitoring &mdash; decision source values</strong> &mdash; The <code>source</code> field on tool-decision events and metrics now includes inline documentation for all six values (<code>config</code>, <code>hook</code>, <code>user_permanent</code>, <code>user_temporary</code>, <code>user_abort</code>, <code>user_reject</code>) with links to the Tool decision event reference</li>
+      <li><strong>Terminal config &mdash; color token expansion</strong> &mdash; Theme override reference gains new tokens including <code>suggestion</code>, <code>userMessageBackgroundHover</code>, <code>messageActionsBackground</code>, <code>bashMessageBackgroundColor</code>, <code>memoryBackgroundColor</code>, usage-meter tokens, speaker-label tokens, and rainbow gradient tokens for <code>ultrathink</code>/<code>ultraplan</code></li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">2 new</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Authentication</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New overview page documenting the two Claude API authentication methods — API keys and Workload Identity Federation — with SDK code examples in 8 languages and guidance on when to use each approach.</p>
+    <ul>
+      <li><strong>API keys</strong> &mdash; Covers creating keys in the Claude Console, passing them via the <code>x-api-key</code> header or <code>ANTHROPIC_API_KEY</code> environment variable, and best practices for rotation and storage</li>
+      <li><strong>Workload Identity Federation</strong> &mdash; Introduces WIF as the keyless alternative for production workloads: the workload exchanges an IdP-issued JWT at <code>POST /v1/oauth/token</code> for a short-lived <code>sk-ant-oat01-...</code> bearer token; the SDK handles refresh automatically</li>
+      <li><strong>SDK examples</strong> &mdash; Inline code samples for cURL, Python, TypeScript, Go, Java, C#, PHP, and Ruby demonstrating both API key and WIF client construction</li>
+      <li><strong>Next steps cards</strong> &mdash; Links to WIF setup walkthrough, provider guides (AWS, GCP, Azure, GitHub Actions, Kubernetes, Okta), WIF reference, and client SDKs page</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/authentication/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/api/authentication/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="authentication" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>WIF reference</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New exhaustive reference for Workload Identity Federation covering the token exchange response schema, all SDK environment variables, credential precedence order, profile configuration file format, OAuth scopes, issuer/rule validation constraints, JWT verification rules, CEL rule-matching semantics, JWKS source modes, token exchange error codes, and a step-by-step troubleshooting guide.</p>
+    <ul>
+      <li><strong>Token exchange response</strong> &mdash; Documents <code>POST /v1/oauth/token</code> RFC 6749 response fields: <code>access_token</code> (<code>sk-ant-oat01-...</code> prefix), <code>token_type</code>, <code>expires_in</code>, and <code>scope</code></li>
+      <li><strong>Environment variables</strong> &mdash; Specifies all six SDK federation variables: <code>ANTHROPIC_FEDERATION_RULE_ID</code>, <code>ANTHROPIC_ORGANIZATION_ID</code>, <code>ANTHROPIC_IDENTITY_TOKEN_FILE</code>, <code>ANTHROPIC_IDENTITY_TOKEN</code>, <code>ANTHROPIC_SERVICE_ACCOUNT_ID</code>, and <code>ANTHROPIC_PROFILE</code>, including which combinations activate the federation path</li>
+      <li><strong>Credential precedence</strong> &mdash; Defines the five-level resolution order: constructor argument → <code>ANTHROPIC_API_KEY</code>/<code>ANTHROPIC_AUTH_TOKEN</code> → <code>ANTHROPIC_PROFILE</code> → federation environment variables → active profile; warns that empty-string variables still win their precedence slot</li>
+      <li><strong>Profile configuration</strong> &mdash; Documents the <code>~/.config/anthropic/configs/</code> JSON profile format, active profile resolution order, and the split between the non-secret config file and the secret credentials file (mode <code>0600</code>)</li>
+      <li><strong>OAuth scopes</strong> &mdash; Defines the <code>workspace:developer</code> scope as granting access to all non-administrative Claude API endpoints (Messages, Models, Managed Agents, Files, Skills)</li>
+      <li><strong>Validation rules</strong> &mdash; Enumerates constraints on resource names, <code>token_lifetime_seconds</code> (60–86400), URL fields (HTTPS, port 443, public DNS), and JWT verification (16 KiB max, asymmetric algorithms only, 30-second clock skew)</li>
+      <li><strong>Rule matching semantics</strong> &mdash; Describes AND semantics across all populated match fields (<code>subject_prefix</code>, <code>audience</code>, <code>claims</code>, <code>condition</code>) and the CEL evaluation environment</li>
+      <li><strong>JWKS source modes</strong> &mdash; Explains <code>discovery</code>, <code>explicit_url</code>, and <code>inline</code> modes with field requirements and the inline key-rotation warning</li>
+      <li><strong>Token exchange errors</strong> &mdash; Maps all <code>400 invalid_grant</code> causes and common SDK-side failures to resolution steps; references the authentication history page in the Claude Console for live debugging</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/authentication/wif-reference" target="_blank" rel="noopener">platform.claude.com/docs/en/api/authentication/wif-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="wif-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">6 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the description of what happens when an LLM hook returns <code>&quot;ok&quot;: false</code> to clarify that behavior is now event-specific rather than uniform.</p>
+    <ul>
+      <li><strong>PreToolUse <code>ok: false</code></strong> &mdash; Now explicitly documented: the tool call is denied and the <code>reason</code> is returned to Claude as the tool error so it can adjust and continue, rather than ending the turn</li>
+      <li><strong>PostToolUse / PostToolBatch / UserPromptSubmit / UserPromptExpansion</strong> &mdash; Confirmed to end the turn with the <code>reason</code> appearing as a chat warning line; Claude does not see it</li>
+      <li><strong>Stop / SubagentStop</strong> &mdash; Unchanged: <code>reason</code> is fed back to Claude as its next instruction so it keeps working</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the LLM hook <code>ok: false</code> behavior table to cover all supported events and corrected the <code>sessionTitle</code> field description.</p>
+    <ul>
+      <li><strong>ok: false event matrix</strong> &mdash; New per-event breakdown: <code>Stop</code>/<code>SubagentStop</code> feed reason back to Claude; <code>PreToolUse</code> denies the call and returns reason as a tool error (equivalent to <code>permissionDecision: &quot;deny&quot;</code>); <code>PostToolUse</code>/<code>PostToolBatch</code>/<code>UserPromptSubmit</code>/<code>UserPromptExpansion</code> end the turn with a warning; <code>PostToolUseFailure</code>/<code>TaskCreated</code>/<code>TaskCompleted</code> return reason as a tool error; <code>PermissionRequest</code> ignores <code>ok: false</code> (must use command hook <code>hookSpecificOutput.decision.behavior: &quot;deny&quot;</code>)</li>
+      <li><strong>sessionTitle field</strong> &mdash; Removed the reference to <code>/rename</code> equivalence; description now simply states it sets the session title and names sessions automatically based on prompt content</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded inline documentation for the <code>source</code> / <code>decision_source</code> fields across the <code>claude_code.tool.blocked_on_user</code> span, the tool-use counter metric, and the tool-decision event to define all six possible values.</p>
+    <ul>
+      <li><strong>decision_source values</strong> &mdash; All three locations (<code>blocked_on_user</code> span, tool-use counter, tool-decision event) now define each value inline: <code>&quot;config&quot;</code> (auto-decided by settings/flags/policy), <code>&quot;hook&quot;</code> (PreToolUse or PermissionRequest hook), <code>&quot;user_permanent&quot;</code> (Always allow, saved rule), <code>&quot;user_temporary&quot;</code> (Yes/session-scoped allow), <code>&quot;user_abort&quot;</code> (dismissed without answering), <code>&quot;user_reject&quot;</code> (No or deny rule match)</li>
+      <li><strong>Cross-reference links</strong> &mdash; The <code>source</code> attribute description in the <code>blocked_on_user</code> span and the tool-use counter metric now link to the Tool decision event section rather than using plain text</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added Windows PowerShell examples for the <code>--agents</code> CLI flag, corrected the built-in subagent name casing, clarified session-reload behavior for file-based vs. UI-created subagents, and added Windows hook-script guidance.</p>
+    <ul>
+      <li><strong>Built-in subagent name</strong> &mdash; Corrected from <code>Claude Code Guide</code> to <code>claude-code-guide</code> in the built-in agents table</li>
+      <li><strong>--agents Windows example</strong> &mdash; Added a PowerShell here-string tab alongside the existing bash tab for CLI-defined subagents</li>
+      <li><strong>File reload behavior</strong> &mdash; Clarified that subagents added or edited directly on disk require a session restart, while subagents created through <code>/agents</code> take effect immediately</li>
+      <li><strong>Windows hook scripts</strong> &mdash; Added notes in both the hook-script section and the readonly-query validation example directing Windows users to write hooks in PowerShell with <code>shell: powershell</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure your terminal for Claude Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the color token reference with new tokens for autocomplete suggestions, additional fullscreen backgrounds, a usage meter, speaker labels, and rainbow gradient keywords.</p>
+    <ul>
+      <li><strong>suggestion token</strong> &mdash; New base-color token controlling autocomplete suggestions and selection highlight in pickers</li>
+      <li><strong>Fullscreen background tokens</strong> &mdash; Added <code>userMessageBackgroundHover</code>, <code>messageActionsBackground</code>, <code>bashMessageBackgroundColor</code>, and <code>memoryBackgroundColor</code> to the fullscreen-mode token table</li>
+      <li><strong>Usage meter and speaker labels</strong> &mdash; New token group documents <code>rate_limit_fill</code>, <code>rate_limit_empty</code>, <code>briefLabelYou</code>, and <code>briefLabelClaude</code></li>
+      <li><strong>Shimmer variants</strong> &mdash; Replaced vague prose with an explicit list of all shimmer-paired base tokens: <code>claude</code>, <code>warning</code>, <code>permission</code>, <code>promptBorder</code>, <code>inactive</code>, and <code>fastMode</code></li>
+      <li><strong>Rainbow gradient tokens</strong> &mdash; Documents <code>rainbow_&amp;lt;color&amp;gt;</code> and <code>rainbow_&amp;lt;color&amp;gt;_shimmer</code> tokens (red/orange/yellow/green/blue/indigo/violet) used for <code>ultrathink</code>/<code>ultraplan</code> keyword rendering</li>
+      <li><strong>Token reference intro text</strong> &mdash; Rephrased to clarify that the <code>/theme</code> interactive editor also shows a small set of single-purpose accent tokens (e.g. onboarding colors) not covered in the written reference</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-your-terminal-for-claude-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a troubleshooting entry for the <code>Cmd+Esc</code> shortcut being silently intercepted by the macOS Tahoe Game Overlay system shortcut.</p>
+    <ul>
+      <li><strong>Cmd+Esc on macOS Tahoe</strong> &mdash; New FAQ entry explains that macOS Tahoe binds <code>Cmd+Esc</code> to the Game Overlay by default; fix is to clear the Game Controllers checkbox in System Settings → Keyboard Shortcuts, or rebind the <code>Claude Code: Focus input</code> command in the VS Code Keyboard Shortcuts editor</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">7 new</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use WIF with AWS</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New provider guide for authenticating AWS workloads (Lambda, EC2, ECS, EKS) to the Claude API without static API keys using either STS <code>GetWebIdentityToken</code> OIDC tokens or EKS projected service-account tokens, with SDK examples in Python, TypeScript, Go, Java, and cURL.</p>
+    <ul>
+      <li><strong>STS path (recommended)</strong> &mdash; Covers enabling outbound web identity federation on the AWS account, granting <code>sts:GetWebIdentityToken</code> to the workload&#x27;s IAM role, retrieving the per-account STS issuer URL, and registering it with Anthropic in discovery mode</li>
+      <li><strong>Federation rule configuration</strong> &mdash; Shows matching on the workload&#x27;s IAM role ARN in the <code>sub</code> claim and the <code>https://api.anthropic.com</code> audience, with guidance on using the <code>claims</code> map or CEL <code>condition</code> for finer scoping via the <code>https://sts.amazonaws.com/</code> nested claim</li>
+      <li><strong>EKS projected-token path</strong> &mdash; Documents the Kubernetes projected <code>serviceAccountToken</code> volume alternative for pods that don&#x27;t need Lambda/EC2/ECS coverage</li>
+      <li><strong>SDK token provider pattern</strong> &mdash; Demonstrates wrapping <code>GetWebIdentityToken</code> as a callable passed to <code>WorkloadIdentityCredentials</code> / <code>oidcFederationProvider</code> / <code>WithFederationTokenProvider</code> so the SDK auto-refreshes on expiry</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/wif-providers/aws" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/wif-providers/aws &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-wif-with-aws" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use WIF with Microsoft Azure</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New provider guide for federating Azure managed identities (VMs, App Service, Functions, Container Apps) and Entra Workload Identity (AKS) with the Claude API, covering IMDS token acquisition, Entra discovery-mode issuer registration, and rule matching on <code>oid</code>/<code>tid</code> claims.</p>
+    <ul>
+      <li><strong>Managed identity path</strong> &mdash; Covers attaching a system- or user-assigned managed identity and fetching its Entra token from the Azure IMDS endpoint at <code>169.254.169.254</code></li>
+      <li><strong>Entra Workload Identity (AKS) path</strong> &mdash; Documents enabling the OIDC issuer on an AKS cluster, deploying the workload-identity webhook, and the two-hop exchange from a Kubernetes-projected token to an Entra-issued token</li>
+      <li><strong>Issuer configuration</strong> &mdash; Notes that the Entra <code>iss</code> claim may be either the <code>v2.0</code> or legacy <code>sts.windows.net</code> form; both share the same JWKS so discovery mode works for either</li>
+      <li><strong>Federation rule</strong> &mdash; Recommends matching both <code>oid</code> (managed identity object ID) and <code>tid</code> (tenant ID) claims for defense in depth against cross-tenant spoofing</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/wif-providers/azure" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/wif-providers/azure &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-wif-with-microsoft-azure" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use WIF with Google Cloud</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New provider guide for federating Google Cloud workloads (Cloud Run, Cloud Functions, App Engine, GCE, GKE with Workload Identity) to the Claude API using Google-signed identity tokens from the instance metadata server, with no extra Google Cloud configuration required.</p>
+    <ul>
+      <li><strong>Metadata server token acquisition</strong> &mdash; Covers fetching a signed identity token via the metadata server HTTP endpoint or <code>gcloud auth print-identity-token</code>, with <code>audience=https://api.anthropic.com&amp;format=full</code> required to include the <code>email</code> claim</li>
+      <li><strong>GKE Workload Identity path</strong> &mdash; Documents binding a Kubernetes service account to a Google service account via the <code>iam.gke.io/gcp-service-account</code> annotation; the resulting token has the same <code>https://accounts.google.com</code> issuer</li>
+      <li><strong>Single shared issuer</strong> &mdash; All Google Cloud surfaces share one issuer record (<code>issuer_url: &quot;https://accounts.google.com&quot;</code>, discovery mode); workloads are differentiated by federation rules rather than separate issuers</li>
+      <li><strong>Federation rule</strong> &mdash; Recommends matching both <code>sub</code> (opaque numeric unique ID, never reused) and <code>email</code> claims to protect against service account deletion and recreation with the same address</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/wif-providers/gcp" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/wif-providers/gcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-wif-with-google-cloud" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use WIF with GitHub Actions</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New provider guide for authenticating GitHub Actions workflows to the Claude API using short-lived OIDC identity tokens, eliminating the need for a stored <code>ANTHROPIC_API_KEY</code> secret in the repository.</p>
+    <ul>
+      <li><strong>id-token permission</strong> &mdash; Documents the required <code>id-token: write</code> workflow/job permission and how to fetch the JWT from <code>ACTIONS_ID_TOKEN_REQUEST_URL</code> via cURL or <code>core.getIDToken()</code> in <code>actions/github-script</code></li>
+      <li><strong>sub claim format</strong> &mdash; Explains the context-dependent <code>sub</code> formats: <code>repo:&amp;lt;owner&amp;gt;/&amp;lt;repo&amp;gt;:ref:refs/heads/&amp;lt;branch&amp;gt;</code> for pushes, <code>:pull_request</code> for PRs, and <code>:environment:&amp;lt;name&amp;gt;</code> for environment-gated deployments</li>
+      <li><strong>Zero-argument SDK usage</strong> &mdash; Shows setting <code>ANTHROPIC_FEDERATION_RULE_ID</code>, <code>ANTHROPIC_ORGANIZATION_ID</code>, <code>ANTHROPIC_SERVICE_ACCOUNT_ID</code>, and <code>ANTHROPIC_IDENTITY_TOKEN_FILE</code> as job-level env vars so <code>Anthropic()</code> auto-federates with no constructor arguments</li>
+      <li><strong>Rule scoping guidance</strong> &mdash; Advises using exact <code>subject_prefix</code> per branch or environment and only broadening to a trailing-<code>*</code> prefix when multiple event types from the same repo must share a rule</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/wif-providers/github-actions" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/wif-providers/github-actions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-wif-with-github-actions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use WIF with Kubernetes</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New provider guide for authenticating self-managed Kubernetes clusters (kubeadm, k3s, OpenShift, on-premises) to the Claude API using projected service account tokens, with inline JWKS support for clusters not reachable from the public internet.</p>
+    <ul>
+      <li><strong>Projected token volume</strong> &mdash; Provides a complete Pod spec with a <code>serviceAccountToken</code> projection (audience <code>https://api.anthropic.com</code>, 3600-second expiry) and the four federation environment variables injected as container env vars</li>
+      <li><strong>Inline JWKS mode</strong> &mdash; For clusters with internal-only issuer URLs (e.g. <code>https://kubernetes.default.svc.cluster.local</code>), documents fetching the JWKS via <code>kubectl get --raw /openid/v1/jwks</code> and registering it in <code>inline</code> mode; warns that manual key rotation is required when the cluster rotates its signing key</li>
+      <li><strong>Managed cluster cross-references</strong> &mdash; Points EKS, GKE, and AKS users to the respective provider guides; this guide targets any other distribution or unlisted managed provider</li>
+      <li><strong>Rule matching</strong> &mdash; Recommends exact <code>subject_prefix</code> of the form <code>system:serviceaccount:&amp;lt;namespace&amp;gt;:&amp;lt;service-account&amp;gt;</code> and only broadening to a namespace-level prefix when all service accounts in the namespace should share one Anthropic service account</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/wif-providers/kubernetes" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/wif-providers/kubernetes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-wif-with-kubernetes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use WIF with Okta</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New provider guide for federating Okta service application identities to the Claude API using the OAuth 2.0 <code>client_credentials</code> grant with <code>private_key_jwt</code> authentication, covering Okta custom authorization server setup and the explicit token-fetch step required since Okta does not inject tokens into the workload environment.</p>
+    <ul>
+      <li><strong>Custom authorization server requirement</strong> &mdash; Explicitly notes that tokens from the Okta org authorization server (<code>/oauth2/v1/token</code> with no server ID) cannot be externally validated; a custom auth server (including <code>default</code>) is required</li>
+      <li><strong>Okta app configuration</strong> &mdash; Walks through creating an API Services app integration, configuring <code>private_key_jwt</code> client authentication, setting the audience to <code>https://api.anthropic.com</code>, granting a scope, and creating an access policy</li>
+      <li><strong>sub claim behavior</strong> &mdash; Documents that Okta sets <code>sub</code> to the application&#x27;s Client ID for <code>client_credentials</code> grants; custom claims can be added for finer rule matching</li>
+      <li><strong>Explicit token fetch</strong> &mdash; Unlike cloud-native providers, Okta requires the workload to call <code>/v1/token</code> with a signed <code>client_assertion</code> JWT and pass the result to the SDK as the identity token provider callable</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/wif-providers/okta" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/wif-providers/okta &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-wif-with-okta" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workload Identity Federation</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New primary WIF concept and setup guide explaining how service accounts, federation issuers, and federation rules work together, walking through the three-step Console setup, and documenting credential precedence, API key migration, token lifetime, and provider-specific links.</p>
+    <ul>
+      <li><strong>Core concepts</strong> &mdash; Defines service accounts (<code>svac_...</code>), federation issuers (<code>fdis_...</code>), and federation rules (<code>fdrl_...</code>) and explains how they compose: issuers establish trust, rules define JWT-to-service-account mappings with match conditions and token lifetime, service accounts are the billable principals</li>
+      <li><strong>Token exchange flow</strong> &mdash; Documents the RFC 7523 <code>jwt-bearer</code> grant at <code>POST /v1/oauth/token</code>: SDK posts IdP JWT, Anthropic verifies signature against registered JWKS, checks <code>exp</code>/<code>nbf</code>/<code>iat</code>, evaluates rule match, returns <code>sk-ant-oat01-...</code> access token; SDK refreshes before expiry</li>
+      <li><strong>Console setup walkthrough</strong> &mdash; Three-step guide: (1) register issuer with URL, JWKS source, and optional CA cert; (2) create service account and add to workspace; (3) create federation rule with match conditions, target service account, scope, and token lifetime</li>
+      <li><strong>Credential precedence</strong> &mdash; Describes the five-level resolution order and the zero-argument client pattern for shipping the same container image across environments</li>
+      <li><strong>Migration from API keys</strong> &mdash; Advises unsetting <code>ANTHROPIC_API_KEY</code>/<code>ANTHROPIC_AUTH_TOKEN</code> when migrating, since non-empty values shadow federation entirely</li>
+      <li><strong>Provider guides</strong> &mdash; Index of per-provider setup guides for AWS, GCP, Azure, GitHub Actions, Kubernetes, and Okta</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/workload-identity-federation" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/workload-identity-federation &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workload-identity-federation" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 15 docs analyzed &middot; 2026-05-05
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
