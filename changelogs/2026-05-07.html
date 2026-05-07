@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; May 07, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">May 07, 2026</div>
+    <span class="badge">Up to date &mdash; synced May 07 at 07:41 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">4</div>
+      <div class="label">API Reference (2 new)</div>
+    </div>
+    <div class="stat tools">
+      <div class="num">1</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">13</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">7</div>
+      <div class="label">Managed Agents (2 new)</div>
+    </div>
+    <div class="stat other">
+      <div class="num">1</div>
+      <div class="label">Other</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Webhooks (Beta API + 7 SDKs)</strong> &mdash; New <code>BetaWebhookEvent</code> type and full webhook domain types added to the Beta API reference, covering session lifecycle events (<code>session.created</code>, <code>session.idled</code>, <code>session.requires_action</code>, etc.) and vault/credential events; corresponding SDK docs added for CLI, C#, Go, Java, Python, Ruby, and TypeScript.</li>
+      <li><strong>Managed Agents webhooks</strong> &mdash; New guide for subscribing to Managed Agents webhook events (session status, multiagent thread, vault, and outcome evaluation), including endpoint registration, <code>X-Webhook-Signature</code> verification via SDK <code>unwrap()</code>, and delivery behavior.</li>
+      <li><strong>Dreams (Managed Agents)</strong> &mdash; New Research Preview API for asynchronous memory consolidation: submit a memory store plus up to 100 session transcripts to <code>POST /v1/dreams</code> with <code>dreaming-2026-04-21</code> beta header; the job deduplicates and reorganizes the store into a new output store.</li>
+      <li><strong>Multiagent sessions</strong> &mdash; <code>callable_agents</code> field replaced by a <code>multiagent</code> coordinator declaration; Research Preview gate removed; updated delegation patterns (parallelization, specialization, escalation) and revised thread event names (<code>session.thread_status_running/idle/terminated</code>).</li>
+      <li><strong>Plugin URL loading (<code>--plugin-url</code>)</strong> &mdash; New CLI flag and bare-mode option to fetch a plugin <code>.zip</code> archive from a URL at session startup, enabling CI artifact testing without local unpacking.</li>
+      <li><strong>LLM gateway model discovery</strong> &mdash; Gateway model discovery is now opt-in via <code>CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1</code> (previously on by default); minimum version bumped to v2.1.129.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">2 new + 2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Beta</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Beta API reference was extended with a full Webhooks section defining the BetaWebhookEvent type and all session, vault, and vault-credential event data variants.</p>
+    <ul>
+      <li><strong>BetaWebhookEvent</strong> &mdash; New top-level type added with <code>id</code> (idempotency key), <code>created_at</code> (RFC 3339), <code>data</code> (union), and <code>type</code> fields.</li>
+      <li><strong>Session event data types</strong> &mdash; Added <code>BetaWebhookSessionCreatedEventData</code>, <code>PendingEventData</code>, <code>RunningEventData</code>, <code>IdledEventData</code>, <code>RequiresActionEventData</code>, <code>ArchivedEventData</code>, <code>DeletedEventData</code>, <code>StatusRescheduledEventData</code>, <code>StatusRunStartedEventData</code>, <code>StatusIdledEventData</code>, <code>StatusTerminatedEventData</code>, <code>ThreadCreatedEventData</code>, <code>ThreadIdledEventData</code>, <code>ThreadTerminatedEventData</code>, and <code>OutcomeEvaluationEndedEventData</code>.</li>
+      <li><strong>Vault event data types</strong> &mdash; Added <code>BetaWebhookVaultCreatedEventData</code>, <code>VaultArchivedEventData</code>, <code>VaultDeletedEventData</code>, and <code>VaultCredentialCreatedEventData</code> (the last includes a <code>vault_id</code> field referencing the owning vault).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="beta" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Webhooks</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New standalone Webhooks reference page documenting all BetaWebhookEvent domain types, covering session lifecycle events (created through outcome_evaluation_ended), vault events, and vault-credential events, with per-field descriptions and idempotency semantics.</p>
+    <ul>
+      <li><strong>BetaWebhookEvent</strong> &mdash; Documents the top-level envelope with <code>id</code>, <code>created_at</code>, <code>data</code>, and <code>type</code> fields used for all webhook deliveries.</li>
+      <li><strong>Session events</strong> &mdash; Full type definitions for 15 session-scoped event data objects covering status transitions, thread lifecycle, and outcome evaluation.</li>
+      <li><strong>Vault and credential events</strong> &mdash; Type definitions for <code>vault.created</code>, <code>vault.archived</code>, <code>vault.deleted</code>, <code>vault_credential.created</code> (with <code>vault_id</code> linkage) event data objects.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/webhooks" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/webhooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="webhooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Beta (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>All seven SDK variants of the Beta reference (CLI, C#, Go, Java, Python, Ruby, TypeScript) were updated to append the full Webhooks section with language-idiomatic type definitions for BetaWebhookEvent and all session, vault, and credential event data classes.</p>
+    <ul>
+      <li><strong>BetaWebhookEvent class</strong> &mdash; Appended to each SDK&#x27;s Beta reference with language-native types (<code>Literal[...]</code> in Python, strongly-typed enums in C#/Go/Java, etc.) for the shared <code>id</code>, <code>created_at</code>, and <code>data</code> fields.</li>
+      <li><strong>Session event data classes</strong> &mdash; 15 session-scoped event data types added across CLI, C#, Go, Java, Python, Ruby, and TypeScript SDK docs.</li>
+      <li><strong>Vault event data classes</strong> &mdash; <code>BetaWebhookVaultCreatedEventData</code>, <code>VaultArchivedEventData</code>, <code>VaultDeletedEventData</code>, and <code>VaultCredentialCreatedEventData</code> added to all 7 SDK references.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="beta-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Webhooks (7 SDKs)</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New per-SDK Webhooks reference pages (CLI, C#, Go, Java, Python, Ruby, TypeScript) providing language-idiomatic type definitions for the complete BetaWebhookEvent domain, including all session lifecycle, vault, and vault-credential event data types.</p>
+    <ul>
+      <li><strong>BetaWebhookEvent</strong> &mdash; Language-native class definitions with <code>id: str</code> / <code>created_at: datetime</code> (Python) and equivalent types in all 6 other SDK languages.</li>
+      <li><strong>Session event data types</strong> &mdash; 15 strongly-typed event data classes per SDK, covering the full session status and thread lifecycle.</li>
+      <li><strong>Vault and credential event data types</strong> &mdash; <code>vault.created</code>, <code>vault.archived</code>, <code>vault.deleted</code>, and <code>vault_credential.created</code> event data types defined for all 7 SDKs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/webhooks" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/webhooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="webhooks-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP connector</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor punctuation fix in the mcp_servers configuration property table.</p>
+    <ul>
+      <li><strong>type field description</strong> &mdash; Added a trailing period to the <code>type</code> property description (&quot;Currently only \&quot;url\&quot; is supported.&quot;) for consistency with surrounding table entries.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-connector &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-connector" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">13 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new --plugin-url flag and clarified --settings merge semantics in the CLI flags table.</p>
+    <ul>
+      <li><strong>--plugin-url</strong> &mdash; New flag to fetch a plugin <code>.zip</code> archive from a URL for the current session only; repeatable for multiple plugins.</li>
+      <li><strong>--settings</strong> &mdash; Description updated to clarify that values in the supplied file or inline JSON override matching keys in <code>settings.json</code> files while omitting a key preserves the file-based value; links to settings precedence docs.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The bare-mode plugin loading table was updated to include the new --plugin-url option alongside --plugin-dir.</p>
+    <ul>
+      <li><strong>Plugin loading in bare mode</strong> &mdash; Row label changed from &quot;A plugin directory&quot; to &quot;A plugin&quot; and value updated to <code>--plugin-dir &amp;lt;path&amp;gt;</code>, <code>--plugin-url &amp;lt;url&amp;gt;</code> to reflect the new URL-based loading option.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The macOS Option/Alt key shortcut list was trimmed, the Alt+T extended thinking shortcut was updated to note native macOS support as of v2.1.132, Shift+Enter support was extended to Windows Terminal, and history search default scope was clarified.</p>
+    <ul>
+      <li><strong>macOS Option key shortcut list</strong> &mdash; Removed <code>Alt+T</code> from the list of shortcuts requiring Option-as-Meta terminal configuration (it now works natively on macOS as of v2.1.132).</li>
+      <li><strong>Alt+T extended thinking</strong> &mdash; Shortcut description updated: as of v2.1.132 this shortcut works on macOS without configuring Option as Meta.</li>
+      <li><strong>Shift+Enter support</strong> &mdash; Windows Terminal added to the list of terminals where Shift+Enter works for newlines without setup.</li>
+      <li><strong>History search default scope</strong> &mdash; Clarified that search defaults to prompts from all projects; pressing Ctrl+S cycles the scope through this session, this project, and all projects.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>LLM gateway configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Gateway model discovery is now opt-in via the CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1 environment variable, changing from the previous always-on behavior, and the minimum required version was bumped to v2.1.129.</p>
+    <ul>
+      <li><strong>CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY</strong> &mdash; New environment variable required to enable <code>/v1/models</code> endpoint querying at startup; discovery is off by default to prevent shared API keys from surfacing all accessible models to every user.</li>
+      <li><strong>Minimum version</strong> &mdash; Required Claude Code version for gateway model discovery updated from v2.1.126 to v2.1.129.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">code.claude.com/docs/en/llm-gateway &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="llm-gateway-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The extended thinking toggle description was simplified to remove the terminal configuration prerequisite note, and the ANTHROPIC_CUSTOM_MODEL_OPTION description was updated to reflect that gateway discovery is now opt-in.</p>
+    <ul>
+      <li><strong>Option+T / Alt+T toggle</strong> &mdash; Removed the note about requiring terminal configuration for Option-key shortcuts, since v2.1.132 no longer requires it on macOS.</li>
+      <li><strong>ANTHROPIC_CUSTOM_MODEL_OPTION</strong> &mdash; Description updated to state that gateway picker population requires <code>CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1</code> to be set, since discovery is no longer automatic.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The pull request counter description was made more precise to cover MCP-tool-triggered PR creation in addition to shell-command creation.</p>
+    <ul>
+      <li><strong>Pull request counter</strong> &mdash; Description updated from &quot;creating pull requests via Claude Code&quot; to &quot;Claude Code creates a pull request or merge request through a shell command or an MCP tool&quot;, also adding merge request coverage.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The themes and monitors plugin manifest fields were moved under an experimental key, a new Experimental components section was added with forward-compatibility guidance, and --plugin-url was documented as a session-scoped loading method.</p>
+    <ul>
+      <li><strong>experimental.themes and experimental.monitors</strong> &mdash; Both fields relocated from the top level of <code>plugin.json</code> to an <code>experimental</code> nested object; top-level declarations still work but generate a <code>claude plugin validate</code> warning and will be required to migrate in a future release.</li>
+      <li><strong>Experimental components section</strong> &mdash; New section documenting the schema stability caveat for <code>themes</code> and <code>monitors</code> under the <code>experimental</code> key.</li>
+      <li><strong>--plugin-url</strong> &mdash; Added as a session-scoped plugin loading method alongside <code>--plugin-dir</code> in the path behavior and plugin specification sections.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added documentation for testing plugins via --plugin-url, which fetches a hosted .zip archive at startup for the current session.</p>
+    <ul>
+      <li><strong>--plugin-url testing workflow</strong> &mdash; New section documents using <code>--plugin-url https://example.com/my-plugin.zip</code> to test a pre-packaged plugin (e.g., a CI artifact) without local extraction; load errors are non-fatal and the same trust considerations apply as other plugin sources.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The skillOverrides setting was added to control per-skill visibility from settings files, and the autoUpdatesChannel entry was updated with a pointer to disabling auto-updates via DISABLE_AUTOUPDATER; --settings merge behavior was also clarified in the precedence section.</p>
+    <ul>
+      <li><strong>skillOverrides</strong> &mdash; New setting (requires v2.1.129) accepting a map of skill name to <code>&quot;on&quot;</code>, <code>&quot;name-only&quot;</code>, <code>&quot;user-invocable-only&quot;</code>, or <code>&quot;off&quot;</code> to control visibility without editing SKILL.md; written by the <code>/skills</code> menu to <code>.claude/settings.local.json</code>.</li>
+      <li><strong>autoUpdatesChannel</strong> &mdash; Entry updated to note that auto-updates can be disabled entirely via <code>DISABLE_AUTOUPDATER</code> in <code>env</code>.</li>
+      <li><strong>--settings merge semantics</strong> &mdash; Settings precedence section clarified: JSON passed via <code>--settings &amp;lt;file-or-json&amp;gt;</code> merges with file-based settings using the same key-level rules as other layers.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Auto-update documentation was expanded to cover opt-in background upgrades for Homebrew and WinGet via CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE, including known WinGet file-lock behavior.</p>
+    <ul>
+      <li><strong>CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE</strong> &mdash; New environment variable: set to <code>1</code> to have Claude Code run the Homebrew or WinGet upgrade command in the background when a new version is available, displaying a restart prompt on success.</li>
+      <li><strong>WinGet upgrade limitation</strong> &mdash; Documented that the WinGet upgrade may fail while Claude Code is running due to Windows file locking; in that case the manual upgrade command is displayed instead.</li>
+      <li><strong>apt/dnf/apk</strong> &mdash; Noted these package managers continue to require manual upgrade because those commands need elevated privileges.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new skillOverrides setting section documenting per-skill visibility overrides from settings, and updated the skill budget guidance to suggest using name-only overrides to free context budget.</p>
+    <ul>
+      <li><strong>skillOverrides setting</strong> &mdash; New section documents four visibility states (<code>&quot;on&quot;</code>, <code>&quot;name-only&quot;</code>, <code>&quot;user-invocable-only&quot;</code>, <code>&quot;off&quot;</code>), how the <code>/skills</code> menu writes them, and the interaction with plugin skills (not affected).</li>
+      <li><strong>Context budget guidance</strong> &mdash; Updated to recommend setting low-priority skills to <code>&quot;name-only&quot;</code> in <code>skillOverrides</code> as an alternative to trimming SKILL.md text when managing the character budget.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The semantics of context_window.total_input_tokens and total_output_tokens were changed from cumulative session totals to current context window counts as of v2.1.132, with documentation and example values updated accordingly.</p>
+    <ul>
+      <li><strong>total_input_tokens / total_output_tokens</strong> &mdash; As of v2.1.132 these fields reflect the live context window from the most recent API response (input includes cache reads and writes), not cumulative session totals; both are <code>0</code> before the first API response.</li>
+      <li><strong>Context window fields section</strong> &mdash; Rewritten to describe <code>total_input_tokens</code>/<code>total_output_tokens</code> as combined current-context values and <code>current_usage</code> as per-category breakdown for cache-hit details.</li>
+      <li><strong>Troubleshooting guidance</strong> &mdash; Removed the caveat that cumulative totals may exceed the context window size; simplified to recommend <code>used_percentage</code> for accurate context state.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure your terminal for Claude Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Windows Terminal was reclassified from &#x27;not available&#x27; to &#x27;works without setup&#x27; for Shift+Enter newline support.</p>
+    <ul>
+      <li><strong>Shift+Enter support table</strong> &mdash; Windows Terminal moved from the &quot;Not available&quot; row to the &quot;Works without setup&quot; row alongside Ghostty, Kitty, iTerm2, WezTerm, Warp, and Apple Terminal.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-your-terminal-for-claude-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">2 new + 5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define your agent</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The callable_agents field was replaced by a multiagent coordinator declaration, and the update operation table descriptions were made more precise.</p>
+    <ul>
+      <li><strong>multiagent field</strong> &mdash; Replaces <code>callable_agents</code>; accepts a coordinator object with an <code>agents</code> roster. Pass <code>null</code> to clear it on update.</li>
+      <li><strong>Array field update behavior</strong> &mdash; <code>callable_agents</code> removed from the list of fully-replaced array fields; <code>multiagent</code> is now documented separately as replaced as a whole including its <code>agents</code> roster.</li>
+      <li><strong>Operation table</strong> &mdash; &quot;List versions&quot; and &quot;Archive&quot; descriptions reworded for clarity (&quot;Returns the full version history&quot; and &quot;Makes the agent read-only&quot;).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/agent-setup" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/agent-setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-your-agent" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define outcomes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Research Preview gate and extra beta header requirement for Outcomes were removed, making the feature available under the standard managed-agents-2026-04-01 header.</p>
+    <ul>
+      <li><strong>Research Preview tip removed</strong> &mdash; The callout requiring a separate research-preview access request was deleted.</li>
+      <li><strong>Beta header</strong> &mdash; <code>managed-agents-2026-04-01-research-preview</code> replaced with the standard <code>managed-agents-2026-04-01</code> header in the note and all code samples.</li>
+      <li><strong>Code sample paths</strong> &mdash; Example file paths updated from <code>/path/to/pr_review_rubric.md</code> to <code>/tmp/rubric.md</code> for consistency across all SDK examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/define-outcomes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/define-outcomes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-outcomes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Dreams</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New Research Preview feature that runs an asynchronous job (POST /v1/dreams, requires dreaming-2026-04-21 beta header) to deduplicate and reorganize an agent memory store using past session transcripts as input, producing a separate output memory store.</p>
+    <ul>
+      <li><strong>Dreams API</strong> &mdash; New <code>POST /v1/dreams</code> endpoint accepting a <code>memory_store</code> input and up to 100 <code>sessions</code> inputs; supported models during preview are <code>claude-opus-4-7</code> and <code>claude-sonnet-4-6</code>.</li>
+      <li><strong>Asynchronous lifecycle</strong> &mdash; Dream resource transitions through <code>pending</code> → <code>running</code> → terminal states; output memory store ID appears in <code>outputs[]</code> once running.</li>
+      <li><strong>dreaming-2026-04-21 beta header</strong> &mdash; Required in addition to <code>managed-agents-2026-04-01</code>; SDKs set both automatically.</li>
+      <li><strong>Non-destructive output</strong> &mdash; Input store is never modified; the reorganized store is written to a new store ID that can be reviewed or discarded.</li>
+      <li><strong>SDK coverage</strong> &mdash; Full code examples for curl, CLI, Python, TypeScript, C#, Go, Java, PHP, and Ruby.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/dreams" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/dreams &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="dreams" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Session event stream</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The multiagent thread event descriptions were revised, new session.thread_status_running/idle/terminated events were added replacing session.thread_idle, and code samples were reformatted and expanded to include CLI tab examples.</p>
+    <ul>
+      <li><strong>agent.thread_message_received / sent</strong> &mdash; Descriptions rewritten: <code>received</code> now means an agent delivered its result to the coordinator; <code>sent</code> means the coordinator sent a follow-up to another agent.</li>
+      <li><strong>session.thread_status_running</strong> &mdash; New event type: a multiagent thread started activity.</li>
+      <li><strong>session.thread_status_idle</strong> &mdash; Replaces <code>session.thread_idle</code>; fires when a thread finishes its turn and is awaiting input; includes <code>stop_reason</code>.</li>
+      <li><strong>session.thread_status_terminated</strong> &mdash; New event type: a multiagent thread was archived or reached a terminal error.</li>
+      <li><strong>session.outcome_evaluated removed</strong> &mdash; Replaced by <code>session.outcome_evaluation_ended</code> in the event table.</li>
+      <li><strong>CLI tab examples</strong> &mdash; New <code>ant beta:sessions:events send</code> YAML examples added to all code groups.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/events-and-streaming" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/events-and-streaming &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="session-event-stream" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multiagent sessions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Research Preview gate was removed, callable_agents was replaced by the multiagent coordinator declaration across all SDK examples, and the delegation pattern guidance was rewritten with parallelization/specialization/escalation patterns.</p>
+    <ul>
+      <li><strong>Research Preview tip removed</strong> &mdash; Access-request callout and extra beta header requirement deleted; standard <code>managed-agents-2026-04-01</code> header is sufficient.</li>
+      <li><strong>callable_agents → multiagent</strong> &mdash; All SDK examples updated to use <code>multiagent: { type: &quot;coordinator&quot;, agents: [...] }</code>; agent version field removed from roster entries.</li>
+      <li><strong>Delegation pattern guidance</strong> &mdash; Section rewritten to cover parallelization (fan-out), specialization (domain-focused agents), and escalation (routing to more capable models) instead of the previous code-review/test-generation examples.</li>
+      <li><strong>&quot;Configure the coordinator&quot; section</strong> &mdash; Renamed from &quot;Declare callable agents&quot; to reflect the new <code>multiagent</code> field semantics.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/multi-agent" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/multi-agent &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multiagent-sessions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Authenticate with vaults</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The mcp_oauth credential example expiry date was updated to a far-future placeholder, variable names were made more descriptive, and a new Reference the vault at session creation section was added with vault_ids examples.</p>
+    <ul>
+      <li><strong>expires_at example value</strong> &mdash; Updated from <code>2026-04-15T00:00:00Z</code> to <code>2099-12-31T23:59:59Z</code> across all SDK code samples to avoid a date that has already passed.</li>
+      <li><strong>vault_ids at session creation</strong> &mdash; New section documents passing <code>vault_ids: [&quot;$vault_id&quot;]</code> when creating a session, with full SDK examples (curl, CLI, Python, TypeScript, C#).</li>
+      <li><strong>Variable naming</strong> &mdash; Static bearer credential variable renamed from <code>credential</code> to <code>bearerCredential</code> / <code>bearer_credential</code> across SDK examples for clarity.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/vaults" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/vaults &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="authenticate-with-vaults" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Subscribe to webhooks</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New guide covering how to register HTTPS webhook endpoints, verify X-Webhook-Signature signatures using the SDK unwrap() helper, and handle the full set of session lifecycle, multiagent thread, vault, and outcome evaluation events without polling.</p>
+    <ul>
+      <li><strong>Supported event types</strong> &mdash; Documents session events (<code>session.status_run_started</code>, <code>status_idled</code>, <code>status_rescheduled</code>, <code>status_terminated</code>, thread lifecycle events, <code>outcome_evaluation_ended</code>) and vault/credential events (<code>vault.created/archived/deleted</code>, <code>vault_credential.created/archived/deleted/refresh_failed</code>).</li>
+      <li><strong>Endpoint registration</strong> &mdash; Explains Console UI setup (URL, event type subscriptions, and whsec_-prefixed signing secret shown once at creation).</li>
+      <li><strong>Signature verification via unwrap()</strong> &mdash; SDK <code>unwrap()</code> helper validates the <code>X-Webhook-Signature</code> header and rejects payloads older than 5 minutes; examples provided for Python (Flask), TypeScript (Express), C#, Go, Java, PHP, and Ruby.</li>
+      <li><strong>Delivery behavior</strong> &mdash; Events carry only <code>type</code> and <code>id</code>; consumers must fetch the full object via a GET call; any non-2xx response triggers a retry.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/webhooks" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/webhooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="subscribe-to-webhooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>WIF reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Two minor wording corrections were made in the WIF reference: a punctuation fix in the workspace_id constraint and a precision fix in the workspace_id_required error description.</p>
+    <ul>
+      <li><strong>workspace_id constraint</strong> &mdash; Added trailing period to the field description for consistency.</li>
+      <li><strong>workspace_id_required error</strong> &mdash; Error cause description changed from &quot;more than one non-default workspace&quot; to &quot;more than one workspace&quot; to accurately reflect the condition.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/wif-reference" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/wif-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="wif-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 26 docs analyzed &middot; 2026-05-07
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
