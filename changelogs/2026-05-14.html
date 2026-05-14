@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; May 14, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">May 14, 2026</div>
+    <span class="badge">Up to date &mdash; synced May 14 at 07:40 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">4</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">7</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">1</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">9</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Agent SDK credit change (June 15, 2026)</strong> &mdash; Agent SDK and <code>claude -p</code> usage on subscription plans will draw from a new separate monthly credit starting June 15, 2026; updated in the headless mode and legal docs.</li>
+      <li><strong>Model deprecation cleanup</strong> &mdash; Claude Sonnet 3.7, Claude Haiku 3.5 (retired on API), Claude Opus 3, Sonnet 3, and Haiku 3 rows removed from pricing and compatibility tables across batch processing, prompt caching, tool use, and search results docs.</li>
+      <li><strong>Bedrock &amp;amp; Vertex AI lifecycle schedules</strong> &mdash; Both platform pages now include a disclaimer that Bedrock/Vertex retirement dates are set independently by AWS/Google Cloud and may differ from Anthropic&#x27;s own schedule; retirement dates updated for Claude Sonnet 3.7 (Bedrock: retired Apr 28; Vertex: retired May 11) and Claude Opus 4 (Bedrock: retiring May 31).</li>
+      <li><strong>Context window overflow behavior</strong> &mdash; Clarified that on Claude 4.5+ models the API now accepts requests exceeding the context window and stops generation with <code>stop_reason: &quot;model_context_window_exceeded&quot;</code> rather than returning a validation error; older models can opt in via the <code>model-context-window-exceeded-2025-08-26</code> beta header.</li>
+      <li><strong>Extended thinking model comparison table</strong> &mdash; Claude Sonnet 3.7 row removed; Claude Opus 4.7 thinking output now documented as omitted by default (set <code>display: &quot;summarized&quot;</code> to receive it), matching Claude Mythos Preview behavior.</li>
+      <li><strong>Output styles doc restructured</strong> &mdash; &quot;How output styles work&quot; and &quot;Comparisons to related features&quot; sections rewritten with a new comparison table covering Output styles, CLAUDE.md, <code>--append-system-prompt</code>, Agents, and Skills; <code>keep-coding-instructions</code> frontmatter field now explained with a worked example.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">4 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed Claude Sonnet 3.7 and Claude Haiku 3.5 from the supported-models table and softened the legacy migration note for `code_execution_20250522`.</p>
+    <ul>
+      <li><strong>Supported models</strong> &mdash; Removed Claude Sonnet 3.7 (`claude-3-7-sonnet-20250219`) and Claude Haiku 3.5 from the model compatibility table.</li>
+      <li><strong>Legacy tool note</strong> &mdash; Reworded the `code_execution_20250522` callout from a generic note to a conditional &quot;If you&#x27;re still using the legacy version&quot; framing, making migration guidance more targeted.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Computer use tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Cleaned up the sampling loop code example by removing Claude Sonnet 3.7-specific parameters, updated beta header model lists, and de-attributed scroll/spreadsheet improvements from Sonnet 3.7.</p>
+    <ul>
+      <li><strong>Beta header model list</strong> &mdash; `computer-use-2025-01-24` entry now lists Claude Sonnet 4, Claude Opus 4 (both deprecated) explicitly; Claude Sonnet 3.7 removed from supported models.</li>
+      <li><strong>Sampling loop code</strong> &mdash; Removed `thinking_budget` parameter, `thinking` object construction, and dynamic `text_editor_type` logic; `text_editor_20250728` is now hardcoded for all models.</li>
+      <li><strong>Enhanced actions note</strong> &mdash; Changed &quot;Available in Claude 4 models and Claude Sonnet 3.7&quot; to &quot;Available on all models that support computer use&quot;.</li>
+      <li><strong>Limitations section</strong> &mdash; Scroll and spreadsheet reliability notes rewritten to remove Sonnet 3.7 attribution; extended thinking referenced generically rather than tied to a specific model.</li>
+      <li><strong>Pricing table</strong> &mdash; Removed the Claude Sonnet 3.7 row (735 tokens per tool definition).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="computer-use-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool use with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Pruned deprecated and retired models from the tool-use system-prompt token pricing table.</p>
+    <ul>
+      <li><strong>Pricing table</strong> &mdash; Removed standalone rows for Claude Sonnet 3.7, Claude Haiku 3.5, Claude Opus 3, Claude Sonnet 3, and Claude Haiku 3; Claude Opus 4, Claude Sonnet 4, and Claude Haiku 3.5 now carry deprecation/retirement labels inline.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-use-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Text editor tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the `text_editor_20250124` (Claude Sonnet 3.7) row from the additional input token pricing table.</p>
+    <ul>
+      <li><strong>Pricing table</strong> &mdash; Deleted the `text_editor_20250124` entry for deprecated Claude Sonnet 3.7, leaving only `text_editor_20250429` (Claude 4.x) at 700 tokens.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="text-editor-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">7 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a prominent notice about the new Agent SDK monthly credit that takes effect June 15, 2026 for subscription plan users, and reworded the CLI invocation description.</p>
+    <ul>
+      <li><strong>Agent SDK credit notice</strong> &mdash; New callout warns that starting June 15, 2026, Agent SDK and `claude -p` usage on Pro/Max plans draws from a separate monthly Agent SDK credit, with a link to the support article.</li>
+      <li><strong>CLI description</strong> &mdash; Introductory paragraph reordered so the SDK overview precedes the `-p` usage example; wording changed from &quot;headless mode&quot; to &quot;non-interactive mode&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate workflows with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that `disableAllHooks` only suppresses hooks where it is set and does not override hooks configured in managed settings.</p>
+    <ul>
+      <li><strong>disableAllHooks behavior</strong> &mdash; Updated the description to note that hooks configured in managed settings continue to run unless `disableAllHooks` is also set at the managed level.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-workflows-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Legal and compliance</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the Agent SDK credit change notice (effective June 15, 2026) at the top of the legal and compliance page.</p>
+    <ul>
+      <li><strong>Agent SDK credit notice</strong> &mdash; Added a note at the page top indicating that Agent SDK and `claude -p` usage on subscription plans will consume a new separate monthly credit starting June 15, 2026.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/legal-and-compliance" target="_blank" rel="noopener">code.claude.com/docs/en/legal-and-compliance &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="legal-and-compliance" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the CLAUDE.md load-order table so user instructions are listed before project instructions, reflecting the actual context-window insertion order.</p>
+    <ul>
+      <li><strong>CLAUDE.md load order</strong> &mdash; Table reordered to show Managed policy → User instructions → Project instructions → Local instructions, with an updated description clarifying that a project instruction appears in context after a user instruction.</li>
+      <li><strong>Scope description</strong> &mdash; Introductory sentence changed from &quot;more specific locations take precedence&quot; to explicitly stating the table lists scopes in load order from broadest to most specific.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Output styles</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Substantially restructured the output styles documentation with a new step-by-step custom style creation guide, a comparison table for related features, and a clarified explanation of `keep-coding-instructions`.</p>
+    <ul>
+      <li><strong>keep-coding-instructions</strong> &mdash; Introductory paragraph now explicitly explains when to set this flag true (changing communication style while still coding) vs. leave it out (non-engineering use cases like writing assistant).</li>
+      <li><strong>Custom style creation</strong> &mdash; Replaced the plain Markdown example with a three-step guide (create file, add frontmatter/instructions, switch style) including a concrete &quot;Diagrams first&quot; worked example.</li>
+      <li><strong>Comparisons section</strong> &mdash; Prose comparisons replaced with a structured table contrasting Output styles, CLAUDE.md, `--append-system-prompt`, Agents, and Skills.</li>
+      <li><strong>Related resources</strong> &mdash; New section added linking to Settings, Permission modes, Plugins, and Debug your configuration.</li>
+      <li><strong>force-for-plugin default</strong> &mdash; Frontmatter table updated to show explicit `false` defaults for `keep-coding-instructions` and `force-for-plugin`.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/output-styles" target="_blank" rel="noopener">code.claude.com/docs/en/output-styles &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="output-styles" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that managed settings can both force-enable and force-disable plugins, neither of which can be overridden by `--plugin-dir`.</p>
+    <ul>
+      <li><strong>--plugin-dir override behavior</strong> &mdash; Exception clause expanded from &quot;force-enabled by managed settings&quot; to &quot;force-enabled or force-disabled by managed settings&quot; to cover both lock directions.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Improved the settings precedence documentation to distinguish scalar override behavior from array merge behavior, and updated examples to use concrete setting names.</p>
+    <ul>
+      <li><strong>Scope interaction description</strong> &mdash; Changed &quot;more specific scopes take precedence&quot; to &quot;Claude Code applies them in priority order&quot;; example updated from a generic permission to `spinnerTipsEnabled` to avoid conflating scalar and array behavior.</li>
+      <li><strong>Precedence example</strong> &mdash; Example changed from a `Bash(npm run *)` permission rule to `permissions.defaultMode` to illustrate scalar override semantics; a follow-up note points to the array-merge behavior for permission rules.</li>
+      <li><strong>Inheritance summary</strong> &mdash; Settings summary entry updated to explicitly state that scalar values override and arrays concatenate across scopes.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Dreams</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Made the `sessions` array a required input (1–100 sessions) for a dream job, removing the previously optional zero-session path.</p>
+    <ul>
+      <li><strong>sessions field</strong> &mdash; Changed from &quot;optionally, up to 100 sessions&quot; to &quot;1 to 100 sessions&quot;, making at least one session mandatory when creating a dream.</li>
+      <li><strong>API description</strong> &mdash; Updated the prose description of dreaming inputs to reflect that the sessions array is now required rather than optional.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/dreams" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/dreams &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="dreams" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">9 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adaptive thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed references to Claude Sonnet 3.7 from the summarized thinking notes and the full-thinking-output callout.</p>
+    <ul>
+      <li><strong>Summarization note</strong> &mdash; Removed &quot;enabling easy migration from Claude Sonnet 3.7 to Claude 4&quot; from the summarization bullet.</li>
+      <li><strong>Full thinking output note</strong> &mdash; Removed the &quot;Claude Sonnet 3.7 continues to return full thinking output&quot; sentence; the Note now only mentions contacting sales for full output on Claude 4 models.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/adaptive-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adaptive-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batch processing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Pruned deprecated and retired models from the Batches API pricing table.</p>
+    <ul>
+      <li><strong>Pricing table</strong> &mdash; Removed Claude Sonnet 3.7, Claude Haiku 3.5 standalone row, Claude Opus 3, and Claude Haiku 3 rows; Claude Opus 4, Claude Sonnet 4 now carry deprecation labels; Claude Haiku 3.5 retained with a &quot;retired, except on Bedrock and Vertex AI&quot; label.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/batch-processing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/batch-processing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batch-processing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock (legacy)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a lifecycle disclaimer explaining that Bedrock retirement dates are set independently by AWS, and updated retirement dates and availability regions for several deprecated models.</p>
+    <ul>
+      <li><strong>Lifecycle disclaimer</strong> &mdash; New paragraph above the model table clarifies that Bedrock deprecation/retirement dates are AWS-controlled and may differ from Anthropic&#x27;s own schedule.</li>
+      <li><strong>Claude Sonnet 3.7</strong> &mdash; Marked as retired April 28, 2026; all regional availability flags changed to No.</li>
+      <li><strong>Claude Opus 4</strong> &mdash; Retirement date updated from October 14, 2026 to May 31, 2026.</li>
+      <li><strong>Claude Haiku 3.5</strong> &mdash; Status changed from &quot;retired&quot; to &quot;Deprecated, retiring June 19, 2026&quot;.</li>
+      <li><strong>Tooltip format</strong> &mdash; Tooltip-based deprecation annotations replaced with inline `&lt;small&gt;` text for cleaner rendering.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock-(legacy)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a lifecycle disclaimer for Vertex AI-specific retirement dates and updated retirement/status annotations for several models.</p>
+    <ul>
+      <li><strong>Lifecycle disclaimer</strong> &mdash; New paragraph above the model table notes that Vertex AI retirement dates are set by Google Cloud and may differ from Anthropic&#x27;s schedule.</li>
+      <li><strong>Claude Sonnet 3.7</strong> &mdash; Status updated to retired May 11, 2026.</li>
+      <li><strong>Claude Haiku 3.5</strong> &mdash; Status changed from &quot;Retired&quot; to &quot;Deprecated, retiring July 5, 2026&quot;.</li>
+      <li><strong>Tooltip format</strong> &mdash; Tooltip-based annotations replaced with inline `&lt;small&gt;` text.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context windows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the &quot;newer Claude models&quot; validation error section with a precise description of the new `model_context_window_exceeded` stop reason available on Claude 4.5+ models.</p>
+    <ul>
+      <li><strong>Context window overflow behavior</strong> &mdash; Section renamed from &quot;Context window management with newer Claude models&quot;; now documents that Claude 4.5+ models accept requests where input + `max_tokens` exceeds the context window and stop with `stop_reason: &quot;model_context_window_exceeded&quot;` rather than a validation error.</li>
+      <li><strong>Beta header opt-in</strong> &mdash; Documents the `model-context-window-exceeded-2025-08-26` beta header for opting earlier models into the new behavior.</li>
+      <li><strong>Interleaved thinking note</strong> &mdash; Removed the Sonnet 3.7 caveat about lacking interleaved thinking support.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-windows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-windows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed Claude Sonnet 3.7 from the model comparison table, updated thinking output defaults for Claude Opus 4.7, and clarified `max_tokens` enforcement behavior for Claude 4.5+ models.</p>
+    <ul>
+      <li><strong>Model comparison table</strong> &mdash; Claude Sonnet 3.7 column removed; Claude Opus 4.7 thinking output now documented as omitted by default (set `display: &quot;summarized&quot;` to receive it), matching Claude Mythos Preview.</li>
+      <li><strong>budget_tokens description</strong> &mdash; Removed the &quot;In Claude 4 and later models&quot; qualifier; the limit now applies universally to full thinking tokens.</li>
+      <li><strong>max_tokens enforcement</strong> &mdash; Updated to describe the Claude 4.5+ behavior: requests exceeding the context window are accepted and stop with `stop_reason: &quot;model_context_window_exceeded&quot;` rather than returning a validation error.</li>
+      <li><strong>Summarization note</strong> &mdash; Removed &quot;enabling easy migration from Claude Sonnet 3.7&quot; and the &quot;Sonnet 3.7 continues to return full thinking output&quot; sentences.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Files API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the supported-models description to reflect that all current Claude models support images, and fixed an internal anchor link for code execution file types.</p>
+    <ul>
+      <li><strong>Supported models description</strong> &mdash; Replaced the versioned &quot;Claude 3+&quot; and &quot;Claude 3.5+&quot; phrasing with &quot;all current Claude models&quot; for image support; PDF and code execution tool file type support now defers to their respective linked pages.</li>
+      <li><strong>File types table link</strong> &mdash; `container_upload` row link updated from `#supported-file-types` to `#upload-and-analyze-your-own-files` anchor.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/files" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="files-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Cleaned up the prompt caching pricing table, updated minimum cacheable token thresholds, and added a Bedrock-specific caching note.</p>
+    <ul>
+      <li><strong>Pricing table</strong> &mdash; Removed Claude Sonnet 3.7, Claude Haiku 3.5 (standalone), Claude Opus 3, and Claude Haiku 3 rows; Claude Opus 4, Claude Sonnet 4 now carry deprecation labels; Claude Haiku 3.5 retained with retirement label.</li>
+      <li><strong>Minimum token thresholds</strong> &mdash; Claude Sonnet 3.7 removed from the 1,024-token group; Haiku 3.5 status updated to &quot;retired, except on Vertex AI&quot;; thresholds now scoped explicitly to the Claude API, Claude Platform on AWS, Vertex AI, and Microsoft Foundry.</li>
+      <li><strong>Bedrock note</strong> &mdash; New callout directs Bedrock users to the AWS Bedrock prompt caching documentation for per-model minimums, failure behavior, and usage-field names.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Search results</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed Claude Sonnet 3.7 from the supported models list and updated Claude Haiku 3.5&#x27;s status to retired.</p>
+    <ul>
+      <li><strong>Supported models</strong> &mdash; Claude Sonnet 3.7 (`claude-3-7-sonnet-20250219`) removed from the supported models list.</li>
+      <li><strong>Claude Haiku 3.5 status</strong> &mdash; Label updated from &quot;deprecated&quot; to &quot;retired, except on Bedrock and Vertex AI&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/search-results" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/search-results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="search-results" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 21 docs analyzed &middot; 2026-05-14
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
