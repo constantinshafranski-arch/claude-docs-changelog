@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; May 16, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">May 16, 2026</div>
+    <span class="badge">Up to date &mdash; synced May 16 at 07:13 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">3</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">5</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat start">
+      <div class="num">1</div>
+      <div class="label">Getting Started</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">1</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">5</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Parallel tool use &mdash; execution semantics</strong> &mdash; New &quot;Execution semantics&quot; section clarifies that tool calls within a single turn are unordered and can run concurrently; includes guidance on handling dependent-call failures via <code>is_error: true</code> without switching to sequential execution.</li>
+      <li><strong>Tool Runner SDK &mdash; expanded language support</strong> &mdash; Tool Runner beta now covers C#, Go, Java, and PHP SDKs in addition to Python, TypeScript, and Ruby, with full code examples and schema-derivation patterns for each.</li>
+      <li><strong>Advisor tool &mdash; output token reduction</strong> &mdash; Trimming guidance revised: <code>max_tokens</code> does not bound advisor output; recommended placement moved to user message with a soft 80-word limit, replacing the prior system-prompt approach.</li>
+      <li><strong>Claude Code on Bedrock &amp;amp; Vertex AI &mdash; small/fast model default changed</strong> &mdash; The small/fast (Haiku) model default is now the primary model on both Bedrock and Vertex AI; use <code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code> to opt back into Haiku for background tasks.</li>
+      <li><strong>Get started &mdash; CLI authentication flow</strong> &mdash; CLI quick-start tab reordered to lead with <code>ant auth login</code> OAuth flow before API-key setup, with headless/CI guidance added; <code>anthropic-java</code> bumped to 2.32.0.</li>
+      <li><strong>Java SDK &mdash; version bump to 2.32.0</strong> &mdash; <code>anthropic-java</code>, <code>anthropic-java-bedrock</code>, <code>anthropic-java-foundry</code>, <code>anthropic-java-vertex</code>, and <code>anthropic-java-aws</code> artifacts all updated from 2.30.0 to 2.32.0 across platform and getting-started docs.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advisor tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Revised advisor output-trimming guidance: max_tokens does not bound advisor output, and the recommended conciseness instruction is now placed in the user message (soft 80-word limit) rather than the system prompt; also corrects &#x27;Amazon Bedrock&#x27; to &#x27;AWS Bedrock&#x27; in the platform availability note.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; Corrected reference from &quot;Amazon Bedrock&quot; to &quot;AWS Bedrock&quot; in the availability caveat.</li>
+      <li><strong>cache_read_input_tokens</strong> &mdash; Reworded &quot;nonzero&quot; to &quot;non-zero&quot; for consistency.</li>
+      <li><strong>Trimming advisor output</strong> &mdash; Clarified that <code>max_tokens</code> does not bound advisor output; moved the conciseness instruction from the system prompt to the user message, updated example wording to an 80-word soft limit, and added a Note that this placement increases consult frequency while still reducing net cost.</li>
+      <li><strong>Instruction placement</strong> &mdash; Added guidance that the limit is a soft constraint and agents should target ~80% of their true ceiling to account for occasional overruns.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advisor-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Parallel tool use</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new &quot;Execution semantics&quot; section documenting that tool calls within a single assistant turn are unordered, can run concurrently, and that dependent-call failures should be returned with is_error: true so Claude can reissue; also added a corresponding troubleshooting item.</p>
+    <ul>
+      <li><strong>Execution semantics (new section)</strong> &mdash; Documents that tool calls in one assistant turn are unordered and can be dispatched with <code>Promise.all</code> / <code>asyncio.gather</code>; Claude issues dependent calls across separate turns.</li>
+      <li><strong>Dependent-call error handling</strong> &mdash; Instructs callers to return <code>is_error: true</code> with the natural error message when a batched call fails due to a missing prerequisite; Claude recovers and reissues rather than requiring the caller to detect dependencies in advance.</li>
+      <li><strong>Troubleshooting item #4</strong> &mdash; Added guidance: do not switch to sequential execution when batch calls appear dependent; instead return the error and optionally add &quot;Only batch tool calls that are independent of each other&quot; to the system prompt.</li>
+      <li><strong>disable_parallel_tool_use formatting</strong> &mdash; Fixed inline code formatting on <code>tool_choice</code> references in the disable instructions.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="parallel-tool-use" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool Runner (SDK)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded Tool Runner beta coverage to C#, Go, Java, and PHP SDKs (previously Python, TypeScript, Ruby only), with full usage examples and schema-derivation explanations for each new language; removed the compaction Tip block and simplified introductory copy.</p>
+    <ul>
+      <li><strong>SDK coverage</strong> &mdash; Tool Runner beta now includes C# (<code>BetaRunnableTool</code>), Go (<code>toolrunner.NewBetaToolFromJSONSchema</code> with <code>jsonschema:</code> struct tags), Java (<code>@JsonClassDescription</code> / <code>@JsonPropertyDescription</code> annotations), and PHP, in addition to the existing Python, TypeScript, and Ruby support.</li>
+      <li><strong>C# example</strong> &mdash; Added full <code>BetaRunnableTool</code> usage with <code>Definition</code> + <code>Run</code> delegate pattern and <code>InputSchema</code> JSON schema construction.</li>
+      <li><strong>Go example</strong> &mdash; Added <code>toolrunner.NewBetaToolFromJSONSchema</code> pattern with typed input structs and <code>jsonschema:</code> tags; includes JSON schema output example.</li>
+      <li><strong>Java example</strong> &mdash; Added <code>Supplier&amp;lt;String&amp;gt;</code>-based tool class pattern with Jackson annotation-driven schema derivation.</li>
+      <li><strong>@beta_tool decorator note</strong> &mdash; Simplified Python decorator explanation: removed the inline JSON schema example, replaced with a one-line description of schema derivation.</li>
+      <li><strong>Compaction Tip removed</strong> &mdash; Removed the automatic context management / compaction Tip block from the introduction.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-runner-(sdk)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION behavior and changed the default small/fast model from Haiku to the primary model, with guidance on opting back into Haiku via ANTHROPIC_DEFAULT_HAIKU_MODEL.</p>
+    <ul>
+      <li><strong>ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION</strong> &mdash; Comment updated to note the variable applies to both Bedrock and Mantle, and has no effect on Bedrock unless <code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code> or the deprecated <code>ANTHROPIC_SMALL_FAST_MODEL</code> is also set.</li>
+      <li><strong>Small/fast model default</strong> &mdash; Default changed from <code>us.anthropic.claude-haiku-4-5-20251001-v1:0</code> to &quot;Same as primary model&quot;; added explanation that Haiku may not be enabled in every account or region, with instructions to set <code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code> to restore Haiku for background tasks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data usage</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated /feedback command documentation to describe session-scoped history selection and added behavior for third-party provider environments where feedback is written to a local archive instead of sent to Anthropic.</p>
+    <ul>
+      <li><strong>/feedback history selection</strong> &mdash; Users now choose how much history to include before submitting: current session only (default), or sessions from the same project over the last 24 hours or 7 days.</li>
+      <li><strong>/feedback on third-party providers</strong> &mdash; When using Bedrock, Vertex, or no Anthropic credentials, <code>/feedback</code> writes the report to <code>~/.claude/feedback-bundles/</code> instead of transmitting it; known API key and token patterns are redacted before writing.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">code.claude.com/docs/en/data-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-usage" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Changed the small/fast model default from Haiku to the primary model, and updated MCP tool search availability to reflect that Vertex AI supports it for Claude Sonnet 4.5+ and Opus 4.5+.</p>
+    <ul>
+      <li><strong>Small/fast model default</strong> &mdash; Default changed from <code>claude-haiku-4-5@20251001</code> to &quot;Same as primary model&quot;; use <code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code> to restore Haiku for background tasks in accounts/projects where it is available.</li>
+      <li><strong>MCP tool search on Vertex AI</strong> &mdash; Clarified that tool search is now supported on Vertex AI for Claude Sonnet 4.5 and later and Claude Opus 4.5 and later; earlier models do not accept the required beta header and will fail if <code>ENABLE_TOOL_SEARCH=true</code> is set.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated ENABLE_TOOL_SEARCH documentation to reflect Vertex AI model-version-specific support and clarified the auto:N syntax.</p>
+    <ul>
+      <li><strong>Tool search on Vertex AI</strong> &mdash; Tool search is now supported on Vertex AI for Sonnet 4.5+ and Opus 4.5+; setting <code>ENABLE_TOOL_SEARCH=true</code> on earlier Vertex AI models causes request failures.</li>
+      <li><strong>ENABLE_TOOL_SEARCH table</strong> &mdash; <code>true</code> row updated to note failure conditions for unsupported Vertex AI model versions or proxies that lack <code>tool_reference</code> support; <code>auto:&amp;lt;N&amp;gt;</code> syntax simplified to <code>auto:N</code> with clearer example wording.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added documentation explaining why the small/fast model defaults to the primary model on Foundry and how to override it with ANTHROPIC_DEFAULT_HAIKU_MODEL.</p>
+    <ul>
+      <li><strong>Small/fast model default</strong> &mdash; Added explanation that background tasks (e.g., session title generation) default to the primary model on Foundry because not every account has a Haiku deployment; set <code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code> to a Haiku deployment name to override.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/microsoft-foundry" target="_blank" rel="noopener">code.claude.com/docs/en/microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-start">🚀</div>
+    <h2>Getting Started</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get started with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>CLI quick-start tab reordered to lead with OAuth-based authentication (ant auth login) before API key setup, with headless/CI guidance added; anthropic-java dependency bumped to 2.32.0.</p>
+    <ul>
+      <li><strong>CLI onboarding order</strong> &mdash; Steps reordered: &quot;Install the CLI&quot; now precedes authentication; &quot;Set your API key&quot; step replaced by an &quot;Authenticate&quot; step using <code>ant auth login</code> with browser-based OAuth and <code>ant auth status</code> confirmation.</li>
+      <li><strong>Headless authentication</strong> &mdash; Added <code>--no-browser</code> flag guidance for remote hosts; noted that <code>ANTHROPIC_API_KEY</code> takes precedence over login credentials and linked to CLI authentication docs for CI environments.</li>
+      <li><strong>Prerequisites</strong> &mdash; Removed the explicit &quot;API key&quot; prerequisite bullet from the CLI path.</li>
+      <li><strong>anthropic-java version</strong> &mdash; Bumped from <code>2.30.0</code> to <code>2.32.0</code> in both Gradle and Maven examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/get-started" target="_blank" rel="noopener">platform.claude.com/docs/en/get-started &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-started-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get started with Claude Managed Agents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Bumped Anthropic CLI Linux binary version to 1.8.0 and anthropic-java Gradle dependency to 2.32.0 in the quickstart installation steps.</p>
+    <ul>
+      <li><strong>Anthropic CLI version</strong> &mdash; Linux direct-download install script updated from <code>VERSION=1.7.0</code> to <code>VERSION=1.8.0</code>.</li>
+      <li><strong>anthropic-java version</strong> &mdash; Gradle snippet updated from <code>2.30.0</code> to <code>2.32.0</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-started-with-claude-managed-agents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Bumped anthropic-java-bedrock dependency from 2.30.0 to 2.32.0 in Gradle and Maven install snippets.</p>
+    <ul>
+      <li><strong>anthropic-java-bedrock version</strong> &mdash; Updated from <code>2.30.0</code> to <code>2.32.0</code> in both Gradle and Maven installation examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Bumped anthropic-java-foundry dependency from 2.30.0 to 2.32.0 in Gradle and Maven install snippets.</p>
+    <ul>
+      <li><strong>anthropic-java-foundry version</strong> &mdash; Updated from <code>2.30.0</code> to <code>2.32.0</code> in both Gradle and Maven installation examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock (legacy)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Bumped anthropic-java-bedrock dependency from 2.30.0 to 2.32.0 in Gradle and Maven install snippets for the legacy InvokeModel/Converse integration.</p>
+    <ul>
+      <li><strong>anthropic-java-bedrock version</strong> &mdash; Updated from <code>2.30.0</code> to <code>2.32.0</code> in both Gradle and Maven installation examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock-(legacy)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Bumped anthropic-java-vertex dependency from 2.30.0 to 2.32.0 in Gradle and Maven install snippets.</p>
+    <ul>
+      <li><strong>anthropic-java-vertex version</strong> &mdash; Updated from <code>2.30.0</code> to <code>2.32.0</code> in both Gradle and Maven installation examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform on AWS</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Bumped anthropic-java-aws dependency from 2.30.0 to 2.32.0 in Gradle and Maven install snippets.</p>
+    <ul>
+      <li><strong>anthropic-java-aws version</strong> &mdash; Updated from <code>2.30.0</code> to <code>2.32.0</code> in both Gradle and Maven installation examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform-on-aws" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 15 docs analyzed &middot; 2026-05-16
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
