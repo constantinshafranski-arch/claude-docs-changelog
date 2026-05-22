@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; May 22, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">May 22, 2026</div>
+    <span class="badge">Up to date &mdash; synced May 22 at 08:19 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">7</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">11</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>MCP proxy service renamed</strong> &mdash; The <code>mcp-gateway</code> service and its config file have been renamed to <code>mcp-proxy</code> and <code>mcp-proxy.yaml</code> across all Docker Compose and Helm deployment docs; update any existing deployments and log-monitoring scripts accordingly</li>
+      <li><strong>Auto mode availability expanded</strong> &mdash; Auto mode is now available to all users on the Anthropic API (not just Max/Team/Enterprise plans), and requires Claude Sonnet 4.6, Opus 4.6, or Opus 4.7</li>
+      <li><strong>MCP per-server tool timeout</strong> &mdash; A <code>timeout</code> field (milliseconds) can now be set per server in <code>.mcp.json</code> to cap tool call wall-clock time, overriding <code>MCP_TOOL_TIMEOUT</code> for that server; values below 1000 ms are floored to 1 second</li>
+      <li><strong>Sandboxing doc overhauled</strong> &mdash; The sandboxing page was rewritten with a step-by-step quickstart, explicit escape-hatch behavior (<code>dangerouslyDisableSandbox</code>), a strict mode toggle (<code>allowUnsandboxedCommands: false</code>), and clarified network/filesystem isolation defaults</li>
+      <li><strong>CLAUDE_CODE_SUBAGENT_MODEL now covers agent teams</strong> &mdash; The env var now applies to both subagents and agent teams, and supports <code>inherit</code> to fall back to normal model resolution</li>
+      <li><strong>Managed MCP configuration extracted to dedicated page</strong> &mdash; The large managed MCP section (Option 1 <code>managed-mcp.json</code> and Option 2 allowlist/denylist) was removed from the MCP doc and now lives at <code>/en/managed-mcp</code>; all cross-references updated accordingly</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">7 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage tunnels in the Console</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Capitalization of &#x27;Research Preview&#x27; corrected to &#x27;research preview&#x27; in the feature notice.</p>
+    <ul>
+      <li><strong>Feature notice text</strong> &mdash; Changed &#x27;Research Preview&#x27; to lowercase &#x27;research preview&#x27; for consistency across all MCP tunnels docs</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-tunnels-in-the-console" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Deploy MCP tunnels with Docker Compose</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The proxy service and its config file were renamed from <code>mcp-gateway</code> to <code>mcp-proxy</code> throughout the Docker Compose deployment guide.</p>
+    <ul>
+      <li><strong>Service rename</strong> &mdash; All references to the <code>mcp-gateway</code> Docker Compose service replaced with <code>mcp-proxy</code></li>
+      <li><strong>Config file rename</strong> &mdash; <code>config/mcp-gateway.yaml</code> renamed to <code>config/mcp-proxy.yaml</code> in both programmatic and manual credential flows</li>
+      <li><strong>network_mode reference</strong> &mdash; <code>network_mode: &quot;service:mcp-gateway&quot;</code> updated to <code>network_mode: &quot;service:mcp-proxy&quot;</code> in all service definitions</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="deploy-mcp-tunnels-with-docker-compose" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Deploy MCP tunnels with Helm</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Capitalization of &#x27;Research Preview&#x27; corrected to &#x27;research preview&#x27; in the feature notice.</p>
+    <ul>
+      <li><strong>Feature notice text</strong> &mdash; Changed &#x27;Research Preview&#x27; to lowercase &#x27;research preview&#x27; for consistency</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="deploy-mcp-tunnels-with-helm" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The proxy service and config file were renamed from <code>mcp-gateway</code> to <code>mcp-proxy</code> in all quickstart code samples for macOS/Linux and Windows/PowerShell.</p>
+    <ul>
+      <li><strong>Service rename</strong> &mdash; <code>mcp-gateway</code> service replaced with <code>mcp-proxy</code> in all Docker Compose YAML snippets</li>
+      <li><strong>Config file rename</strong> &mdash; <code>config/mcp-gateway.yaml</code> renamed to <code>config/mcp-proxy.yaml</code> in macOS/Linux and PowerShell setup steps</li>
+      <li><strong>Log monitoring commands</strong> &mdash; <code>docker compose logs mcp-gateway</code> updated to <code>docker compose logs mcp-proxy</code> in verification steps</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels-quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The default Kubernetes secret name for the <code>--output</code> flag on the setup CLI was changed from <code>mcp-gateway</code> to <code>mcp-tunnel</code>.</p>
+    <ul>
+      <li><strong>--output default value</strong> &mdash; Default Kubernetes secret name for <code>setup attach</code> and <code>setup renew</code> changed from <code>k8s-secret:mcp-gateway</code> to <code>k8s-secret:mcp-tunnel</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/reference" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels security</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Capitalization of &#x27;Research Preview&#x27; corrected to &#x27;research preview&#x27; in the feature notice.</p>
+    <ul>
+      <li><strong>Feature notice text</strong> &mdash; Changed &#x27;Research Preview&#x27; to lowercase &#x27;research preview&#x27; for consistency</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/security" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/security &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels-security" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshoot MCP tunnels</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Troubleshooting table and OAuth routing instructions updated to reference the renamed <code>mcp-proxy</code> service instead of <code>mcp-gateway</code>.</p>
+    <ul>
+      <li><strong>Troubleshooting table</strong> &mdash; Fix instructions for &#x27;No ingress rules&#x27; and &#x27;no route for host&#x27; errors updated to reference <code>service:mcp-proxy</code> and <code>docker compose restart mcp-proxy</code></li>
+      <li><strong>Config file reference</strong> &mdash; Code block filename updated from <code>config/mcp-gateway.yaml</code> to <code>config/mcp-proxy.yaml</code> in the upstream IP validation section</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/troubleshooting" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshoot-mcp-tunnels" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">11 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Desktop application</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Auto mode availability was broadened: it is now available to all Anthropic API users regardless of plan, no longer restricted to Max/Team/Enterprise.</p>
+    <ul>
+      <li><strong>Auto mode availability</strong> &mdash; Expanded from Max, Team, Enterprise, and API plans to all Anthropic API users; removed Pro plan exclusion language</li>
+      <li><strong>Model requirements unified</strong> &mdash; Requirement simplified to Claude Sonnet 4.6, Opus 4.6, or Opus 4.7 for all eligible plans; separate per-plan model requirements removed</li>
+      <li><strong>Third-party provider exclusion</strong> &mdash; Auto mode remains unavailable on third-party providers</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="desktop-application" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Development containers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A link to the new Sandbox environments comparison page was added to the related resources list.</p>
+    <ul>
+      <li><strong>Related resources</strong> &mdash; Added link to <code>/en/sandbox-environments</code> for comparing dev containers with the built-in Bash sandbox, custom containers, and VMs</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/devcontainer" target="_blank" rel="noopener">code.claude.com/docs/en/devcontainer &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="development-containers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A clarification was added to command history behavior: submitting the same prompt twice records only one history entry.</p>
+    <ul>
+      <li><strong>Command history deduplication</strong> &mdash; Documented that submitting the same prompt twice in a row records a single history entry, so pressing Up navigates to the previous distinct prompt</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Per-server tool execution timeouts were documented, and the large managed MCP configuration section was extracted to a dedicated page at <code>/en/managed-mcp</code>.</p>
+    <ul>
+      <li><strong>Per-server timeout</strong> &mdash; Added <code>timeout</code> field (ms) in <code>.mcp.json</code> entries to set a hard wall-clock limit per tool call, overriding <code>MCP_TOOL_TIMEOUT</code> for that server only; values below 1000 ms floored to 1 second</li>
+      <li><strong>HTTP/SSE fetch budget</strong> &mdash; Documented that HTTP and SSE servers have a 60-second minimum first-byte budget regardless of the per-server timeout value</li>
+      <li><strong>Managed MCP section removed</strong> &mdash; The full managed MCP configuration content (Option 1 <code>managed-mcp.json</code>, Option 2 allowlists/denylists) was replaced with a pointer to the new dedicated page at <code>/en/managed-mcp</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>CLAUDE_CODE_SUBAGENT_MODEL</code> environment variable description was extended to cover agent teams and a new <code>inherit</code> value.</p>
+    <ul>
+      <li><strong>CLAUDE_CODE_SUBAGENT_MODEL scope</strong> &mdash; Now applies to both subagents and agent teams, overriding per-invocation <code>model</code> parameter and subagent frontmatter</li>
+      <li><strong>inherit value</strong> &mdash; Setting <code>CLAUDE_CODE_SUBAGENT_MODEL=inherit</code> restores normal model resolution instead of forcing a specific model</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Three new reserved marketplace names were added to the official Anthropic reserved name list.</p>
+    <ul>
+      <li><strong>Reserved marketplace names</strong> &mdash; Added <code>claude-for-legal</code>, <code>claude-for-financial-services</code>, and <code>financial-services-plugins</code> to the list of names reserved for official Anthropic use</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure the sandboxed Bash tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The sandboxing page was substantially rewritten with a step-by-step quickstart, explicit escape-hatch and strict-mode documentation, and reorganized sections covering filesystem/network isolation behavior.</p>
+    <ul>
+      <li><strong>Page restructured</strong> &mdash; Overhauled from a conceptual overview into a task-oriented guide with Get started steps, Configure sandboxing, and How sandboxing works sections</li>
+      <li><strong>Quickstart via /sandbox</strong> &mdash; Added a three-step guide using the <code>/sandbox</code> command to enable the sandbox and choose approval mode</li>
+      <li><strong>Escape hatch documented</strong> &mdash; Explicitly described the <code>dangerouslyDisableSandbox</code> parameter behavior: Claude may retry failed sandboxed commands outside the sandbox through the normal permission flow</li>
+      <li><strong>Strict sandbox mode</strong> &mdash; Documented <code>allowUnsandboxedCommands: false</code> setting (exposed as Strict sandbox mode in the /sandbox Overrides tab) to fully disable the escape hatch</li>
+      <li><strong>Linux/WSL2 dependency check</strong> &mdash; The Dependencies tab in <code>/sandbox</code> now shows status of <code>bubblewrap</code>, <code>socat</code>, <code>ripgrep</code>, and the optional seccomp filter; AppArmor and WSL notes moved to collapsible accordions</li>
+      <li><strong>Network isolation defaults clarified</strong> &mdash; No domains are pre-allowed; first-use prompts approval; <code>allowManagedDomainsOnly</code> blocks non-allowed domains automatically</li>
+      <li><strong>Filesystem defaults clarified</strong> &mdash; Default read access still reaches credential files like <code>~/.aws/credentials</code> and <code>~/.ssh/</code>; added explicit recommendation to add them to <code>denyRead</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-the-sandboxed-bash-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Security</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The related resources list was updated with links to the new Sandbox environments page and reformatted for consistency.</p>
+    <ul>
+      <li><strong>Related resources</strong> &mdash; Added link to new <code>/en/sandbox-environments</code> page for comparing isolation approaches; reformatted all links from dash-separated to colon-separated style</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/security" target="_blank" rel="noopener">code.claude.com/docs/en/security &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="security" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Settings reference updated with clarified descriptions for <code>forceLoginMethod</code> and <code>forceLoginOrgUUID</code> regarding API key session blocking, and MCP-related cross-references updated to point to the new <code>/en/managed-mcp</code> page.</p>
+    <ul>
+      <li><strong>forceLoginMethod clarified</strong> &mdash; Now explicitly states that API key, <code>apiKeyHelper</code>, and third-party provider sessions are blocked at startup when set in managed settings, since neither value can be satisfied without first-party OAuth</li>
+      <li><strong>forceLoginOrgUUID clarified</strong> &mdash; API key and third-party provider sessions are blocked at startup because organization membership cannot be verified for them</li>
+      <li><strong>MCP cross-references updated</strong> &mdash; Links for <code>allowedMcpServers</code>, <code>allowManagedMcpServersOnly</code>, <code>deniedMcpServers</code>, and the <code>strictPluginOnlyCustomization</code> <code>mcp</code> surface updated from <code>/en/mcp#managed-mcp-configuration</code> to <code>/en/managed-mcp</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Windows installation instructions were updated to make Git for Windows optional rather than required, with separate behavior documented for setups with and without Git Bash.</p>
+    <ul>
+      <li><strong>Git for Windows now optional</strong> &mdash; Native Windows no longer lists Git for Windows as a requirement; it is now described as optional and enables the Bash tool</li>
+      <li><strong>Without Git for Windows</strong> &mdash; Documented that Claude Code falls back to the PowerShell tool when Git Bash is absent</li>
+      <li><strong>Setup table updated</strong> &mdash; Native Windows &#x27;Requires&#x27; column changed from &#x27;Git for Windows recommended&#x27; to &#x27;None; Git for Windows is optional&#x27;</li>
+      <li><strong>Shell prerequisite simplified</strong> &mdash; Removed the Git Bash fallback note from the supported shells list in system requirements</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The bundled skills list was updated: <code>/simplify</code> replaced by <code>/code-review</code> in the skills inventory.</p>
+    <ul>
+      <li><strong>Bundled skill renamed</strong> &mdash; <code>/simplify</code> replaced by <code>/code-review</code> in both the bundled skills list and the related-commands note; all other bundled skills (<code>/batch</code>, <code>/debug</code>, <code>/loop</code>, <code>/claude-api</code>) unchanged</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 18 docs analyzed &middot; 2026-05-22
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
