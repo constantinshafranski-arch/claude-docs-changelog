@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; May 30, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">May 30, 2026</div>
+    <span class="badge">Up to date &mdash; synced May 30 at 07:40 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">6</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">15</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">14</div>
+      <div class="label">Managed Agents (1 new)</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">5</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Cloud sandbox reference (new doc)</strong> &mdash; New reference page documents pre-installed languages (Python 3.12+, Node 20+, Go, Rust, Java, Ruby, PHP, C/C++), databases, utilities, and sandbox specs (Ubuntu 22.04, 8 GB RAM, 10 GB disk) for Managed Agents cloud environments.</li>
+      <li><strong>MCP WebSocket transport</strong> &mdash; Claude Code now supports <code>type: &quot;ws&quot;</code> MCP servers via <code>.mcp.json</code> or <code>claude mcp add-json</code>, enabling persistent bidirectional connections to event-pushing remote servers.</li>
+      <li><strong>Skills-directory plugins + <code>plugin init</code></strong> &mdash; Any skill folder containing a <code>.claude-plugin/plugin.json</code> manifest auto-loads as a <code>&amp;lt;name&amp;gt;@skills-dir</code> plugin; <code>claude plugin init</code> scaffolds the structure with optional component flags (<code>--with skills hooks mcp</code> etc.).</li>
+      <li><strong>Multiagent coordinator pinning clarification</strong> &mdash; Coordinator <code>multiagent.agents</code> rosters are snapshotted at creation time; updating a referenced agent does not propagate automatically—you must update the coordinator to pick up new versions.</li>
+      <li><strong>Memory store 2,000-memory limit + best practices</strong> &mdash; Memory stores now enforce a hard 2,000-memory cap with documented recovery strategies (condense with dreaming sessions, attach fresh stores, use read-only access for reference material).</li>
+      <li><strong>Claude Platform on AWS expansion</strong> &mdash; Webhooks, multiagent orchestration, and self-hosted sandboxes are now available on Claude Platform on AWS; a new <code>AnthropicSelfHostedEnvironmentAccess</code> managed IAM policy is added for worker authentication.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">6 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP connector</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new &#x27;When Claude uses MCP tools&#x27; section explaining explicit vs. implicit tool-triggering behavior, and expanded the denylist guidance to recommend denylisting write/destructive tools for read-only assistants.</p>
+    <ul>
+      <li><strong>When Claude uses MCP tools</strong> &mdash; New section documenting when Claude calls an MCP tool (request maps to a tool&#x27;s capability, explicitly or implicitly) vs. answers directly (general knowledge about a connected service).</li>
+      <li><strong>System prompt steering</strong> &mdash; Documents that tool-call frequency is steerable via system prompt; cross-references the tool use overview for example phrasings.</li>
+      <li><strong>Denylist guidance</strong> &mdash; Updated denylist description to recommend denylisting write or destructive tools when building read-only assistants or requiring human confirmation before state changes.</li>
+      <li><strong>Multi-server tool selection</strong> &mdash; Added note that with many tools available Claude selects by name and description accuracy, and recommends enabling <code>defer_loading</code> with the Tool search tool for large tool sets.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-connector &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-connector" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Remote MCP servers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a note cross-referencing the new &#x27;When Claude uses MCP tools&#x27; triggering behavior section for remote MCP tools.</p>
+    <ul>
+      <li><strong>Triggering behavior note</strong> &mdash; Added a callout informing users that remote MCP tools follow the same trigger rules documented in the MCP connector&#x27;s &#x27;When Claude uses MCP tools&#x27; section.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/remote-mcp-servers" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/remote-mcp-servers &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="remote-mcp-servers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advisor tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Revised the coding-task system prompt guidance to clarify that the executor under-calls the advisor by default, removing a previous performance claim.</p>
+    <ul>
+      <li><strong>Executor default behavior</strong> &mdash; Replaced an internal benchmark claim with a factual observation that the executor tends to under-call the advisor on coding tasks without system-prompt steering, and repositioned the suggested prompt blocks accordingly.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advisor-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Computer use tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a tip explaining how the zoom behavior of <code>computer_20251124</code> with <code>enable_zoom: true</code> works, including when Claude zooms and how to trigger it deliberately.</p>
+    <ul>
+      <li><strong>Zoom behavior tip</strong> &mdash; New item 7 in best-practices list: when <code>enable_zoom: true</code> is set, Claude zooms on small text or specific UI elements (file names, tab titles, status-bar text, line numbers, button labels) when asked about a specific region rather than the whole screen.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="computer-use-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool use with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new &#x27;When Claude uses tools&#x27; section documenting the default <code>tool_choice: auto</code> decision boundary and how to steer it via system prompt or the <code>tool_choice</code> parameter.</p>
+    <ul>
+      <li><strong>When Claude uses tools</strong> &mdash; New section explaining that with <code>{&quot;type&quot;: &quot;auto&quot;}</code>, Claude calls a tool when the request maps to a capability not already in context, and responds directly for stable knowledge, creative tasks, and conversational turns.</li>
+      <li><strong>System prompt steering</strong> &mdash; Documents light (<code>&quot;Use the tools to investigate before responding.&quot;</code>), strong (<code>&quot;Always call a tool first.&quot;</code>), and conservative phrasings, plus a reference to <code>tool_choice</code> for hard guarantees.</li>
+      <li><strong>Per-tool trigger docs</strong> &mdash; Added cross-references to the web search and code execution tool pages for per-tool trigger boundary details.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-use-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web fetch tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a &#x27;When Claude fetches&#x27; subsection documenting the fetch trigger boundary, and clarified combined search-and-fetch behavior when both tools are enabled.</p>
+    <ul>
+      <li><strong>When Claude fetches</strong> &mdash; New subsection: Claude fetches when a URL is provided or a specific named resource is referenced; it does not fetch for general-knowledge or open-ended questions.</li>
+      <li><strong>Combined search and fetch</strong> &mdash; Added explanation that when both web search and web fetch are enabled and the user names a specific page without a URL, Claude uses search to locate it then fetches the result.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-fetch-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">15 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>claude agents</code> command now accepts an <code>--agent</code> flag to set the default agent for dispatched sessions.</p>
+    <ul>
+      <li><strong><code>claude agents --agent</code> flag</strong> &mdash; Added <code>--agent</code> to the <code>claude agents</code> command so you can set the default agent definition for sessions dispatched from agent view, alongside the existing <code>--permission-mode</code>, <code>--model</code>, and <code>--effort</code> flags.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Desktop application</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the description of agent teams support: parallel Claude Code sessions that message each other are CLI-only, while dynamic workflows (which do run in Desktop) are now distinguished and linked.</p>
+    <ul>
+      <li><strong>Agent teams clarification</strong> &mdash; Reworded the limitation to clarify that parallel Claude Code sessions that message each other are CLI-only; dynamic workflows that run inside one session are available in Desktop.</li>
+      <li><strong>Tasks pane link</strong> &mdash; Added a hyperlink to the dynamic workflows doc from the tasks pane description.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="desktop-application" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the <code>effort.level</code> field description: ultracode is no longer a distinct level and now reports as <code>xhigh</code> instead of <code>ultra</code>.</p>
+    <ul>
+      <li><strong><code>effort.level</code> values</strong> &mdash; Removed <code>&quot;ultra&quot;</code> as a distinct effort level; ultracode now reports as <code>&quot;xhigh&quot;</code> in the hook payload, matching the status line and skill substitution behavior.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the <code>Ctrl+V</code> / paste-image shortcut to include WSL support with an <code>Alt+V</code> fallback for terminals that intercept <code>Ctrl+V</code>.</p>
+    <ul>
+      <li><strong>WSL paste image support</strong> &mdash; <code>Ctrl+V</code> and <code>Alt+V</code> are now both bound on WSL; users should use <code>Alt+V</code> if the terminal intercepts <code>Ctrl+V</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added support for WebSocket MCP servers (<code>type: &quot;ws&quot;</code>) and documented OAuth fallback behavior when a static <code>headers.Authorization</code> token is rejected.</p>
+    <ul>
+      <li><strong>WebSocket transport (Option 4)</strong> &mdash; New <code>type: &quot;ws&quot;</code> server type supports persistent bidirectional connections; configured via <code>.mcp.json</code> or <code>claude mcp add-json</code>. Accepts <code>url</code>, <code>headers</code>, <code>headersHelper</code>, <code>timeout</code>, and <code>alwaysLoad</code>; does not support OAuth or the <code>--transport</code> flag.</li>
+      <li><strong>Plugin transport types</strong> &mdash; WebSocket added to the list of supported plugin MCP transports alongside stdio, SSE, and HTTP.</li>
+      <li><strong>OAuth fallback behavior</strong> &mdash; Added note that if <code>headers.Authorization</code> is configured and rejected by the server, Claude Code reports a connection failure rather than falling back to OAuth.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>autoMemoryDirectory</code> setting is now readable from all settings scopes, including project and local settings, subject to the workspace trust gate.</p>
+    <ul>
+      <li><strong><code>autoMemoryDirectory</code> scope expansion</strong> &mdash; Setting is now read from any settings scope (user, project, local, policy, or <code>--settings</code>); values from project or local settings are honored only after the workspace trust dialog is accepted, the same gate governing hooks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded telemetry coverage with <code>tool_parameters</code> on <code>tool_decision</code> events, <code>WorkspaceBash</code> tool parameters, and a new clarification that <code>tool_decision</code> events can now be used to audit rejected commands.</p>
+    <ul>
+      <li><strong><code>tool_decision</code> <code>tool_parameters</code></strong> &mdash; <code>tool_decision</code> events now include a <code>tool_parameters</code> attribute (when <code>OTEL_LOG_TOOL_DETAILS=1</code>) covering Bash, WorkspaceBash, MCP, Skill, Agent, and legacy Task tools, enabling audit of rejected commands.</li>
+      <li><strong>WorkspaceBash tool telemetry</strong> &mdash; Added <code>WorkspaceBash</code> to <code>tool_result</code> and <code>tool_decision</code> parameter schemas, emitting <code>bash_command</code>, <code>full_command</code>, and <code>timeout</code>.</li>
+      <li><strong>Agent tool naming</strong> &mdash; References to &#x27;Task tool&#x27; updated to &#x27;Agent tool or legacy Task tool&#x27; across span hierarchy docs, <code>subagent_type</code> attribute descriptions, and security mapping table.</li>
+      <li><strong>Security signal table</strong> &mdash; Updated &#x27;Commands run and files touched&#x27; signal to reference both <code>tool_result</code> (executed) and <code>tool_decision</code> (rejected) events.</li>
+      <li><strong><code>OTEL_LOG_TOOL_DETAILS</code> clarification</strong> &mdash; Expanded description to clarify that data is sent only to your OTEL endpoint (never Anthropic), that <code>full_command</code> is emitted untruncated, and that <code>tool_input</code> truncation applies only to <code>tool_result</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified the uniqueness constraint on marketplace <code>name</code>: adding a second marketplace with the same name replaces the first, and all plugins under one name must be listed in a single <code>marketplace.json</code>.</p>
+    <ul>
+      <li><strong>Marketplace name uniqueness</strong> &mdash; Each user can register only one marketplace per name; a second registration with the same name replaces the first. To publish multiple plugins under one marketplace name, list them all in a single <code>marketplace.json</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a full &#x27;Skills-directory plugins&#x27; section documenting the <code>@skills-dir</code> source, scope and trust rules, and the new <code>plugin init</code> / <code>plugin new</code> CLI command for scaffolding plugins.</p>
+    <ul>
+      <li><strong>Skills-directory plugins</strong> &mdash; Any skill folder with a <code>.claude-plugin/plugin.json</code> manifest loads as <code>&amp;lt;name&amp;gt;@skills-dir</code> automatically; personal-scope plugins load from <code>~/.claude/skills/</code> without restrictions, project-scope from <code>&amp;lt;cwd&amp;gt;/.claude/skills/</code> behind the workspace trust gate.</li>
+      <li><strong>Trust gate restrictions</strong> &mdash; Project-scope <code>@skills-dir</code> plugins restrict MCP servers to per-server approval, block LSP servers until trust is granted, and disable background monitors.</li>
+      <li><strong><code>plugin init</code> command</strong> &mdash; New <code>claude plugin init &amp;lt;name&amp;gt;</code> (alias: <code>new</code>) scaffolds a plugin at <code>~/.claude/skills/&amp;lt;name&amp;gt;/</code> with optional <code>--with</code> components (<code>skills</code>, <code>agents</code>, <code>hooks</code>, <code>mcp</code>, <code>lsp</code>, <code>output-style</code>, <code>channel</code>). Blocked when <code>strictKnownMarketplaces</code> or <code>blockedMarketplaces</code> excludes the <code>skills-dir</code> source.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a &#x27;Develop a plugin in your skills directory&#x27; section showing how to use <code>claude plugin init</code> as an alternative to <code>--plugin-dir</code> during development.</p>
+    <ul>
+      <li><strong>Skills-directory development workflow</strong> &mdash; <code>claude plugin init my-tool</code> creates <code>~/.claude/skills/my-tool/</code> with a manifest and starter <code>SKILL.md</code>; auto-loads as <code>my-tool@skills-dir</code> on the next session with no marketplace or install step.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>workflowKeywordTriggerEnabled</code> (v2.1.157+) and updated <code>agent</code> and <code>autoMemoryDirectory</code> setting descriptions to reflect new behaviors.</p>
+    <ul>
+      <li><strong><code>workflowKeywordTriggerEnabled</code></strong> &mdash; New setting (min v2.1.157) that controls whether the word <code>workflow</code> in a prompt triggers a dynamic workflow. Set to <code>false</code> to type the word without triggering one. Default: <code>true</code>.</li>
+      <li><strong><code>agent</code> setting</strong> &mdash; Now also sets the default agent for sessions dispatched from <code>claude agents</code>, in addition to applying to the main thread.</li>
+      <li><strong><code>autoMemoryDirectory</code> setting</strong> &mdash; Updated description: project and local settings values are now honored after workspace trust dialog acceptance, replacing the prior blanket exclusion of project/local scope.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added notes on skills-directory plugin discovery and clarified that <code>${CLAUDE_EFFORT}</code> no longer emits <code>ultra</code>; ultracode reports as <code>xhigh</code>.</p>
+    <ul>
+      <li><strong>Plugin note in skills directory</strong> &mdash; Added a callout that adding a <code>.claude-plugin/plugin.json</code> to a skill folder loads it as a <code>@skills-dir</code> plugin; in a project&#x27;s <code>.claude/skills/</code> this requires workspace trust.</li>
+      <li><strong>Live change detection note</strong> &mdash; Added a note that live change detection covers <code>SKILL.md</code> only; changes to hooks, MCP config, agents, and output styles inside a plugin folder require <code>/reload-plugins</code>.</li>
+      <li><strong><code>${CLAUDE_EFFORT}</code> value update</strong> &mdash; Removed <code>ultra</code> from the list of possible values; ultracode is not a distinct level and reports as <code>xhigh</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>effort.level</code> field description to remove <code>ultra</code> as a distinct value; ultracode now reports as <code>xhigh</code>.</p>
+    <ul>
+      <li><strong><code>effort.level</code> values</strong> &mdash; Removed <code>ultra</code> from the enumerated values; ultracode is not a distinct effort level and reports as <code>xhigh</code> in status line data.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the <code>bypassPermissions</code> warning to include <code>.cargo</code> as an additional directory that bypassed permission checks can write to.</p>
+    <ul>
+      <li><strong><code>bypassPermissions</code> scope</strong> &mdash; Added <code>.cargo</code> to the list of directories that <code>bypassPermissions</code> mode allows writes to without approval, alongside <code>.git</code>, <code>.claude</code>, <code>.vscode</code>, <code>.idea</code>, and <code>.husky</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure your terminal for Claude Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>/terminal-setup</code> command in VS Code, Cursor, and Windsurf now also sets <code>terminal.integrated.gpuAcceleration</code> to <code>&quot;off&quot;</code> to prevent garbled text in the integrated terminal.</p>
+    <ul>
+      <li><strong>GPU acceleration fix</strong> &mdash; <code>/terminal-setup</code> now sets <code>terminal.integrated.gpuAcceleration</code> to <code>&quot;off&quot;</code> in VS Code, Cursor, and Windsurf to prevent garbled text; revert to <code>&quot;auto&quot;</code> and reload the editor window to undo.</li>
+      <li><strong>Scroll sensitivity clarification</strong> &mdash; Separated the GPU acceleration change from the existing mouse-wheel scroll sensitivity change into a distinct bullet for clarity.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/terminal-config" target="_blank" rel="noopener">code.claude.com/docs/en/terminal-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-your-terminal-for-claude-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 new + 13 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define your agent</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a clarification that updating an agent does not propagate to coordinator rosters that reference it; coordinators must be updated explicitly to delegate to a newer version.</p>
+    <ul>
+      <li><strong>Coordinator roster pinning</strong> &mdash; Documented that coordinators referencing an agent in <code>multiagent.agents</code> keep the version pinned at coordinator creation time; updating the referenced agent requires updating the coordinator to pick up the new version.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/agent-setup" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/agent-setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-your-agent" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Cloud sandbox reference</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New reference page documenting the pre-installed software environment for Managed Agents cloud sandboxes, covering programming languages (Python 3.12+, Node 20+, Go 1.22+, Rust 1.77+, Java 21+, Ruby 3.3+, PHP 8.3+, C/C++ GCC 13+), database clients, system and development utilities, and sandbox specifications (Ubuntu 22.04, x86_64, up to 8 GB RAM, up to 10 GB disk, network disabled by default).</p>
+    <ul>
+      <li><strong>Programming languages</strong> &mdash; Documents 8 pre-installed language runtimes with versions and package managers available without any installation steps.</li>
+      <li><strong>Databases</strong> &mdash; SQLite is fully available; PostgreSQL and Redis are client tools only—database servers are not running by default.</li>
+      <li><strong>Utilities</strong> &mdash; Lists system tools (git, curl, jq), development tools (make, cmake, ripgrep, htop), and text processing tools (sed, awk, vim) available out of the box.</li>
+      <li><strong>Sandbox specifications</strong> &mdash; Ubuntu 22.04 LTS, x86_64, up to 8 GB RAM, up to 10 GB disk, network disabled by default (enable in environment config).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/cloud-sandboxes-reference" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/cloud-sandboxes-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cloud-sandbox-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define outcomes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor terminology correction: changed &#x27;container&#x27; to &#x27;sandbox&#x27; in the output file path description.</p>
+    <ul>
+      <li><strong>Terminology</strong> &mdash; Updated references from &#x27;container&#x27; to &#x27;sandbox&#x27; throughout, consistent with the broader terminology normalization across Managed Agents docs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/define-outcomes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/define-outcomes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-outcomes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Cloud environment setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Terminology updated throughout from &#x27;container&#x27; to &#x27;sandbox&#x27;, and the pre-installed runtimes section now links to the new Cloud sandbox reference page.</p>
+    <ul>
+      <li><strong>Terminology normalization</strong> &mdash; All references to &#x27;container&#x27; replaced with &#x27;sandbox&#x27; (description, packages section, networking section, and lifecycle notes).</li>
+      <li><strong>Reference link update</strong> &mdash; Pre-installed runtimes section now links to the new <code>cloud-sandboxes-reference</code> page instead of the deprecated <code>cloud-containers</code> page.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/environments" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/environments &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cloud-environment-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Session event stream</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed a Java SDK code example where an unnecessary cast was applied to the object returned by <code>event._json().orElseThrow().asObject().orElseThrow()</code>.</p>
+    <ul>
+      <li><strong>Java SDK cast fix</strong> &mdash; Removed the erroneous <code>(Map&amp;lt;String, JsonValue&amp;gt;)</code> cast in the event-listing example; the type is now inferred directly from <code>asObject().orElseThrow()</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/events-and-streaming" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/events-and-streaming &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="session-event-stream" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adding files</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Terminology updated from &#x27;container&#x27; to &#x27;sandbox&#x27; throughout the file mounting and path sections.</p>
+    <ul>
+      <li><strong>Terminology normalization</strong> &mdash; All references to &#x27;container&#x27; replaced with &#x27;sandbox&#x27; in the intro, mounting instructions, and file paths note.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/files" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adding-files" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Accessing GitHub</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed a C# SDK code snippet that iterated with a full <code>foreach</code> loop to use <code>FirstAsync()</code> for conciseness, and updated &#x27;container&#x27; terminology to &#x27;sandbox&#x27;.</p>
+    <ul>
+      <li><strong>C# SDK example fix</strong> &mdash; Replaced verbose <code>await foreach</code> loop for retrieving the first resource ID with <code>(await listed.Paginate().FirstAsync()).ID</code>.</li>
+      <li><strong>Terminology normalization</strong> &mdash; Updated &#x27;session container&#x27; to &#x27;session sandbox&#x27;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/github" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/github &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="accessing-github" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Using agent memory</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Memory stores now enforce a hard 2,000-memory limit, and the former &#x27;Limits&#x27; section has been replaced with detailed &#x27;Best practices for memory management&#x27; guidance.</p>
+    <ul>
+      <li><strong>2,000-memory limit</strong> &mdash; Memory stores now have a documented hard cap of 2,000 memories; writes to new memories fail when the limit is reached, while existing memories remain readable and editable.</li>
+      <li><strong>Best practices section</strong> &mdash; New guidance covering: use focused per-purpose stores, condense or prune before the store fills (including dreaming sessions), attach a new store when scope has grown, and limit write access to sessions that actually add memories.</li>
+      <li><strong>Terminology normalization</strong> &mdash; Updated &#x27;container&#x27; to &#x27;sandbox&#x27; throughout.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/memory" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="using-agent-memory" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multiagent sessions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the coordinator&#x27;s <code>multiagent.agents</code> roster is snapshotted at creation time and pinned to resolved versions; added a note and fixed a Java SDK cast.</p>
+    <ul>
+      <li><strong>Version pinning semantics</strong> &mdash; <code>{&quot;type&quot;: &quot;agent&quot;, &quot;id&quot;: agent.id}</code> without a version is now documented as pinning the latest version at coordinator creation time, not dynamically resolving on each session.</li>
+      <li><strong>Roster snapshot note</strong> &mdash; New paragraph clarifying that the coordinator&#x27;s configuration (including <code>multiagent.agents</code>) is snapshotted at creation/update; to delegate to a newer agent version, update the coordinator.</li>
+      <li><strong>Java SDK cast fix</strong> &mdash; Removed erroneous <code>(Map&amp;lt;String, JsonValue&amp;gt;)</code> cast in the thread events listing example.</li>
+      <li><strong>Terminology normalization</strong> &mdash; Updated &#x27;container&#x27; to &#x27;sandbox&#x27;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/multi-agent" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/multi-agent &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multiagent-sessions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Managed Agents overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Terminology updated throughout from &#x27;container&#x27; to &#x27;sandbox&#x27; to align with the new cloud sandbox documentation nomenclature.</p>
+    <ul>
+      <li><strong>Terminology normalization</strong> &mdash; All references to &#x27;cloud container&#x27; replaced with &#x27;cloud sandbox&#x27; across the concepts table, how-it-works steps, built-in tool descriptions, and data retention note.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-managed-agents-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get started with Claude Managed Agents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Terminology updated from &#x27;container&#x27; to &#x27;sandbox&#x27; and Java SDK imports reordered for consistency.</p>
+    <ul>
+      <li><strong>Terminology normalization</strong> &mdash; Updated &#x27;container&#x27; to &#x27;sandbox&#x27; in the concepts table, step descriptions, and quickstart explanation.</li>
+      <li><strong>Java SDK import order</strong> &mdash; Reordered imports for <code>BetaUnrestrictedNetwork</code>, <code>EnvironmentCreateParams</code>, and <code>BetaManagedAgentsStreamSessionEvents</code> for consistency.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-started-with-claude-managed-agents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Security model</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Terminology updated from &#x27;container&#x27; to &#x27;sandbox&#x27; and the security responsibility description updated to &#x27;Isolate tools inside your sandbox&#x27;.</p>
+    <ul>
+      <li><strong>Terminology normalization</strong> &mdash; All &#x27;container&#x27; references replaced with &#x27;sandbox&#x27; in security responsibilities, including image hardening, network egress, key storage, untrusted workloads, and blast radius guidance.</li>
+      <li><strong>Anthropic responsibility clarification</strong> &mdash; Updated &#x27;Sandbox tools inside your container&#x27; to &#x27;Isolate tools inside your sandbox&#x27; to more precisely describe the shared-responsibility boundary.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-security" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-security &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="security-model" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Self-hosted sandboxes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Self-hosted sandboxes are no longer blocked on Claude Platform on AWS; the availability restriction is removed and replaced with a note that the work-list endpoint (<code>GET /v1/environments/{id}/work</code>) is currently unavailable there, plus a new IAM authentication note for AWS workers.</p>
+    <ul>
+      <li><strong>AWS availability</strong> &mdash; Removed the blanket &#x27;not yet available on Claude Platform on AWS&#x27; restriction; self-hosted sandboxes are now supported on AWS.</li>
+      <li><strong>Work-list endpoint limitation</strong> &mdash; Added note that <code>GET /v1/environments/{id}/work</code> (list pending work) is not available on Claude Platform on AWS; other work endpoints (poll, ack, heartbeat, stop, post results, per-item get, stats) work normally.</li>
+      <li><strong>AWS IAM authentication</strong> &mdash; New note: workers on Claude Platform on AWS authenticate with AWS IAM (SigV4) via the <code>AnthropicSelfHostedEnvironmentAccess</code> managed policy; environment keys from the Claude Console do not work.</li>
+      <li><strong>Terminology normalization</strong> &mdash; All &#x27;container&#x27; references updated to &#x27;sandbox&#x27; throughout.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="self-hosted-sandboxes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Start a session</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Terminology updated from &#x27;container&#x27; to &#x27;sandbox&#x27; in session lifecycle descriptions.</p>
+    <ul>
+      <li><strong>Terminology normalization</strong> &mdash; Updated &#x27;provision its container&#x27; to &#x27;provision its sandbox&#x27; in the lifecycle description and &#x27;associated container&#x27; to &#x27;associated sandbox&#x27; in the delete-session section.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/sessions" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/sessions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="start-a-session" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adaptive thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added per-message thinking steering guidance, new prompt examples for encouraging or suppressing thinking, and documented <code>usage.output_tokens_details.thinking_tokens</code> for observability.</p>
+    <ul>
+      <li><strong>Per-message thinking steering</strong> &mdash; New guidance: appending <code>&quot;Please think hard before responding.&quot;</code> to a user message encourages thinking on that turn; <code>&quot;Answer directly without deliberating.&quot;</code> suppresses it, independent of the system prompt.</li>
+      <li><strong>System prompt steering examples</strong> &mdash; Added <code>&quot;This task involves multi-step reasoning. Think carefully before responding.&quot;</code> as an example for encouraging thinking, with a note that steering effectiveness is sensitive to exact wording.</li>
+      <li><strong><code>effort.high</code> description correction</strong> &mdash; Changed &#x27;Claude always thinks&#x27; to &#x27;Claude almost always thinks&#x27; for the default <code>high</code> effort level.</li>
+      <li><strong><code>output_tokens_details.thinking_tokens</code></strong> &mdash; Documents the new <code>usage.output_tokens_details.thinking_tokens</code> field for observing how many billed output tokens were spent on internal reasoning when using <code>display: &quot;omitted&quot;</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/adaptive-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adaptive-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform on AWS</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded Claude Managed Agents availability on AWS to include webhooks, multiagent orchestration, and self-hosted sandboxes, and added a new <code>AnthropicSelfHostedEnvironmentAccess</code> IAM managed policy.</p>
+    <ul>
+      <li><strong>Managed Agents feature expansion</strong> &mdash; Webhooks, multiagent orchestration, and self-hosted sandboxes are now documented as available on Claude Platform on AWS; removed prior restrictions on these features.</li>
+      <li><strong>Work-list endpoint caveat</strong> &mdash; The <code>GET /v1/environments/{id}/work</code> list endpoint is not available on AWS; other self-hosted sandbox work endpoints function normally.</li>
+      <li><strong><code>AnthropicSelfHostedEnvironmentAccess</code> policy</strong> &mdash; A fifth managed IAM policy is added for self-hosted sandbox worker authentication.</li>
+      <li><strong>CloudTrail webhook events</strong> &mdash; Webhook operations are now logged as Management events by default alongside workspace and vault operations.</li>
+      <li><strong>Console Webhooks page</strong> &mdash; Webhooks management page added to the Claude Console pages table under Settings → Webhooks.</li>
+      <li><strong>Managed Agents doc links</strong> &mdash; Inline links added for agents, environments, sessions, credential vaults, memory stores, webhooks, multiagent orchestration, and self-hosted sandboxes in the AWS overview.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform-on-aws" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context windows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a note that Claude&#x27;s tool selection remains accurate with 100K+ token contexts, with cross-references to manage tool context and the tool search tool for reducing tool-definition overhead.</p>
+    <ul>
+      <li><strong>Large-context tool selection</strong> &mdash; New note stating Claude&#x27;s tool selection holds with large input documents (100K+ tokens) and pointing to Manage tool context and the tool search tool for reducing token overhead from tool definitions.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-windows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-windows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added documentation for <code>usage.output_tokens_details.thinking_tokens</code> and clarified that the streaming breakdown appears only on the final <code>message_delta</code> event.</p>
+    <ul>
+      <li><strong><code>output_tokens_details.thinking_tokens</code></strong> &mdash; New field documents how many billed output tokens were internal reasoning; always ≤ <code>output_tokens</code>; <code>output_tokens</code> remains the authoritative billing total.</li>
+      <li><strong>Streaming note</strong> &mdash; Clarified that the <code>output_tokens_details</code> breakdown appears only on the final <code>message_delta</code> event when streaming.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Mid-conversation system messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the code examples from Python-only to a full multi-language CodeGroup covering cURL, CLI, Python, TypeScript, C#, Go, Java, and PHP, all with automatic prompt caching annotations.</p>
+    <ul>
+      <li><strong>Multi-language examples</strong> &mdash; Added cURL, CLI (<code>ant</code>), TypeScript, C#, Go, Java, and PHP code tabs to the mid-conversation system message example, each annotated with automatic prompt caching context.</li>
+      <li><strong>Caching annotation</strong> &mdash; All new examples include <code>cache_control: {type: &quot;ephemeral&quot;}</code> and inline comments explaining that the cached prefix from the previous request remains valid when earlier turns are byte-identical.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mid-conversation-system-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 40 docs analyzed &middot; 2026-05-30
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
