@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 02, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 02, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 02 at 09:07 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">14</div>
+      <div class="label">API Reference (7 new)</div>
+    </div>
+    <div class="stat tools">
+      <div class="num">11</div>
+      <div class="label">Agents &amp; Tools (1 new)</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">11</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">20</div>
+      <div class="label">Managed Agents (2 new)</div>
+    </div>
+    <div class="stat other">
+      <div class="num">7</div>
+      <div class="label">Other (4 new)</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">3</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>CMEK (Customer-Managed Encryption Keys)</strong> &mdash; New end-to-end documentation for encrypting workspace data at rest using your own AWS KMS, Google Cloud KMS, or Azure Key Vault key, including a new External Keys Admin API with full CRUD and validation endpoints.</li>
+      <li><strong>External Keys API</strong> &mdash; Six new API reference docs cover POST/GET/LIST/UPDATE/DELETE/VALIDATE operations on <code>/v1/organizations/external_keys</code>, enabling programmatic management of CMEK configurations for AWS, GCP, and Azure KMS providers.</li>
+      <li><strong>Workspace object CMEK fields</strong> &mdash; All Workspace API endpoints (Create, Get, List, Update, Archive) updated to surface two new fields: <code>external_key_id</code> (write-once CMEK reference) and <code>compartment_id</code> (used to scope KMS key policies per workspace).</li>
+      <li><strong>Managed Agents restructure</strong> &mdash; Event type catalog and session lifecycle operations split into two new dedicated docs (<code>reference</code> and <code>session-operations</code>), consolidating rate limits, branding guidelines, self-hosted worker CLI flags, and supported MCP server types.</li>
+      <li><strong>MCP tunnels concepts page</strong> &mdash; New reference doc canonicalizes terminology for all MCP tunnel components (proxy, cloudflared, setup component, tunnel edge, inner TLS) and both credential-provisioning modes (programmatic vs. manual), with a Mermaid connection diagram.</li>
+      <li><strong>Programmatic tool calling updates</strong> &mdash; <code>allowed_callers</code> clarified as a guidance hint rather than a hard API block; <code>tool_not_allowed</code> error replaced by <code>invalid_request_error</code> on <code>tool_choice</code>; internal benchmark data added showing 20–40% input-token savings on 10–49 tool workloads.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">7 new + 7 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Admin</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Workspace object across Create, Get, and List operations now exposes two new CMEK fields: <code>external_key_id</code> (write-once pointer to an External Key config) and <code>compartment_id</code> (used to scope cloud-provider KMS key policies).</p>
+    <ul>
+      <li><strong>external_key_id (request body)</strong> &mdash; New optional field on Create Workspace; references an External Key config created via the External Keys API; write-once once attached to a workspace</li>
+      <li><strong>compartment_id (response)</strong> &mdash; New field in the Workspace response object identifying the workspace&#x27;s encryption compartment; use this value in AWS KMS key-policy conditions or Azure Key Vault tags</li>
+      <li><strong>external_key_id (response)</strong> &mdash; Echoed back in the Workspace object on Create and Get responses alongside the new compartment_id</li>
+      <li><strong>Workspace object shape</strong> &mdash; Response signature updated from <code>{ id, archived_at, created_at, 5 more }</code> to <code>{ id, archived_at, compartment_id, 7 more }</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="admin" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>External Keys</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New top-level API reference covering all CRUD and validation operations for customer-managed encryption key (CMEK) configurations under <code>/v1/organizations/external_keys</code>, supporting AWS KMS, Google Cloud KMS, and Azure Key Vault providers.</p>
+    <ul>
+      <li><strong>Create External Key (POST)</strong> &mdash; Accepts <code>display_name</code>, <code>geo</code>, and a <code>provider_config</code> union (AWS: <code>kms_arn</code>/<code>role_arn</code>; GCP: <code>key_name</code>; Azure: <code>key_name</code>/<code>tenant_id</code>/<code>vault_uri</code>/<code>client_id</code>)</li>
+      <li><strong>List External Keys (GET)</strong> &mdash; Returns paginated results ordered by creation time with <code>next_page</code> cursor</li>
+      <li><strong>Get External Key (GET /{id})</strong> &mdash; Retrieves a single external key config by ID</li>
+      <li><strong>Update External Key (POST /{id})</strong> &mdash; Partial update; <code>display_name</code> always editable; <code>geo</code> and <code>provider_config</code> locked once any workspace references the config</li>
+      <li><strong>Delete External Key (DELETE /{id})</strong> &mdash; Rejected if any workspace still references the config; returns <code>external_key_deleted</code> type</li>
+      <li><strong>Validate External Key (POST /{id}/validate)</strong> &mdash; Anthropic performs a live encrypt/decrypt roundtrip against the customer&#x27;s KMS (30-second timeout) and returns <code>success</code> or <code>failure</code> with an error message</li>
+      <li><strong>Domain types</strong> &mdash; Full response schema documented for all three provider shapes</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/external_keys" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/external_keys &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="external-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create External Key External Keys</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>Dedicated reference page for <code>POST /v1/organizations/external_keys</code>, documenting the request body and response schema for registering a new CMEK config against AWS KMS, Google Cloud KMS, or Azure Key Vault.</p>
+    <ul>
+      <li><strong>provider_config.Aws</strong> &mdash; Requires <code>kms_arn</code> and <code>role_arn</code>; optional <code>region</code> derived from ARN if omitted</li>
+      <li><strong>provider_config.Gcp</strong> &mdash; Requires full Cloud KMS <code>key_name</code> resource path</li>
+      <li><strong>provider_config.Azure</strong> &mdash; Requires <code>key_name</code>, <code>tenant_id</code>, <code>vault_uri</code>; optional <code>client_id</code> for single-tenant app registrations</li>
+      <li><strong>geo</strong> &mdash; Optional data-residency field; only <code>us</code> is currently supported</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/external_keys/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/external_keys/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-external-key-external-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Delete External Key External Keys</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>Dedicated reference page for <code>DELETE /v1/organizations/external_keys/{external_key_id}</code>, which deletes an external key config and is rejected if any workspace still references it.</p>
+    <ul>
+      <li><strong>Guard condition</strong> &mdash; Request is rejected with an error if any workspace still holds a reference to the config being deleted</li>
+      <li><strong>Response</strong> &mdash; Returns <code>{ id, type: &quot;external_key_deleted&quot; }</code> on success</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/external_keys/delete" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/external_keys/delete &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="delete-external-key-external-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List External Keys External Keys</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>Dedicated reference page for <code>GET /v1/organizations/external_keys</code>, which returns paginated external key configs ordered by creation time (newest first) using an opaque <code>next_page</code> cursor.</p>
+    <ul>
+      <li><strong>Pagination</strong> &mdash; Supports <code>limit</code> (results per page) and opaque <code>page</code> cursor from a previous response&#x27;s <code>next_page</code></li>
+      <li><strong>Response shape</strong> &mdash; Each item in <code>data</code> includes <code>id</code>, <code>created_at</code>, <code>display_name</code>, <code>geo</code>, <code>provider_config</code>, <code>type</code>, and <code>updated_at</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/external_keys/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/external_keys/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-external-keys-external-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get External Key External Keys</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>Dedicated reference page for <code>GET /v1/organizations/external_keys/{external_key_id}</code>, which retrieves a single external key config by ID including full provider config details.</p>
+    <ul>
+      <li><strong>Path parameter</strong> &mdash; <code>external_key_id</code> identifies the external key config to retrieve</li>
+      <li><strong>Response</strong> &mdash; Returns full external key object including <code>provider_config</code> union, <code>geo</code>, and timestamps</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/external_keys/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/external_keys/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-external-key-external-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update External Key External Keys</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>Dedicated reference page for <code>POST /v1/organizations/external_keys/{external_key_id}</code>, which partially updates a CMEK config — <code>display_name</code> is always editable, but <code>geo</code> and <code>provider_config</code> are locked once any workspace references the config.</p>
+    <ul>
+      <li><strong>Immutability constraint</strong> &mdash; <code>geo</code> and <code>provider_config</code> cannot be changed once referenced by a workspace, because previously encrypted data requires the original key identity to decrypt</li>
+      <li><strong>Partial update semantics</strong> &mdash; Omitted fields are left unchanged; only <code>display_name</code> remains freely editable at any time</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/external_keys/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/external_keys/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-external-key-external-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Validate External Key Validate</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>Dedicated reference page for <code>POST /v1/organizations/external_keys/{external_key_id}/validate</code>, which triggers a live encrypt/decrypt roundtrip against the customer&#x27;s KMS and returns a structured success/failure result.</p>
+    <ul>
+      <li><strong>Roundtrip timeout</strong> &mdash; Anthropic waits up to 30 seconds for the KMS encrypt/decrypt roundtrip to complete</li>
+      <li><strong>Response fields</strong> &mdash; Returns <code>status</code> (<code>&quot;success&quot;</code> or <code>&quot;failure&quot;</code>), <code>error</code> (error message string or null), and <code>type: &quot;external_key_validation&quot;</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/external_keys/validate" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/external_keys/validate &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="validate-external-key-validate" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Create Workspace and Get Workspace endpoints both gain <code>external_key_id</code> as an optional request body field and return two new response fields (<code>compartment_id</code> and <code>external_key_id</code>) on the Workspace object.</p>
+    <ul>
+      <li><strong>external_key_id (request)</strong> &mdash; New optional body parameter on Create Workspace linking a CMEK config; write-once once set</li>
+      <li><strong>compartment_id (response)</strong> &mdash; New Workspace response field; reference in AWS KMS key-policy conditions or Azure Key Vault tags to scope the key to this compartment</li>
+      <li><strong>external_key_id (response)</strong> &mdash; Echoed in the Workspace response alongside <code>compartment_id</code></li>
+      <li><strong>Workspace object shape</strong> &mdash; Updated from <code>{ id, archived_at, created_at, 5 more }</code> to <code>{ id, archived_at, compartment_id, 7 more }</code> on both Create and Get</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Archive Workspace Archive</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Archive Workspace response now includes the two new CMEK fields (<code>compartment_id</code> and <code>external_key_id</code>) consistent with all other Workspace endpoints.</p>
+    <ul>
+      <li><strong>compartment_id</strong> &mdash; Added to Archive Workspace response; identifies the workspace&#x27;s encryption compartment for use in cloud-provider KMS key scoping</li>
+      <li><strong>external_key_id</strong> &mdash; Added to Archive Workspace response; reflects the write-once CMEK config attached to this workspace</li>
+      <li><strong>Workspace object shape</strong> &mdash; Updated from <code>{ id, archived_at, created_at, 5 more }</code> to <code>{ id, archived_at, compartment_id, 7 more }</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/archive" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/archive &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="archive-workspace-archive" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create Workspace Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Create Workspace gains <code>external_key_id</code> as a new optional body parameter and returns <code>compartment_id</code> and <code>external_key_id</code> in the response.</p>
+    <ul>
+      <li><strong>external_key_id (body)</strong> &mdash; Optional; links a CMEK config created via the External Keys API; write-once, cannot be detached or replaced after attachment</li>
+      <li><strong>compartment_id (response)</strong> &mdash; New field; use its value in cloud-provider KMS key policies to scope the key to this workspace</li>
+      <li><strong>external_key_id (response)</strong> &mdash; Echoed in the Workspace response alongside <code>compartment_id</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-workspace-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List Workspaces Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>List Workspaces response objects now include <code>compartment_id</code> and <code>external_key_id</code> on each Workspace entry, consistent with other Workspace endpoints.</p>
+    <ul>
+      <li><strong>compartment_id</strong> &mdash; Added to each Workspace item in the list response</li>
+      <li><strong>external_key_id</strong> &mdash; Added to each Workspace item in the list response</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-workspaces-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get Workspace Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Get Workspace response now includes <code>compartment_id</code> and <code>external_key_id</code> on the Workspace object.</p>
+    <ul>
+      <li><strong>compartment_id</strong> &mdash; Added to Get Workspace response; use in cloud-provider KMS key-policy conditions</li>
+      <li><strong>external_key_id</strong> &mdash; Added to Get Workspace response; reflects the write-once CMEK config</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-workspace-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Workspace Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Update Workspace gains <code>external_key_id</code> as a new optional body parameter (write-once) and the response now includes <code>compartment_id</code> and <code>external_key_id</code>.</p>
+    <ul>
+      <li><strong>external_key_id (body)</strong> &mdash; New optional field for attaching a CMEK config at update time; write-once semantics apply</li>
+      <li><strong>compartment_id (response)</strong> &mdash; Added to Update Workspace response</li>
+      <li><strong>external_key_id (response)</strong> &mdash; Added to Update Workspace response</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/admin/workspaces/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/admin/workspaces/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-workspace-workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">1 new + 10 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Architecture and components</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New conceptual reference defining canonical names for all MCP tunnel components (proxy, cloudflared, setup component, tunnel edge, inner TLS, upstream MCP server), both credential-provisioning modes (programmatic vs. manual), and the tunnel connection model illustrated with a Mermaid sequence diagram.</p>
+    <ul>
+      <li><strong>Component glossary</strong> &mdash; Defines canonical names and aliases for tunnel stack, proxy (<code>mcp-proxy</code>/<code>mcp-gateway</code>), cloudflared, setup component, tunnel edge IP ranges, inner TLS, and upstream MCP server</li>
+      <li><strong>Credential provisioning modes</strong> &mdash; Documents programmatic access (WIF-based, Helm managed mode <code>setup.enabled: true</code>) vs. manual (Console-based, Helm external mode <code>setup.enabled: false</code>) as a paired-tabs model</li>
+      <li><strong>Connection model</strong> &mdash; Clarifies that cloudflared dials outbound to the tunnel edge while MCP requests flow inbound over that connection; Mermaid diagram shows all hops including inner TLS termination at the proxy</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/concepts" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/concepts &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="architecture-and-components" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage tunnels in the Console</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified Console role requirements for tunnel management, rewrote the programmatic-access setup steps to reference the new concepts glossary, and replaced prose descriptions of credential values with a comparison table.</p>
+    <ul>
+      <li><strong>Role requirement</strong> &mdash; Clarified that organization admins and owners have the Manage tunnels permission by default; custom roles and per-account grants can also include it</li>
+      <li><strong>Programmatic access toggle</strong> &mdash; Simplified prerequisites to three items (registered OIDC issuer, federation rule with <code>org:manage_tunnels</code>, service account workspace membership); removed the permission-to-manage-federation-rules prerequisite from the main list</li>
+      <li><strong>Post-creation credential table</strong> &mdash; Replaced multi-paragraph prose with a two-column table contrasting what you need with vs. without programmatic access</li>
+      <li><strong>Tunnel scope note</strong> &mdash; Added callout that tunnels are workspace-scoped and the new tunnel belongs to the currently selected workspace</li>
+      <li><strong>Token reveal note</strong> &mdash; Clarified that every reveal and rotation is recorded in the Compliance API activity log</li>
+      <li><strong>MCP server terminology</strong> &mdash; Updated references from &quot;tunneled MCP servers&quot; to &quot;upstream MCP servers&quot; per the concepts glossary</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-tunnels-in-the-console" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Deploy MCP tunnels with Docker Compose</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated Compose deploy guide to link component names to the new concepts glossary, clarified that the programmatic flow requires an OIDC identity provider on the host, fixed the sample server directory setup, and improved multi-VM deployment instructions.</p>
+    <ul>
+      <li><strong>OIDC requirement callout</strong> &mdash; Added note that programmatic access requires the host to have an OIDC identity provider; directs users without one to the manual tab</li>
+      <li><strong>Compose file hardening note</strong> &mdash; Moved the security note (non-root, read-only filesystem, dropped capabilities, pinned digests) to appear before the config block rather than after</li>
+      <li><strong>routes clarification</strong> &mdash; Noted that <code>routes</code> is a flat map, not a list</li>
+      <li><strong>chmod 644 explanation</strong> &mdash; Added comment explaining why the world-read bit is needed for the non-root proxy container to read a host-owned key file</li>
+      <li><strong>cloudflared network mode</strong> &mdash; Replaced prose explanation of <code>network_mode: &quot;service:mcp-proxy&quot;</code> with a precise description of the shared network namespace</li>
+      <li><strong>Multi-VM instructions</strong> &mdash; Clarified that <code>TUNNEL_TOKEN</code> must be re-exported in every fresh shell; simplified multi-host copy instructions</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="deploy-mcp-tunnels-with-docker-compose" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Deploy MCP tunnels with Helm</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated Helm deploy guide to note that for non-default release names the setup ServiceAccount name follows Helm&#x27;s fullname convention, added <code>tunnel.tokenVersion</code> to the values example, and added a note clarifying the default vs. Console audience mismatch.</p>
+    <ul>
+      <li><strong>ServiceAccount name warning</strong> &mdash; For release names other than <code>mcp-tunnel</code>, users must run <code>helm template | grep ServiceAccount</code> to confirm the name before creating the federation rule</li>
+      <li><strong>Audience mismatch note</strong> &mdash; Explicit callout that the chart default audience is <code>api.anthropic.com</code> (no scheme) while the Console form suggests <code>https://api.anthropic.com</code>; the two must match byte-for-byte</li>
+      <li><strong>tunnel.tokenVersion</strong> &mdash; Added to the values.yaml example with a comment explaining it triggers token rotation on increment</li>
+      <li><strong>Pre-install hook clarification</strong> &mdash; Updated language to &quot;setup component runs as a Helm pre-install hook Job&quot;; references updated from &quot;Setup Job authentication failures&quot; to &quot;Setup component authentication failures&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="deploy-mcp-tunnels-with-helm" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Overview page updated to hyperlink all component names to the new concepts glossary, tighten network requirements table language, remove embedded Python/TypeScript SDK code examples in favor of a link to the MCP connector page, and note that payloads are always encrypted when crossing Cloudflare&#x27;s network.</p>
+    <ul>
+      <li><strong>Component links</strong> &mdash; cloudflared, proxy, inner TLS, and upstream MCP server now link to concepts glossary anchors</li>
+      <li><strong>Network requirements table</strong> &mdash; Column header changed to &quot;Used during&quot;; &quot;Setup&quot; row renamed to &quot;Setup component&quot;; &quot;Continuous&quot; changed to &quot;Runtime&quot;</li>
+      <li><strong>SDK examples removed</strong> &mdash; Python and TypeScript code blocks removed from the Messages API section; replaced with a link to the MCP connector page for per-language examples</li>
+      <li><strong>Security model wording</strong> &mdash; Clarified that payloads are always encrypted when they cross Cloudflare&#x27;s network (removed the conditional &quot;in which payloads cross Cloudflare unencrypted&quot; phrasing)</li>
+      <li><strong>Remote MCP servers link</strong> &mdash; Added pointer to Remote MCP servers page for example servers to deploy</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording updates: corrected Console URL to <code>platform.claude.com</code>, updated session creation instructions to include naming the agent, and added next-step guidance for swapping in a custom MCP server.</p>
+    <ul>
+      <li><strong>Console URL</strong> &mdash; Corrected link from <code>console.anthropic.com</code> to <code>platform.claude.com</code></li>
+      <li><strong>Agent creation step</strong> &mdash; Added instruction to give the agent a name and keep the pre-filled model in the session picker</li>
+      <li><strong>Post-verification next steps</strong> &mdash; Added instructions for replacing the sample server with a custom MCP server (add to Compose, add route to proxy config, restart <code>mcp-proxy</code>)</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels-quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed &quot;Setup CLI&quot; section to &quot;Setup component&quot;, extracted <code>routes</code> field documentation into a dedicated &quot;Route matching&quot; subsection, and clarified default values for <code>--output</code> and <code>--token-version</code> flags.</p>
+    <ul>
+      <li><strong>Section rename</strong> &mdash; &quot;Setup CLI&quot; renamed to &quot;Setup component&quot; throughout; intro updated to describe the binary as shipped inside the <code>mcp-proxy</code> image</li>
+      <li><strong>Route matching subsection</strong> &mdash; <code>routes</code> table entry condensed; new &quot;Route matching&quot; section explains flat map semantics, exact-then-suffix lookup, path forwarding, and the mandatory <code>scheme://host:port</code> upstream format</li>
+      <li><strong>tunnel_domain default</strong> &mdash; Updated from &quot;Required for the subdomain-key form used in this guide&quot; to &quot;Required when routes keys are bare subdomains&quot;</li>
+      <li><strong>--output flag</strong> &mdash; Both <code>setup init</code> and <code>setup renew-cert</code> <code>--output</code> descriptions now note the Helm chart passes <code>k8s-secret:&amp;lt;release&amp;gt;</code></li>
+      <li><strong>--token-version flag</strong> &mdash; Default description updated to note that both Helm and Compose pass <code>1</code> as the initial value</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/reference" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels security</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor terminology updates aligning with the concepts glossary (&quot;tunnel stack&quot; instead of &quot;deployment&quot;, &quot;upstream MCP servers&quot;) and added clarification on what credentials the Docker Compose data directory contains.</p>
+    <ul>
+      <li><strong>Terminology alignment</strong> &mdash; &quot;Stop the deployment&quot; steps renamed to &quot;Stop the tunnel stack&quot;; &quot;tunneled MCP servers&quot; renamed to &quot;upstream MCP servers&quot;</li>
+      <li><strong>Docker Compose credential locations</strong> &mdash; Added note clarifying that private keys/certs are in <code>data/</code> and the tunnel token is in <code>data/tunnel-token</code> (programmatic) or the shell environment (manual)</li>
+      <li><strong>Setup Job reference</strong> &mdash; Updated &quot;setup Job created a single Secret&quot; to &quot;setup component created a single Secret&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/security" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/security &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels-security" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshoot MCP tunnels</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed &quot;Setup Job authentication failures&quot; section to &quot;Setup component authentication failures&quot;, updated quick-reference table entries, clarified that IPv6 applies only to the cloudflared-to-edge hop (not proxy-to-upstream), and added an introductory sentence grouping the three failure layers.</p>
+    <ul>
+      <li><strong>Section rename</strong> &mdash; &quot;Setup Job authentication failures&quot; renamed to &quot;Setup component authentication failures&quot; throughout</li>
+      <li><strong>Quick-reference table</strong> &mdash; <code>no route for host</code> row now includes the restart command inline; IP validation row updated to &quot;upstream MCP server resolves outside RFC1918&quot;</li>
+      <li><strong>IPv4-only scope</strong> &mdash; Added parenthetical noting the cloudflared-to-edge egress range is a different hop from the IPv4-only proxy-to-upstream connection</li>
+      <li><strong>Introductory framing</strong> &mdash; Added sentence grouping failures into three ordered layers before the quick-reference table</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/troubleshooting" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshoot-mcp-tunnels" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Programmatic tool calling</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that <code>allowed_callers</code> is a guidance hint rather than a hard API enforcement boundary, replaced the <code>tool_not_allowed</code> error with <code>invalid_request_error</code> on <code>tool_choice</code>, added internal benchmark data on token savings, and rewrote the &quot;when to use&quot; guidance with strong-fit vs. weak-fit framing.</p>
+    <ul>
+      <li><strong>allowed_callers semantics</strong> &mdash; Clarified that <code>allowed_callers</code> guides Claude and is validated against <code>tool_choice</code>, but is not a hard API-level block; clients must still handle direct <code>tool_use</code> for any tool</li>
+      <li><strong>Error change</strong> &mdash; <code>tool_not_allowed</code> replaced by <code>invalid_request_error</code> (on <code>tool_choice</code>) in error reference table and troubleshooting section</li>
+      <li><strong>Performance data</strong> &mdash; Added Anthropic internal benchmark results: 38% input-token reduction on 75-tool project-management benchmark; ~8% cost increase on τ²-bench sequential workflows; 20–40% savings typical for 10–49 tool definitions</li>
+      <li><strong>allowed_callers values wording</strong> &mdash; Changed from &quot;only callable&quot; / &quot;callable&quot; to &quot;guided to call&quot; language for all three array values</li>
+      <li><strong>When to use section</strong> &mdash; Rewritten with &quot;Strong fit&quot; / &quot;Weak fit&quot; framing; added overhead vs. savings trade-off explanation and advice to measure before enabling broadly</li>
+      <li><strong>BrowseComp/DeepSearchQA result</strong> &mdash; Updated from vague &quot;key factor&quot; to specific &quot;11% improvement with 24% fewer input tokens&quot; with a link to the blog post</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="programmatic-tool-calling" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>allowed_callers</code> description to clarify that omitting <code>&quot;direct&quot;</code> guides Claude to call the tool from code execution rather than enforcing a hard restriction.</p>
+    <ul>
+      <li><strong>allowed_callers wording</strong> &mdash; Changed &quot;means the tool is callable only from within code execution&quot; to &quot;guides Claude to call the tool only from within code execution&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">11 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the <code>claude daemon stop --any</code> command to the command reference table for recovering from an unresponsive supervisor.</p>
+    <ul>
+      <li><strong>claude daemon stop --any</strong> &mdash; New command that stops the background-session supervisor and the sessions it hosts; <code>--keep-workers</code> flag leaves sessions running for the next supervisor to reconnect; documented as the recovery path for an unresponsive supervisor</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Desktop application</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the MCP server note to document that the Desktop app now loads servers from <code>claude_desktop_config.json</code> into Code tab sessions alongside servers from <code>~/.claude.json</code> and <code>.mcp.json</code>; the standalone CLI does not read that file.</p>
+    <ul>
+      <li><strong>MCP server loading behavior</strong> &mdash; Desktop app now loads <code>claude_desktop_config.json</code> servers into Code tab sessions alongside <code>~/.claude.json</code> and <code>.mcp.json</code> sources</li>
+      <li><strong>Standalone CLI behavior</strong> &mdash; Clarified that the standalone CLI does not read <code>claude_desktop_config.json</code>; users on macOS and WSL should run <code>claude mcp add-from-claude-desktop</code> to copy those servers</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="desktop-application" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate actions with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the page title from &quot;Automate workflows with hooks&quot; and added that the <code>MessageDisplay</code> event lowers hook timeouts to 10 seconds.</p>
+    <ul>
+      <li><strong>Page title</strong> &mdash; Renamed from &quot;Automate workflows with hooks&quot; to &quot;Automate actions with hooks&quot;</li>
+      <li><strong>MessageDisplay timeout</strong> &mdash; <code>MessageDisplay</code> now lowers <code>command</code>, <code>http</code>, and <code>mcp_tool</code> hook defaults to 10 seconds (documented alongside the existing 30-second <code>UserPromptSubmit</code> override)</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-actions-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>MessageDisplay</code> hook documentation with a 10-second default timeout, expanded its use-case description, added a full cross-platform code example (macOS/Linux bash + Windows PowerShell), and updated the <code>timeout</code> table row to reflect the new event-level default.</p>
+    <ul>
+      <li><strong>MessageDisplay timeout</strong> &mdash; Default timeout lowered to 10 seconds for <code>command</code>, <code>http</code>, and <code>mcp_tool</code> hook types on this event; table and prose updated</li>
+      <li><strong>MessageDisplay use cases</strong> &mdash; Expanded description to list stripping markdown, transforming Agent SDK output, and redacting API keys or hostnames</li>
+      <li><strong>MessageDisplay example</strong> &mdash; New cross-platform example showing a plain-text display hook in bash (using <code>jq</code>) and PowerShell that removes bold markers and inline code backticks from <code>delta</code></li>
+      <li><strong>UserPromptSubmit timeout wording</strong> &mdash; Updated to &quot;shorter than the 600-second default for those types on most other events&quot; to acknowledge <code>MessageDisplay</code>&#x27;s 10-second override</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a pointer to the new MCP quickstart page and clarified that tool search loads both tool names and server instructions at session start.</p>
+    <ul>
+      <li><strong>MCP quickstart link</strong> &mdash; Added introductory sentence directing first-time users to the MCP quickstart for a step-by-step walkthrough</li>
+      <li><strong>Tool search behavior</strong> &mdash; Updated description to note that both tool names and server instructions load at session start (previously stated only tool names)</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the <code>[1m]</code> suffix documentation to clarify it applies to <code>opus</code> and <code>sonnet</code> aliases but does not extend the plan-mode Opus phase of <code>opusplan</code>, which remains capped at 200K.</p>
+    <ul>
+      <li><strong>[1m] suffix scope</strong> &mdash; Clarified the suffix applies to <code>opus</code> and <code>sonnet</code> aliases but explicitly does not extend the plan-mode Opus phase of <code>opusplan</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a reference to the new MCP quickstart in the &quot;Connect your tools with MCP&quot; accordion.</p>
+    <ul>
+      <li><strong>MCP quickstart mention</strong> &mdash; Added sentence pointing to the MCP quickstart for connecting a first server end to end</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the <code>shutdownTimeout</code> and <code>restartOnCrash</code> fields from the LSP optional fields table.</p>
+    <ul>
+      <li><strong>LSP optional fields</strong> &mdash; <code>shutdownTimeout</code> and <code>restartOnCrash</code> fields removed from the optional fields table</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the plugin definition to clarify that a plugin is a self-contained directory that may optionally include a <code>.claude-plugin/plugin.json</code> manifest rather than requiring one.</p>
+    <ul>
+      <li><strong>Plugin definition</strong> &mdash; Updated to &quot;self-contained directories with skills, agents, hooks, or a <code>.claude-plugin/plugin.json</code> manifest&quot; to reflect that the manifest is optional</li>
+      <li><strong>Plugin directory description</strong> &mdash; Step 1 now says a plugin &quot;optionally&quot; includes the manifest alongside skills, agents, or hooks</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the managed settings link in the &quot;Verify active settings&quot; section to point to the correct <code>admin-setup</code> anchor.</p>
+    <ul>
+      <li><strong>Managed settings link</strong> &mdash; Fixed reference from <code>/en/managed-settings</code> to <code>/en/admin-setup#decide-how-settings-reach-devices</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed a URL encoding issue in the model error anchor link.</p>
+    <ul>
+      <li><strong>Model error anchor</strong> &mdash; Corrected <code>#theres-an-issue-with-the-selected-model</code> to URL-encoded form <code>#there%E2%80%99s-an-issue-with-the-selected-model</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">2 new + 18 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define your agent</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated model support language and corrected the system prompt cross-reference link to point to the new reference page.</p>
+    <ul>
+      <li><strong>Model support</strong> &mdash; Changed from &quot;All Claude 4.5 and later models&quot; to &quot;All Claude 4.5-family and later models&quot;</li>
+      <li><strong>system field link</strong> &mdash; Updated cross-reference from events-and-streaming to <code>reference#event-types</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/agent-setup" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/agent-setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-your-agent" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Cloud sandbox reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording improvement in the database note, replacing an explicit list with &quot;such as&quot; phrasing.</p>
+    <ul>
+      <li><strong>Database note wording</strong> &mdash; Changed &quot;PostgreSQL, Redis, etc.&quot; to &quot;such as PostgreSQL and Redis&quot; for consistency</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/cloud-sandboxes-reference" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/cloud-sandboxes-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cloud-sandbox-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define outcomes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified the grader&#x27;s output as an explanation (not a per-criterion breakdown), tightened the Files API beta-header note, and fixed Go error handling in the retrieving-deliverables code example.</p>
+    <ul>
+      <li><strong>Grader output description</strong> &mdash; Changed from &quot;per-criterion breakdown&quot; to &quot;explanation summarizing which criteria passed or failed&quot;</li>
+      <li><strong>Files API beta header note</strong> &mdash; Converted inline note to a structured <code>&amp;lt;Note&amp;gt;</code> callout clarifying both beta headers are required when uploading rubrics via the Files API</li>
+      <li><strong>user.message link</strong> &mdash; Updated cross-reference from events-and-streaming to <code>reference#event-types</code></li>
+      <li><strong>Go error handling</strong> &mdash; Fixed silent error ignoring in <code>io.ReadAll</code> and <code>os.WriteFile</code> calls</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/define-outcomes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/define-outcomes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-outcomes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Cloud environment setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the <code>allowed_hosts</code> format description (bare hostnames/wildcards, no URL scheme) and updated session-creation and networking mode descriptions.</p>
+    <ul>
+      <li><strong>allowed_hosts format</strong> &mdash; Corrected from &quot;must be HTTPS-prefixed&quot; to bare hostnames or wildcard patterns such as <code>*.example.com</code>; do not include a URL scheme</li>
+      <li><strong>networking modes</strong> &mdash; Changed &quot;via the&quot; to &quot;through the&quot; for <code>allow_package_managers</code> and <code>allow_mcp_servers</code> description</li>
+      <li><strong>Session creation link</strong> &mdash; Added hyperlink to the sessions page in the &quot;Use the environment in a session&quot; section</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/environments" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/environments &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cloud-environment-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Session event stream</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the full event type tables (moved to the new Reference page) and replaced them with a single link, restructured the reconnection steps into a numbered list, and changed list-item punctuation from em-dash to colon in the debugging tips.</p>
+    <ul>
+      <li><strong>Event type tables removed</strong> &mdash; User, agent, session, and span event tables extracted to <code>reference#event-types</code>; section now links there</li>
+      <li><strong>Reconnection steps</strong> &mdash; Converted paragraph into a three-item numbered list (open stream, list history, tail and skip seen IDs)</li>
+      <li><strong>Debugging tips formatting</strong> &mdash; Changed from em-dash to colon separator in list items</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/events-and-streaming" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/events-and-streaming &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="session-event-stream" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adding files</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording improvements: changed &quot;via&quot; to &quot;through&quot;, updated file-copy semantics note to present tense, and fixed Go error handling in the file download code example.</p>
+    <ul>
+      <li><strong>Via → through</strong> &mdash; Consistent phrasing update throughout</li>
+      <li><strong>file_id note</strong> &mdash; Changed &quot;will be created&quot; to &quot;is created&quot; for present-tense consistency</li>
+      <li><strong>Go error handling</strong> &mdash; Fixed silent error ignoring in <code>io.ReadAll</code> and <code>os.WriteFile</code> calls</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/files" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adding-files" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Accessing GitHub</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a Next steps card group at the end of the page and fixed a minor heading capitalization.</p>
+    <ul>
+      <li><strong>Next steps cards</strong> &mdash; Added CardGroup with three cards linking to Session event stream, MCP connector, and Adding files</li>
+      <li><strong>Section heading</strong> &mdash; Changed &quot;GitHub MCP and Session Resources&quot; to &quot;GitHub MCP and session resources&quot;</li>
+      <li><strong>resource.list reference</strong> &mdash; Changed &quot;via <code>resources.list</code>&quot; to &quot;through <code>resources.list</code>&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/github" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/github &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="accessing-github" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP connector</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the &quot;Supported MCP server types&quot; section at the bottom with a link to the new reference page, and updated the 100k token threshold to use a comma-formatted number.</p>
+    <ul>
+      <li><strong>Supported MCP server types</strong> &mdash; Section content removed; replaced with a link to <code>reference#supported-mcp-server-types</code></li>
+      <li><strong>Token threshold formatting</strong> &mdash; Changed &quot;100k tokens&quot; to &quot;100,000 tokens&quot; for consistency</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/mcp-connector" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/mcp-connector &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-connector" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Using agent memory</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording changes replacing &quot;via&quot; with &quot;through&quot; and updating past-memory-version retention note.</p>
+    <ul>
+      <li><strong>Via → through</strong> &mdash; Consistent phrasing update for API and Console access descriptions</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/memory" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="using-agent-memory" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multiagent sessions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording update in the primary thread description, changing &quot;won&#x27;t&quot; and &quot;will&quot; to present-tense declarative forms.</p>
+    <ul>
+      <li><strong>Primary thread description</strong> &mdash; Changed &quot;You won&#x27;t see / but you will see&quot; to &quot;You don&#x27;t see / but you do see&quot; for consistent present-tense style</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/multi-agent" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/multi-agent &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multiagent-sessions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Managed Agents overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Extracted rate limits, branding guidelines, and the new Reference card into the dedicated Reference page; updated the CardGroup from 2 to 3 columns with a new Reference card; and separated MCP tunnels and dreaming into their own more-limited research-preview callout.</p>
+    <ul>
+      <li><strong>Reference card added</strong> &mdash; New card in the 3-column CardGroup links to the new <code>reference</code> page (event types, rate limits, CLI flags, lookup tables)</li>
+      <li><strong>API reference card renamed</strong> &mdash; &quot;API reference&quot; → &quot;Start a session&quot; with updated description</li>
+      <li><strong>Rate limits and branding guidelines</strong> &mdash; Content moved to the new Reference page; overview now links there</li>
+      <li><strong>Research preview scope</strong> &mdash; Separated MCP tunnels and dreaming into a distinct &quot;more limited research preview&quot; callout; reworded the general Managed Agents beta note</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-managed-agents-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Permission policies</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording correction changing &quot;will be enabled&quot; to present tense in the <code>default_config</code> note.</p>
+    <ul>
+      <li><strong>default_config note</strong> &mdash; &quot;the agent toolset will be enabled&quot; changed to &quot;the agent toolset is enabled&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/permission-policies" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/permission-policies &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="permission-policies" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get started with Claude Managed Agents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed the Console account link URL, updated the minimum Go version for the CLI from 1.22 to 1.25, and changed several future-tense statements to present tense.</p>
+    <ul>
+      <li><strong>Console URL</strong> &mdash; Updated from <code>/</code> to <code>https://platform.claude.com</code></li>
+      <li><strong>Go version</strong> &mdash; Minimum version updated from 1.22 to 1.25 for CLI installation from source</li>
+      <li><strong>Agent loop description</strong> &mdash; Changed five future-tense steps to present tense</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-started-with-claude-managed-agents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Reference</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New dedicated reference page for Claude Managed Agents consolidating the full event type catalog (user, agent, session, and span events), self-hosted worker CLI flags, supported MCP server types, rate limits (300 req/min create, 600 req/min read), and branding guidelines previously scattered across the overview and events pages.</p>
+    <ul>
+      <li><strong>Event types</strong> &mdash; Full catalog of user, agent, session, and span event types in tabbed layout; adds new <code>session.deleted</code> event and <code>session.thread_status_rescheduled</code> for multiagent threads</li>
+      <li><strong>Self-hosted worker flags</strong> &mdash; Documents all <code>ant beta:worker</code> CLI flags: <code>--environment-id</code>, <code>--environment-key</code>, <code>--workdir</code>, <code>--on-work</code>, <code>--unrestricted-paths</code>, <code>--max-idle</code>, <code>--log-format</code></li>
+      <li><strong>Supported MCP server types</strong> &mdash; Documents remote (HTTP endpoint) and private (MCP tunnels) server support with streamable HTTP transport requirement</li>
+      <li><strong>Rate limits</strong> &mdash; 300 req/min for create endpoints, 600 req/min for read endpoints</li>
+      <li><strong>Branding guidelines</strong> &mdash; Permitted (&quot;Claude Agent&quot;, &quot;Powered by Claude&quot;) and not-permitted (&quot;Claude Code&quot;, &quot;Claude Cowork&quot;) uses</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/reference" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Security model</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording improvements to the shared-responsibility bullet points for clarity.</p>
+    <ul>
+      <li><strong>Untrusted workloads bullet</strong> &mdash; Changed &quot;for each trust boundary&quot; phrasing and &quot;instead of&quot; instead of &quot;rather than&quot;</li>
+      <li><strong>Log retention bullet</strong> &mdash; Changed to &quot;pass through your worker and stay in your environment&quot; for clarity</li>
+      <li><strong>Leaked key bullet</strong> &mdash; Retitled from &quot;Revoke a leaked key faster than you can detect it&quot; to &quot;Instantly invalidate a leaked key&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-security" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes-security &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="security-model" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Self-hosted sandboxes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Restructured the setup flow into shared steps with tabs only where deployment method differs, added a data-flow boundary note, clarified sandbox filesystem paths, added a &quot;Before you begin&quot; checklist, and improved code examples with proper import lines.</p>
+    <ul>
+      <li><strong>Data-flow boundary note</strong> &mdash; Added paragraph explaining tool inputs/outputs flow to Anthropic&#x27;s control plane while execution stays on the host</li>
+      <li><strong>Sandbox filesystem section</strong> &mdash; Clarified <code>/workspace</code> as the system default and explained that CLI <code>--workdir</code> defaults to current directory; <code>/mnt/session/outputs</code> only applies in sandbox mode</li>
+      <li><strong>Before you begin checklist</strong> &mdash; New prerequisites section listing required host, SDK/CLI, and two credentials (environment key + API key)</li>
+      <li><strong>Skills definition</strong> &mdash; Added inline definition of skills as &quot;reusable, filesystem-based resources that give the agent domain-specific expertise&quot;</li>
+      <li><strong>Code examples</strong> &mdash; Added missing import statements (Python, TypeScript, C#, Java, PHP) throughout the environment-creation code blocks</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="self-hosted-sandboxes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Session operations</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New dedicated page covering all post-creation session operations: retrieving, listing, updating (mid-session agent config replacement), archiving, and deleting sessions, including session status reference table and code examples in all SDK languages plus the CLI.</p>
+    <ul>
+      <li><strong>Session statuses table</strong> &mdash; Documents <code>idle</code>, <code>running</code>, <code>rescheduling</code>, and <code>terminated</code> statuses with descriptions</li>
+      <li><strong>Updating agent configuration</strong> &mdash; Explains full-replacement semantics for <code>agent.tools</code> and <code>agent.mcp_servers</code>; session must be <code>idle</code>; updates are session-local</li>
+      <li><strong>Retrieve, list, archive, delete</strong> &mdash; Full code examples (cURL, CLI, Python, TypeScript, C#, Go, Java, PHP, Ruby) for each operation</li>
+      <li><strong>Extracted from sessions page</strong> &mdash; Content previously in &quot;Other session operations&quot; section of the sessions page moved here</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/session-operations" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/session-operations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="session-operations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Start a session</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Extracted session statuses and all update/retrieve/archive/delete operations into the new Session operations page; updated the user event cross-reference link to the new reference page.</p>
+    <ul>
+      <li><strong>Session operations extracted</strong> &mdash; &quot;Session statuses&quot; and &quot;Other session operations&quot; sections removed; content moved to the new <code>session-operations</code> page</li>
+      <li><strong>user event link</strong> &mdash; Updated from events-and-streaming to <code>reference#event-types</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/sessions" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/sessions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="start-a-session" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tools</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording improvements: updated token threshold formatting to 100,000, changed &quot;decides&quot; to &quot;determines&quot;, and switched list examples from &quot;e.g.&quot; to &quot;for example&quot;.</p>
+    <ul>
+      <li><strong>Token threshold</strong> &mdash; Changed &quot;100K tokens&quot; to &quot;100,000 tokens&quot; for consistency</li>
+      <li><strong>Tool call decision wording</strong> &mdash; Changed &quot;Claude decides when&quot; to &quot;Claude determines when&quot; for precision</li>
+      <li><strong>Example phrasing</strong> &mdash; Changed &quot;e.g.&quot; to &quot;for example&quot; in best-practice bullets</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/tools" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/tools &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tools" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Authenticate with vaults</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that vaults are workspace-scoped (anyone with an API key for the same workspace can reference them) and provided the specific endpoint path for the <code>mcp_oauth_validate</code> call.</p>
+    <ul>
+      <li><strong>Vault scope warning</strong> &mdash; Changed from &quot;anyone with API key access&quot; to &quot;anyone with an API key for the same workspace&quot;</li>
+      <li><strong>mcp_oauth_validate endpoint</strong> &mdash; Added the full endpoint path <code>POST /v1/vaults/{vault_id}/credentials/{credential_id}/mcp_oauth_validate</code> and its SDK equivalent</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/vaults" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/vaults &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="authenticate-with-vaults" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">4 new + 3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure AWS KMS for CMEK</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New step-by-step guide for configuring an AWS KMS symmetric key as a CMEK for an Anthropic organization, covering cross-account key policy setup, the Anthropic IAM role ARN, workspace compartment ID scoping, Admin API key registration, and Terraform examples.</p>
+    <ul>
+      <li><strong>Anthropic IAM role ARN</strong> &mdash; Published canonical ARN <code>arn:aws:iam::915198916910:role/anthropic-cmek-client-us</code> for cross-account access</li>
+      <li><strong>Key policy structure</strong> &mdash; Three required statements: AccountRootAdmin, AllowAnthropicCMEKCrypto (with optional <code>EncryptionContext</code> condition on <code>anthropic:compartment_uuid</code>), and AllowAnthropicCMEKDescribe</li>
+      <li><strong>Compartment ID usage</strong> &mdash; Explains how to find the workspace compartment ID in the Console or via the Get Workspace API and use it in the key policy condition</li>
+      <li><strong>Registration and validation</strong> &mdash; Step-by-step using <code>POST /v1/organizations/external_keys</code> and the validate endpoint</li>
+      <li><strong>Terraform</strong> &mdash; Terraform resource examples included</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek-aws-kms" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek-aws-kms &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-aws-kms-for-cmek" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure Azure Key Vault for CMEK</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New step-by-step guide for configuring an Azure Key Vault RSA key as a CMEK, covering Entra service principal consent, RBAC role assignment scoped to the individual key, vault configuration verification (RBAC auth, purge protection, public network access), and Terraform examples.</p>
+    <ul>
+      <li><strong>Anthropic app details</strong> &mdash; Published multi-tenant app client ID <code>8635ae1a-3e5d-44e8-a4ed-e0f614466f87</code> and display name <code>anthropic-cmek-client-us</code></li>
+      <li><strong>RSA key requirement</strong> &mdash; Azure Key Vault requires RSA (3072-bit or larger) with <code>wrapKey</code>/<code>unwrapKey</code> operations; symmetric keys not supported</li>
+      <li><strong>RBAC scoping</strong> &mdash; Assigns <code>Key Vault Crypto User</code> role scoped to the individual key (not vault-wide) to minimize blast radius</li>
+      <li><strong>Vault prerequisites</strong> &mdash; RBAC authorization enabled, purge protection enabled, public network access allowed; verification command provided</li>
+      <li><strong>Domain restricted sharing note</strong> &mdash; Documents <code>constraints/iam.allowedPolicyMemberDomains</code> workaround needed for GCP org policy (note appears in GCP guide; Azure guide covers equivalent Entra considerations)</li>
+      <li><strong>Terraform</strong> &mdash; Terraform resource examples included</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek-azure-key-vault" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek-azure-key-vault &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-azure-key-vault-for-cmek" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure Google Cloud KMS for CMEK</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New step-by-step guide for configuring a Google Cloud KMS symmetric key as a CMEK, covering key ring creation, HSM-protected crypto key creation, two IAM bindings (CryptoKey Encrypter/Decrypter + Viewer) scoped to the individual key, and Terraform examples.</p>
+    <ul>
+      <li><strong>Anthropic service account</strong> &mdash; Published canonical service account email <code>anthropic-cmek-client-us@gcp-anthropic-cmek-clients.iam.gserviceaccount.com</code></li>
+      <li><strong>Key ring region constraint</strong> &mdash; Must be a single-region US location (e.g. <code>us-east5</code>); multi-region (<code>us</code>, <code>global</code>) not supported</li>
+      <li><strong>Dual IAM bindings</strong> &mdash; <code>roles/cloudkms.cryptoKeyEncrypterDecrypter</code> for encrypt/decrypt and <code>roles/cloudkms.viewer</code> for startup metadata read; both scoped to the individual key</li>
+      <li><strong>Domain-restricted sharing note</strong> &mdash; Documents how to handle <code>constraints/iam.allowedPolicyMemberDomains</code> org policy; Anthropic Cloud Identity customer ID available on request</li>
+      <li><strong>Data Access audit logs</strong> &mdash; Warns that <code>DATA_READ</code>/<code>DATA_WRITE</code> audit logs are off by default and must be enabled to audit Anthropic&#x27;s key operations</li>
+      <li><strong>Terraform</strong> &mdash; Terraform resource examples included</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek-google-cloud-kms" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek-google-cloud-kms &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-google-cloud-kms-for-cmek" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customer-managed encryption keys</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New overview page for the CMEK feature, explaining how workspace-level encryption works, which data is protected (message content, backups), which features are disabled under CMEK (Skills, sessions, Files API, Batch API, code execution), key rotation semantics, and links to the three provider-specific setup guides.</p>
+    <ul>
+      <li><strong>CMEK overview</strong> &mdash; Explains envelope encryption at the workspace level; only protects data written after key is enabled; existing data not re-encrypted</li>
+      <li><strong>Availability</strong> &mdash; US regions only; multi-region and EU not yet supported; not compatible with HIPAA-enabled organizations</li>
+      <li><strong>Recommended regions</strong> &mdash; AWS: <code>us-east-2</code>; GCP: <code>us-central1</code>/<code>us-east5</code>; Azure: <code>northcentralus</code>/<code>eastus2</code></li>
+      <li><strong>Disabled features</strong> &mdash; Skills, sessions, server-side stateful tools, standalone Files API, Batch API, and code execution are disabled or substantially modified</li>
+      <li><strong>Limitations</strong> &mdash; Write-once key attachment; no retroactive encryption; up to 1-hour revocation delay; small latency overhead for KMS round-trips</li>
+      <li><strong>Provider guides</strong> &mdash; CardGroup linking to AWS KMS, Google Cloud KMS, and Azure Key Vault setup guides</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customer-managed-encryption-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>WIF reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording updates to the credential-resolution order description and the token exchange request section.</p>
+    <ul>
+      <li><strong>Active profile resolution</strong> &mdash; Changed &quot;Resolved via&quot; to &quot;Resolved from&quot; for the active profile credential source</li>
+      <li><strong>Token exchange intro</strong> &mdash; Removed the parenthetical reference to &quot;below&quot; in the environment-variables anchor link</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/wif-reference" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/wif-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="wif-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workload Identity Federation</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Reorganized the page by moving &quot;How it works&quot; below the Concepts section, added explicit SDK credential configuration examples for Java and PHP (previously showing only env-var comments), and updated the Ruby SDK example to use the new <code>WorkloadIdentity</code> credential class.</p>
+    <ul>
+      <li><strong>How it works moved</strong> &mdash; Section relocated after the Concepts section (issuers, service accounts, rules) so users understand the building blocks before the flow</li>
+      <li><strong>Java SDK example</strong> &mdash; Replaced <code>AnthropicOkHttpClient.fromEnv()</code> with explicit <code>InMemoryProfileConfigProvider</code> builder showing all WIF fields</li>
+      <li><strong>PHP SDK example</strong> &mdash; Replaced env-var comment with explicit <code>WorkloadIdentityCredentials</code> / <code>IdentityTokenFile</code> / <code>TokenCache</code> constructor</li>
+      <li><strong>Ruby SDK example</strong> &mdash; Updated to <code>Anthropic::Credentials::WorkloadIdentity.new</code> with <code>IdentityTokenFile</code> provider and all required fields</li>
+      <li><strong>Token lifetime formula</strong> &mdash; Clarified as: lesser of (a) rule&#x27;s <code>token_lifetime_seconds</code> and (b) twice remaining IdP JWT lifetime; never less than 60 seconds</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/workload-identity-federation" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/workload-identity-federation &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workload-identity-federation" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the MCP tunnels scoping description to lead with authentication requirements, fixed a billing-member workspace-role exception clarification, and corrected Microsoft Foundry parenthetical.</p>
+    <ul>
+      <li><strong>MCP tunnels description</strong> &mdash; Reordered to lead with org-scoped OAuth token requirement; role and workspace-scoping details repositioned for clarity</li>
+      <li><strong>Billing member exception</strong> &mdash; Clarified that billing members can be upgraded to Workspace Admin (the one exception to the no-role-change constraint)</li>
+      <li><strong>Microsoft Foundry note</strong> &mdash; Changed &quot;in beta&quot; to &quot;where Claude is currently in beta&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/workspaces" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/workspaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform on AWS</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the autonomous-session reauthentication note to link to the new <code>reference#event-types</code> page instead of the events-and-streaming page.</p>
+    <ul>
+      <li><strong>User events link</strong> &mdash; Corrected cross-reference from <code>events-and-streaming#event-types</code> to <code>reference#event-types</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform-on-aws" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Mid-conversation system messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the &quot;when to use&quot; section with two new use cases (application-observed state changes and relaying mid-loop user input), added a concrete JSON example of placement after tool results, and tightened the limitations around untrusted content in system messages.</p>
+    <ul>
+      <li><strong>New use cases</strong> &mdash; Added &quot;State changes your application observes&quot; (files changed, token budget, available tools) and &quot;User input that should not interrupt an agentic loop&quot; as explicit use cases</li>
+      <li><strong>Placement after tool results</strong> &mdash; New subsection with a JSON example placing a system message after a <code>tool_result</code> block to relay mid-loop user input; includes phrasing guidance (state context rather than override commands)</li>
+      <li><strong>Placement constraints clarified</strong> &mdash; Explicitly noted that a <code>user</code> turn carrying <code>tool_result</code> blocks counts; the one disallowed position is between a <code>tool_use</code> block and its <code>tool_result</code></li>
+      <li><strong>Untrusted content limitation</strong> &mdash; Reworded &quot;Not a security boundary&quot; to &quot;Not a place for untrusted content&quot;; warns against placing raw tool output or retrieved documents in system messages</li>
+      <li><strong>System vs. user authority explanation</strong> &mdash; Added prose explaining why system messages carry operator-level priority that persists even if the end user asks for something different</li>
+      <li><strong>Section retitled</strong> &mdash; &quot;Why position matters for caching&quot; renamed to &quot;When to use a mid-conversation system message&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mid-conversation-system-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected the Amazon Bedrock availability note: Claude Opus 4.8 is no longer listed as generally available on Bedrock for structured outputs.</p>
+    <ul>
+      <li><strong>Bedrock availability</strong> &mdash; Removed Claude Opus 4.8 from the &quot;generally available on Amazon Bedrock&quot; list; it remains GA on the Claude API and Vertex AI</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 66 docs analyzed &middot; 2026-06-02
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
