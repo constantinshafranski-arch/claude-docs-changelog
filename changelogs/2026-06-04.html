@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 04, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 04, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 04 at 08:45 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">9</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">1</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">2</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>WebSearch tool unavailable on Bedrock</strong> &mdash; Claude Code on Amazon Bedrock now explicitly documents that the WebSearch tool is not available, with a link to the WebSearch tool behavior reference.</li>
+      <li><strong>overloaded error category added</strong> &mdash; The <code>system/api_retry</code> stream event, <code>StopFailure</code> hook matcher, and hooks reference tables all gain <code>overloaded</code> as a recognized error type alongside <code>rate_limit</code>, enabling hooks and CI scripts to differentiate server-overload failures.</li>
+      <li><strong>OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES</strong> &mdash; New env var lets operators exclude <code>OTEL_RESOURCE_ATTRIBUTES</code> keys from metric datapoint labels to control cardinality, while custom attributes are still sent in the OTLP resource block.</li>
+      <li><strong>forceLoginMethod / forceLoginOrgUUID updated</strong> &mdash; Both managed settings now explicitly exempt Bedrock, Vertex, and Foundry third-party provider sessions from first-party OAuth enforcement, clarifying that cloud IAM handles those cases.</li>
+      <li><strong>/fork command now on by default (v2.1.161+)</strong> &mdash; Forked subagents are no longer experimental; <code>CLAUDE_CODE_FORK_SUBAGENT</code> is only required to make forks the model&#x27;s default spawn behavior, and <code>/fork</code> works without it.</li>
+      <li><strong>Vision image size limits clarified</strong> &mdash; The Claude API per-image limit is raised to 10 MB (previously documented as 5 MB); Amazon Bedrock and Vertex AI remain at 5 MB, with new inline documentation and an updated FAQ entry.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">9 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a caveat noting that the WebSearch tool is not available when Claude Code is configured to use Amazon Bedrock.</p>
+    <ul>
+      <li><strong>WebSearch tool restriction</strong> &mdash; New bullet in the Bedrock considerations list states the WebSearch tool is unavailable on Bedrock and links to the WebSearch tool behavior reference.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>system/api_retry</code> event&#x27;s <code>error</code> field now includes <code>overloaded</code> as a recognized error category.</p>
+    <ul>
+      <li><strong>overloaded error category</strong> &mdash; Added <code>overloaded</code> to the enumerated values for the <code>error</code> field in the <code>system/api_retry</code> stream event schema, alongside <code>rate_limit</code>, <code>server_error</code>, and others.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate actions with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The hook matcher reference table for <code>StopFailure</code> now includes <code>overloaded</code> as a matchable error type.</p>
+    <ul>
+      <li><strong>StopFailure overloaded matcher</strong> &mdash; Added <code>overloaded</code> to the example matcher values for the <code>StopFailure</code> event in the event-matcher reference table, enabling hooks to specifically catch server-overload failures.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-actions-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Both the event-matcher table and the <code>StopFailure</code> input schema now include <code>overloaded</code> as a recognized error type.</p>
+    <ul>
+      <li><strong>StopFailure matcher table</strong> &mdash; Added <code>overloaded</code> to the example matcher values for <code>StopFailure</code> in the event-type matcher reference table.</li>
+      <li><strong>StopFailure input schema</strong> &mdash; Added <code>overloaded</code> to the enumerated values for the <code>error</code> field in the <code>StopFailure</code> hook input schema.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added UX details for how unused claude.ai connectors are collapsed in the MCP panel starting from v2.1.161.</p>
+    <ul>
+      <li><strong>Unused connector collapsing (v2.1.161+)</strong> &mdash; Connectors you have never signed into are now collapsed behind a &#x27;Show unused connectors&#x27; row in the claude.ai section, preventing a long org-provisioned list from filling the panel; previously signed-in connectors remain visible.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new <code>OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES</code> environment variable and clarified how custom <code>OTEL_RESOURCE_ATTRIBUTES</code> keys are attached as datapoint attributes.</p>
+    <ul>
+      <li><strong>OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES</strong> &mdash; New cardinality-control env var (default: <code>true</code>) that, when set to <code>false</code>, excludes <code>OTEL_RESOURCE_ATTRIBUTES</code> keys from metric datapoint labels while still sending them in the OTLP resource block.</li>
+      <li><strong>Standard attributes table</strong> &mdash; Added a new row for keys from <code>OTEL_RESOURCE_ATTRIBUTES</code>, documenting that they appear on every metric datapoint and event record by default, controlled by <code>OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES</code>.</li>
+      <li><strong>Custom attribute label semantics</strong> &mdash; Added prose clarifying that custom keys are attached to every metric series as datapoint labels, that they never override standard built-in attributes, and that high-cardinality values increase storage cost.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>forceLoginMethod</code> and <code>forceLoginOrgUUID</code> settings to clarify that Bedrock, Vertex, and Foundry third-party provider sessions are not blocked by those policies, and documented that the <code>git</code> marketplace source type works with any git hosting service.</p>
+    <ul>
+      <li><strong>forceLoginMethod third-party exemption</strong> &mdash; Clarified that Bedrock, Vertex, and Foundry sessions are not blocked by <code>forceLoginMethod</code>; only <code>ANTHROPIC_API_KEY</code>, <code>ANTHROPIC_AUTH_TOKEN</code>, and <code>apiKeyHelper</code> are affected.</li>
+      <li><strong>forceLoginOrgUUID third-party exemption</strong> &mdash; Clarified that Bedrock, Vertex, and Foundry sessions are not blocked by <code>forceLoginOrgUUID</code>, with guidance to use cloud IAM to restrict those accounts instead.</li>
+      <li><strong>workflowKeywordTriggerEnabled history note</strong> &mdash; Added that before v2.1.160 the trigger keyword was <code>workflow</code>, not <code>ultracode</code>.</li>
+      <li><strong>git marketplace source</strong> &mdash; Added documentation that the <code>git</code> source type works with any git hosting service (including self-hosted GitLab and Bitbucket) using the machine&#x27;s existing git authentication.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>/fork</code> command is now enabled by default in v2.1.161+, removing its experimental status, and the description of fork mode&#x27;s behavior was updated to reflect the removal of the <code>/fork</code>-as-<code>/branch</code>-alias change.</p>
+    <ul>
+      <li><strong>/fork command default (v2.1.161+)</strong> &mdash; The <code>/fork</code> command is enabled by default without needing <code>CLAUDE_CODE_FORK_SUBAGENT=1</code>; setting the env var is now only required to make forks the model&#x27;s default spawn behavior.</li>
+      <li><strong>Fork mode behavior change</strong> &mdash; Removed the bullet stating <code>/fork</code> acts as an alias for <code>/branch</code>; <code>/fork</code> now always spawns a fork regardless of whether <code>CLAUDE_CODE_FORK_SUBAGENT</code> is set.</li>
+      <li><strong>Experimental status removed</strong> &mdash; Forked subagents are no longer described as experimental; the opt-in variable is now only required for making fork the automatic spawn strategy.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new troubleshooting section for garbled or corrupted text in integrated terminals caused by GPU rendering in VS Code, Cursor, and Devin Desktop.</p>
+    <ul>
+      <li><strong>Integrated terminal GPU rendering issue</strong> &mdash; New section documents that boxes, smears, or wrong glyphs in VS Code/Cursor/Devin Desktop integrated terminals are caused by the GPU renderer; fix by running <code>/terminal-setup</code> or manually setting <code>terminal.integrated.gpuAcceleration</code> to <code>&quot;off&quot;</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Self-hosted sandboxes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Claude Platform on AWS authentication note to reflect that workers can now authenticate via either AWS IAM (SigV4) or an API key generated in the AWS Console, not solely IAM.</p>
+    <ul>
+      <li><strong>AWS worker authentication options</strong> &mdash; The note for Claude Platform on AWS now states the worker authenticates with AWS IAM (SigV4) &lt;em&gt;or&lt;/em&gt; an API key generated in the AWS Console, clarifying that environment keys from the Claude Console are still unsupported for this endpoint.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="self-hosted-sandboxes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Build an orchestration mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The orchestration mode example was significantly expanded across all SDK languages to add a PHP port, a <code>JOURNAL_PATH</code> for task tracking, separate <code>MAX_CONCURRENT</code> and <code>MAX_TOTAL_SUBTASKS</code> constants, a <code>REQUEST_TIMEOUT_SECONDS</code> setting, a <code>DOC_TEST_MODE</code> flag for CI validation, and atomic journal writes.</p>
+    <ul>
+      <li><strong>MAX_CONCURRENT / MAX_TOTAL_SUBTASKS split</strong> &mdash; Replaced the single <code>MAX_PARALLEL_AGENTS</code> constant with separate <code>MAX_CONCURRENT</code> (concurrency cap) and <code>MAX_TOTAL_SUBTASKS</code> (planning budget) constants across Python, TypeScript, C#, Go, Java, and Ruby.</li>
+      <li><strong>DOC_TEST_MODE flag</strong> &mdash; Added a <code>DOC_TEST_MODE</code> environment variable check across all ports that caps loops to a single turn, allowing the automated docs harness to validate examples without running the full orchestration.</li>
+      <li><strong>JOURNAL_PATH / orchestration journal</strong> &mdash; Added <code>JOURNAL_PATH</code> (defaulting to <code>orchestration_journal.json</code>, overridable via <code>ORCH_JOURNAL</code>) and atomic journal write logic across all SDK ports.</li>
+      <li><strong>REQUEST_TIMEOUT_SECONDS</strong> &mdash; Added a 600-second request timeout constant across all ports, with the C# port also setting a non-streaming <code>requestMaxTokens</code> of 8192 to stay within API limits.</li>
+      <li><strong>PHP port added</strong> &mdash; A new PHP implementation of the orchestration example is included in the <code>CodeGroup</code>, covering all the same constants and patterns as the other language ports.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/mid-conversation-effort-example" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/mid-conversation-effort-example &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="build-an-orchestration-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Vision</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified per-image size limits: the Claude API limit is now documented as 10 MB (up from the previously stated 5 MB), while Amazon Bedrock and Vertex AI remain at 5 MB, with a new inline limits section and an updated FAQ entry.</p>
+    <ul>
+      <li><strong>Claude API image size limit</strong> &mdash; Updated the per-image limit for the Claude API from 5 MB to 10 MB in both the limits table and the FAQ section.</li>
+      <li><strong>Platform-specific size limit table</strong> &mdash; Added a new inline list documenting the per-image size limit by platform: 10 MB for the Claude API, 5 MB for Amazon Bedrock and Vertex AI, and 10 MB for claude.ai.</li>
+      <li><strong>FAQ request-size clarification</strong> &mdash; Expanded the FAQ answer to note that the overall 32 MB request size limit can be hit before per-image caps when sending many large images, and recommends the Files API on the Claude API (noting it is not available on Bedrock or Vertex AI).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/vision" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/vision &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="vision" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 12 docs analyzed &middot; 2026-06-04
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
