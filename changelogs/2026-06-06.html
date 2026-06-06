@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 06, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 06, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 06 at 07:45 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">3</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">16</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">10</div>
+      <div class="label">Platform</div>
+    </div>
+    <div class="stat test">
+      <div class="num">1</div>
+      <div class="label">Testing &amp; Evaluation</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecated</strong> &mdash; Claude Opus 4.1 is now marked as deprecated across all documentation, including tool compatibility tables, pricing tables, platform model listings (Bedrock, Vertex AI, Foundry), and feature support references.</li>
+      <li><strong>Claude Code settings: requiredMinimumVersion / requiredMaximumVersion</strong> &mdash; Two new managed-settings-only keys enforce a hard version range at startup; processes outside the range exit immediately, unlike the soft <code>minimumVersion</code> floor which only constrains updates.</li>
+      <li><strong>Hooks reference: if-field Bash matching table</strong> &mdash; A new decision table documents exactly when the <code>if</code> filter fires for subcommands, <code>$()</code>, backticks, and <code>$VAR</code> expansions, and clarifies fail-open behavior; <code>additionalContext</code> is now supported on <code>SubagentStop</code> hooks.</li>
+      <li><strong>Monitoring: new api_refusal OTEL event</strong> &mdash; A dedicated <code>claude_code.api_refusal</code> event is emitted when a response stream ends with <code>stop_reason: &quot;refusal&quot;</code>, enabling refusal-frequency tracking; MCP server connection events also gain <code>is_plugin</code>, <code>plugin_id_hash</code>, and <code>plugin.name</code> attributes.</li>
+      <li><strong>Claude Code headless: background-task exit behavior</strong> &mdash; Background Bash tasks started during a <code>claude -p</code> run are now terminated ~5 seconds after the final result, fixing a pre-v2.1.163 hang when a never-exiting process held the invocation open.</li>
+      <li><strong>Model alias resolution clarified for Bedrock, Vertex AI, and Foundry</strong> &mdash; Documentation across all three cloud-provider guides now states that unresolved aliases fall back to Claude Code&#x27;s built-in provider default (which can lag the latest release), not always the newest Anthropic release.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the code execution tool model compatibility table.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for <code>claude-opus-4-1-20250805</code> in the supported-models table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Computer use tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the computer-use beta header compatibility note.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for Claude Opus 4.1 in the <code>computer-use-2025-01-24</code> beta header model list.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="computer-use-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool use with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the tool-use system prompt token-count table.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for Claude Opus 4.1 in the per-model tool prompt token table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-use-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">16 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The model-pinning warning was updated to clarify that unpinned aliases resolve to Claude Code&#x27;s built-in Bedrock default, not necessarily the latest Anthropic release.</p>
+    <ul>
+      <li><strong>Model alias resolution</strong> &mdash; Revised the pin-versions warning to state that unresolved aliases fall back to Claude Code&#x27;s built-in Bedrock default, which can lag the newest release; updated fallback language to reflect the default instead of the latest version.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The model-pinning warning was updated to clarify that unpinned aliases resolve to Claude Code&#x27;s built-in Vertex AI default, not necessarily the latest Anthropic release.</p>
+    <ul>
+      <li><strong>Model alias resolution</strong> &mdash; Revised the pin-versions warning to state that unresolved aliases fall back to Claude Code&#x27;s built-in Vertex AI default, which can lag the newest release; updated fallback language to reflect the default instead of the latest version.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A new section documents how background Bash tasks are handled at exit during <code>claude -p</code> runs, fixing a pre-v2.1.163 hang.</p>
+    <ul>
+      <li><strong>Background tasks at exit</strong> &mdash; Added documentation stating that background Bash tasks (e.g., dev servers, watch builds) are terminated approximately 5 seconds after <code>claude -p</code> delivers its final result and stdin closes, resolving an indefinite hang present before v2.1.163.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate actions with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>if</code>-field Bash matching behavior was significantly expanded with a decision table and clarified fail-open semantics, replacing a single prose paragraph.</p>
+    <ul>
+      <li><strong>if-field Bash matching table</strong> &mdash; Replaced the prior prose description with a structured table showing when the hook fires for simple commands, compound (<code>&amp;amp;&amp;amp;</code>) commands, <code>$()</code> subshells, backtick expansions, and unmatched patterns.</li>
+      <li><strong>Fail-open semantics</strong> &mdash; Clarified that patterns constraining past the command name fail open on <code>$()</code>, backticks, and <code>$VAR</code>; unparseable commands also fail open; the permission system should be used for hard allow/deny enforcement.</li>
+      <li><strong>if-field description correction</strong> &mdash; Removed the prior caveat that the hook spawns when a Bash command is too complex to parse, replacing it with accurate fail-open language.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-actions-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The hooks reference received multiple updates: the <code>if</code>-field description was expanded with a Bash matching table, <code>SubagentStop</code> now supports <code>hookSpecificOutput.additionalContext</code>, the <code>Stop</code>/<code>SubagentStop</code> decision-control table gained a new <code>additionalContext</code> field, and the <code>prompt</code> field now documents dollar-sign escaping.</p>
+    <ul>
+      <li><strong>if-field Bash matching table</strong> &mdash; Added a <code>bash-if-matching</code> anchor and a decision table in the common-fields section covering how subcommands, <code>$()</code>, backticks, leading <code>VAR=value</code> assignments, and unparseable commands interact with <code>if</code> patterns.</li>
+      <li><strong>SubagentStop additionalContext</strong> &mdash; Updated the SubagentStop section to clarify that it now supports <code>hookSpecificOutput.additionalContext</code> with <code>hookEventName: &quot;SubagentStop&quot;</code>, enabling non-error feedback that keeps the subagent running without triggering a hook error notification.</li>
+      <li><strong>Stop decision-control table</strong> &mdash; Added <code>hookSpecificOutput.additionalContext</code> as a new field in the Stop/SubagentStop decision table, with a code example showing usage and an explanation distinguishing it from <code>decision: &quot;block&quot;</code>.</li>
+      <li><strong>prompt field dollar escaping</strong> &mdash; Added a note that a backslash before <code>$ARGUMENTS</code> or a positional placeholder renders a literal dollar sign (e.g., <code>\$1.00</code> → <code>$1.00</code>).</li>
+      <li><strong>additionalContext in transcript</strong> &mdash; Noted that <code>Stop</code> and <code>SubagentStop</code> hooks returning <code>additionalContext</code> are now listed as placement targets in the reminder-location table.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>/btw</code> overlay keybindings table gained a new <code>c</code> key that copies the answer to the clipboard as raw Markdown.</p>
+    <ul>
+      <li><strong>Copy to clipboard key</strong> &mdash; Added the <code>c</code> keybinding to the side-question overlay, which copies the answer as raw Markdown to the clipboard rather than the hard-wrapped terminal rendering captured by mouse selection.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The model-pinning warning and setup note were updated to accurately describe alias resolution behavior and the absence of a startup model check on Foundry.</p>
+    <ul>
+      <li><strong>Model alias resolution</strong> &mdash; Revised the pin-versions warning to state that unresolved aliases fall back to Claude Code&#x27;s built-in Foundry default, which can lag the newest release; added that Foundry has no startup model check so requests fail when the default is unavailable.</li>
+      <li><strong>Setup note</strong> &mdash; Simplified the multi-user deployment note to remove the &quot;when Anthropic releases new models&quot; phrasing in favor of a direct instruction to pin model versions before rollout.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/microsoft-foundry" target="_blank" rel="noopener">code.claude.com/docs/en/microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The third-party deployment pinning section was updated to clarify that unpinned aliases resolve to a built-in provider default that can lag the latest Anthropic release.</p>
+    <ul>
+      <li><strong>Model alias resolution</strong> &mdash; Replaced the description of aliases resolving to &quot;the latest version&quot; with language stating they resolve to a built-in default model ID per provider, which can lag the newest release and may not be enabled in a user&#x27;s account.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A new <code>claude_code.api_refusal</code> OTEL event was added for tracking refusals, and MCP server connection events gained plugin-attribution attributes with privacy-preserving redaction.</p>
+    <ul>
+      <li><strong>api_refusal event</strong> &mdash; Added a new <code>claude_code.api_refusal</code> event emitted when a response stream ends with <code>stop_reason: &quot;refusal&quot;</code>; includes standard attributes, <code>model</code>, and <code>request_id</code> from the response <code>request-id</code> header.</li>
+      <li><strong>mcp_server_connection plugin attributes</strong> &mdash; Added <code>is_plugin</code>, <code>plugin_id_hash</code>, and <code>plugin.name</code> to MCP server connection events; third-party plugin names are redacted to the literal <code>&quot;third-party&quot;</code> unless <code>OTEL_LOG_TOOL_DETAILS=1</code>.</li>
+      <li><strong>Security mapping table</strong> &mdash; Updated the MCP server connect/failure row in the event-to-attribute security mapping table to include <code>is_plugin</code>.</li>
+      <li><strong>OTEL_LOG_TOOL_DETAILS redaction note</strong> &mdash; Updated the redaction summary to note that <code>mcp_server_connection</code> retains <code>is_plugin</code>, <code>plugin_id_hash</code>, and <code>plugin.name</code> even without detailed logging, with non-Anthropic names redacted.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>plugin list</code> command documentation now mentions the equivalent <code>/plugin list</code> interactive session command and its <code>--enabled</code>/<code>--disabled</code> filters.</p>
+    <ul>
+      <li><strong>/plugin list interactive command</strong> &mdash; Added a note that within an interactive session, <code>/plugin list</code> prints the same listing inline and accepts <code>--enabled</code>, <code>--disabled</code>, and the <code>ls</code> shorthand.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The welcome-screen description was corrected to reflect the actual prompt UI, and code block theme attributes were normalized.</p>
+    <ul>
+      <li><strong>Welcome screen description</strong> &mdash; Updated the launch description to state that Claude Code shows a prompt with the version, current model, and working directory above it, replacing the prior reference to a &quot;welcome screen with session information, recent conversations, and latest updates&quot;.</li>
+      <li><strong>Code block theme attributes</strong> &mdash; Normalized duplicated <code>theme={null}</code> attributes on installation code blocks (no user-facing change).</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Two new managed-settings keys (<code>requiredMinimumVersion</code> and <code>requiredMaximumVersion</code>) were added to enforce a hard startup version range, and the <code>minimumVersion</code> description was updated to reference the new hard-floor option; default commit attribution format also changed.</p>
+    <ul>
+      <li><strong>requiredMinimumVersion</strong> &mdash; New managed-settings-only key; if the running Claude Code version is below this floor, the process exits at startup and instructs the user to update. Unlike <code>minimumVersion</code>, this blocks startup rather than only constraining updates.</li>
+      <li><strong>requiredMaximumVersion</strong> &mdash; New managed-settings-only key; if the running version exceeds this ceiling, the process exits at startup; auto-updates and <code>claude update</code> skip versions above the ceiling. Recovery tools (<code>claude update</code>, <code>claude install</code>, <code>claude doctor</code>) remain functional above the ceiling.</li>
+      <li><strong>minimumVersion description</strong> &mdash; Added a cross-reference to <code>requiredMinimumVersion</code> for cases where a hard startup block is needed rather than a soft update floor.</li>
+      <li><strong>Default commit attribution</strong> &mdash; Removed the 🤖 emoji and <code>[Claude Code](https://claude.com/claude-code)</code> line from the default commit trailer format, leaving only the <code>Co-Authored-By</code> trailer; added a note that the model name reflects the active session model.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The update management section now documents <code>requiredMinimumVersion</code> and <code>requiredMaximumVersion</code> as the managed-settings mechanism for blocking startup outside an approved version range.</p>
+    <ul>
+      <li><strong>requiredMinimumVersion / requiredMaximumVersion</strong> &mdash; Added a paragraph clarifying that <code>minimumVersion</code> only constrains updates, and directing operators to <code>requiredMinimumVersion</code> and <code>requiredMaximumVersion</code> in managed settings when a hard startup version range is required.</li>
+      <li><strong>Code block theme attributes</strong> &mdash; Normalized duplicated <code>theme={null}</code> attributes on installation code blocks (no user-facing change).</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Skill argument substitution now documents how to include a literal dollar sign before a digit or substitution keyword using a backslash escape.</p>
+    <ul>
+      <li><strong>Dollar-sign escaping in substitutions</strong> &mdash; Added documentation that a single backslash before <code>$</code> followed by a digit, <code>ARGUMENTS</code>, or a declared argument name produces a literal <code>$</code> (e.g., <code>\$1.00</code> → <code>$1.00</code>); a doubled backslash such as <code>\\$1</code> preserves both backslashes and still substitutes.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fork-mode documentation was clarified to distinguish explicit opt-in/opt-out via <code>CLAUDE_CODE_FORK_SUBAGENT</code> from a staged server-side rollout, and the <code>=1</code> qualifier was added where missing.</p>
+    <ul>
+      <li><strong>Fork mode rollout</strong> &mdash; Updated the note to clarify that from v2.1.161, fork mode may also be enabled by default in interactive sessions as part of a staged rollout; setting <code>CLAUDE_CODE_FORK_SUBAGENT=1</code> explicitly enables it and <code>=0</code> explicitly disables it, overriding the rollout.</li>
+      <li><strong>CLAUDE_CODE_FORK_SUBAGENT=1 qualifier</strong> &mdash; Added the <code>=1</code> value qualifier to the environment variable in the limitations section and tightened prose from &quot;Setting <code>CLAUDE_CODE_FORK_SUBAGENT</code>&quot; to &quot;Enabling fork mode&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The model-pinning guidance was updated to state that unresolved aliases fall back to Claude Code&#x27;s built-in provider default rather than always resolving to the latest version.</p>
+    <ul>
+      <li><strong>Model alias resolution</strong> &mdash; Revised the pin-models guidance to state that unresolved aliases resolve to Claude Code&#x27;s built-in default for each provider (Bedrock, Vertex AI, Foundry, Claude Platform on AWS), which can lag the newest release; updated fallback language from &quot;latest version&quot; to &quot;default&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">10 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batch processing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the Batches API pricing table.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for Claude Opus 4.1 in the batch pricing table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/batch-processing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/batch-processing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batch-processing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 was marked as deprecated with a retirement date, and a lifecycle-terms note was added to direct readers to the model-deprecations page.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Marked Claude Opus 4.1 as deprecated with a retiring date of August 5, 2026 in the Foundry model table.</li>
+      <li><strong>Lifecycle terms note</strong> &mdash; Added a sentence directing readers to the model-deprecations page for definitions of Deprecated and Retired, noting that Foundry follows the Claude API lifecycle schedule.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock (legacy)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Partner-platform retirement dates were removed from inline table annotations and redirected to AWS&#x27;s own lifecycle page; several models had status updated to reflect current deprecation/retirement state.</p>
+    <ul>
+      <li><strong>Lifecycle date sourcing</strong> &mdash; Replaced the inline retirement-date annotations and the explanatory footnote with a note directing readers to Amazon Bedrock&#x27;s model lifecycle page for current dates, as partner schedules are set by AWS independently.</li>
+      <li><strong>Claude Opus 4 retired</strong> &mdash; Updated Claude Opus 4 from &quot;Deprecated. Retiring May 31, 2026&quot; to &quot;Retired&quot; and removed its regional availability (now all No).</li>
+      <li><strong>Claude Opus 4.1 deprecated</strong> &mdash; Added a Deprecated annotation to Claude Opus 4.1.</li>
+      <li><strong>Claude Sonnet 4, Sonnet 3.7, Haiku 3.5 annotations</strong> &mdash; Removed specific retirement dates from Sonnet 4, Sonnet 3.7, and Haiku 3.5, leaving only the Deprecated/Retired status label.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock-(legacy)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Partner-platform retirement dates were removed from inline table annotations and redirected to Google Cloud&#x27;s documentation; several models had status updated, and Vertex AI setup links were updated to the new Google Cloud URL.</p>
+    <ul>
+      <li><strong>Lifecycle date sourcing</strong> &mdash; Replaced inline retirement-date annotations and the explanatory footnote with a note directing readers to Google Cloud&#x27;s Claude on Vertex AI documentation for current retirement dates.</li>
+      <li><strong>Claude Opus 4.1 deprecated</strong> &mdash; Added a Deprecated annotation to Claude Opus 4.1.</li>
+      <li><strong>Claude Opus 4 deprecated</strong> &mdash; Changed Claude Opus 4 from &quot;Deprecated. Retiring September 14, 2026&quot; to simply &quot;Deprecated&quot;.</li>
+      <li><strong>Claude Sonnet 4, Sonnet 3.7, Haiku 3.5 annotations</strong> &mdash; Removed specific retirement dates from Sonnet 4, Sonnet 3.7, and Haiku 3.5, leaving only Deprecated/Retired status.</li>
+      <li><strong>Google Cloud documentation URLs</strong> &mdash; Updated setup and model-availability links from <code>cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude</code> to the new <code>docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude</code> URL.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context editing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now labeled as deprecated in the <code>clear_thinking_20251015</code> thinking-block preservation table.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a &quot;(deprecated)&quot; label to Claude Opus 4.1 in the thinking-block preservation by model class table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-editing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-editing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-editing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the interleaved-thinking model list and the thinking-block preservation sections.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a &quot;(deprecated)&quot; qualifier to Claude Opus 4.1 in the interleaved-thinking supported-models list, the partner-platform validation note, the thinking-block preservation description, and the backward-compatibility note.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Handling stop reasons</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the refusal-handling tip that suggests switching to Haiku 4.5.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for Opus 4.1 in the tip advising users who encounter frequent <code>refusal</code> stop reasons.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/handling-stop-reasons &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="handling-stop-reasons" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multilingual support</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the multilingual benchmark table header.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a &quot;(deprecated)&quot; label to the Claude Opus 4.1 column header in the zero-shot chain-of-thought multilingual evaluation table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/multilingual-support" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/multilingual-support &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multilingual-support" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in both the prompt-caching pricing table and the minimum cacheable prompt length list.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for Claude Opus 4.1 in the prompt-caching pricing table and the minimum cacheable token-length list.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Search results</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the search results feature model availability list.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for <code>claude-opus-4-1-20250805</code> in the supported-models list.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/search-results" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/search-results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="search-results" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-test">🧪</div>
+    <h2>Testing &amp; Evaluation</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Streaming refusals</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4.1 is now marked as deprecated in the tip advising users who encounter frequent streaming refusal stop reasons.</p>
+    <ul>
+      <li><strong>Claude Opus 4.1 deprecation</strong> &mdash; Added a deprecation label and link to the model-deprecations page for Opus 4.1 in the tip suggesting Haiku 4.5 as an alternative when <code>refusal</code> stop reasons occur frequently.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals" target="_blank" rel="noopener">platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="streaming-refusals" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 30 docs analyzed &middot; 2026-06-06
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
