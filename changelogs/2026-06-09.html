@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 09, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 09, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 09 at 08:29 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">2</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">2</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat start">
+      <div class="num">1</div>
+      <div class="label">Getting Started</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">1</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat other">
+      <div class="num">3</div>
+      <div class="label">Other</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">9</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>SDK docs path migration</strong> &mdash; All references to <code>/docs/en/api/client-sdks</code> have been updated to <code>/docs/en/cli-sdks-libraries/overview</code> across platform integration guides (Bedrock, Vertex AI, Foundry, AWS), authentication, and streaming docs.</li>
+      <li><strong>Skills disallowed-tools</strong> &mdash; Claude Code Skills now support a <code>disallowed-tools</code> frontmatter field to restrict Claude&#x27;s available tools for the duration of a single skill activation, with scope and lifetime clarified.</li>
+      <li><strong>Task budget visibility</strong> &mdash; New note clarifies the budget countdown is model-only; API responses and SDKs expose no remaining-budget field, requiring client-side summation of <code>usage</code> across loop turns.</li>
+      <li><strong>Zero Data Retention eligibility</strong> &mdash; ZDR for Claude Code on Enterprise is now documented as requiring eligibility confirmation; it is not included in the standard Enterprise plan.</li>
+      <li><strong>Advisor tool generic properties</strong> &mdash; The advisor tool now explicitly accepts <code>cache_control</code>, <code>allowed_callers</code>, <code>defer_loading</code>, and <code>strict</code> tool definition properties.</li>
+      <li><strong>Dreams cancellation usage</strong> &mdash; New note warns that <code>usage</code> fields on a canceled dream may continue updating for seconds after cancellation; callers must poll until values stabilize.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get started with Agent Skills in the API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a note clarifying that Skills work with both the legacy and newer code execution tool revisions, and explaining version/header consistency requirements.</p>
+    <ul>
+      <li><strong>Code execution tool compatibility</strong> &mdash; New note documents that Skills work with <code>code_execution_20250825</code> (beta header <code>code-execution-2025-08-25</code>) and all later revisions such as <code>code_execution_20260120</code>; any code execution tool version satisfies the Skills requirement.</li>
+      <li><strong>Version consistency guidance</strong> &mdash; Clarifies that the tool <code>type</code> and beta header must match the chosen code execution tool version, while <code>skills-2025-10-02</code> must always be included regardless of which revision is used.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/agent-skills/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-started-with-agent-skills-in-the-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advisor tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that the advisor tool accepts the same generic tool definition properties available on any tool, including cache_control, allowed_callers, defer_loading, and strict.</p>
+    <ul>
+      <li><strong>Generic tool properties</strong> &mdash; The advisor tool now explicitly accepts <code>cache_control</code>, <code>allowed_callers</code>, <code>defer_loading</code>, and <code>strict</code> in its tool definition, with cross-references to the Tool reference and structured outputs pages for their semantics.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advisor-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data usage</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that Zero Data Retention for Claude Code on Enterprise requires eligibility confirmation and is not included in the standard Enterprise plan.</p>
+    <ul>
+      <li><strong>ZDR eligibility</strong> &mdash; Updated language to state ZDR is available to qualified accounts only; it is not included in the standard Enterprise plan and must be enabled per-organization by the account team after confirming eligibility.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">code.claude.com/docs/en/data-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-usage" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the vague guidance on blocking skill tools with a precise description of the new disallowed-tools frontmatter field and its activation scope.</p>
+    <ul>
+      <li><strong>disallowed-tools frontmatter</strong> &mdash; Skills can now declare <code>disallowed-tools</code> in their frontmatter to remove specific tools from Claude&#x27;s available pool for the duration of that skill activation; the restriction clears automatically on the next user message.</li>
+      <li><strong>Permissions scope clarification</strong> &mdash; To block tools across all skills and prompts persistently, deny rules in permission settings must still be used; the new frontmatter field is skill-scoped and temporary.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-start">🚀</div>
+    <h2>Getting Started</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get started with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated CLI installation and authentication cross-links to point to the new cli-sdks-libraries path, and updated the Client SDKs card to reflect C# instead of Java.</p>
+    <ul>
+      <li><strong>CLI docs links</strong> &mdash; Installation reference now links to <code>/docs/en/cli-sdks-libraries/cli/quickstart#installation</code> and non-interactive authentication reference links to <code>/docs/en/cli-sdks-libraries/cli/authentication</code>.</li>
+      <li><strong>Client SDKs card</strong> &mdash; The further-reading card now points to <code>/docs/en/cli-sdks-libraries/overview</code> and lists Python, TypeScript, and C# (replacing the previous Java reference).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/get-started" target="_blank" rel="noopener">platform.claude.com/docs/en/get-started &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-started-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Dreams</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a note warning that a canceled dream&#x27;s usage fields may continue updating briefly after cancellation, requiring polling until values stabilize.</p>
+    <ul>
+      <li><strong>Post-cancellation usage polling</strong> &mdash; New note documents that <code>usage</code> fields on a <code>canceled</code> dream can continue to update for a few seconds while in-flight work winds down; callers that need a final token count must poll the dream object until <code>usage</code> stabilizes.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/dreams" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/dreams &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="dreams" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Authentication</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated client SDK cross-links to the new cli-sdks-libraries path and refreshed the SDK listing order in the WIF reference card.</p>
+    <ul>
+      <li><strong>SDK links</strong> &mdash; References to <code>/docs/en/api/client-sdks</code> replaced with <code>/docs/en/cli-sdks-libraries/overview</code> in both the API key and WIF sections.</li>
+      <li><strong>CLI auth link</strong> &mdash; Inline comment pointing to API key shell setup now references <code>/docs/en/cli-sdks-libraries/cli/authentication#api-key</code>.</li>
+      <li><strong>WIF card SDK list</strong> &mdash; Client SDKs card description reordered to Python, TypeScript, C#, Go, Java, PHP, Ruby, and the CLI.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/authentication" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/authentication &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="authentication" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data residency</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the OpenAI SDK compatibility endpoint cross-link in the inference_geo availability note to use the new cli-sdks-libraries path.</p>
+    <ul>
+      <li><strong>OpenAI SDK compat link</strong> &mdash; The note on <code>inference_geo</code> availability now links to <code>/docs/en/cli-sdks-libraries/libraries/openai-sdk</code> instead of the deprecated <code>/docs/en/api/openai-sdk</code> path.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/data-residency" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/data-residency &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-residency" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workload Identity Federation</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the ant auth status CLI cross-link to the new cli-sdks-libraries path in the ANTHROPIC_API_KEY shadowing warning.</p>
+    <ul>
+      <li><strong>CLI auth status link</strong> &mdash; The warning about <code>ANTHROPIC_API_KEY</code> shadowing federation credentials now links to <code>/docs/en/cli-sdks-libraries/cli/authentication#check-authentication-status</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/workload-identity-federation" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/workload-identity-federation &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workload-identity-federation" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">9 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the client SDK reference link to point to the new cli-sdks-libraries/overview path.</p>
+    <ul>
+      <li><strong>SDK docs link</strong> &mdash; The &quot;Install an SDK&quot; section now links to <code>/docs/en/cli-sdks-libraries/overview</code> instead of the deprecated <code>/docs/en/api/client-sdks</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated client SDK cross-links to the new path and removed the stale &quot;see Client SDKs&quot; reference from the SDK support note.</p>
+    <ul>
+      <li><strong>SDK docs links</strong> &mdash; Both the SDK support note and the &quot;Install an SDK&quot; section now reference <code>/docs/en/cli-sdks-libraries/overview</code>.</li>
+      <li><strong>SDK support note</strong> &mdash; Removed the trailing &quot;For available SDK platform integrations, see Client SDKs&quot; sentence from the note listing Go/Ruby as unsupported for Foundry.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock (legacy)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated all client SDK cross-links throughout the legacy Bedrock guide to the new cli-sdks-libraries/overview path.</p>
+    <ul>
+      <li><strong>SDK docs links</strong> &mdash; Three occurrences of <code>/docs/en/api/client-sdks</code> in the intro, &quot;Install an SDK&quot; section, and closing reference are all replaced with <code>/docs/en/cli-sdks-libraries/overview</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock-(legacy)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Vertex AI</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated all client SDK cross-links to the new cli-sdks-libraries/overview path throughout the Vertex AI guide.</p>
+    <ul>
+      <li><strong>SDK docs links</strong> &mdash; All four references to <code>/docs/en/api/client-sdks</code> in the intro and SDK installation sections are replaced with <code>/docs/en/cli-sdks-libraries/overview</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-vertex-ai" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform on AWS</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated client SDK cross-links to the new path, simplified the SDK support note, and clarified IAM action bypass wording.</p>
+    <ul>
+      <li><strong>SDK docs links</strong> &mdash; References to <code>/docs/en/api/client-sdks</code> in the intro note and &quot;Install an SDK&quot; section replaced with <code>/docs/en/cli-sdks-libraries/overview</code>.</li>
+      <li><strong>SDK note simplified</strong> &mdash; Removed the &quot;For per-language client availability, see Client SDKs&quot; sentence from the intro note.</li>
+      <li><strong>IAM bypass wording</strong> &mdash; &quot;read organization-level metadata directly through Anthropic APIs&quot; changed to &quot;directly from Anthropic&quot; to remove the ambiguous API reference.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform-on-aws" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context editing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated SDK cross-links to the new cli-sdks-libraries path and replaced informal shorthand with full phrasing in inline examples.</p>
+    <ul>
+      <li><strong>SDK docs links</strong> &mdash; Both occurrences pointing to Python/TypeScript/Ruby SDK compaction documentation updated from <code>/docs/en/api/client-sdks</code> to <code>/docs/en/cli-sdks-libraries/overview</code>.</li>
+      <li><strong>Inline example phrasing</strong> &mdash; &quot;e.g.&quot; replaced with &quot;for example&quot; in the thinking-block clearing description for consistency with documentation style.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-editing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-editing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-editing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Streaming messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated client SDK cross-links to the new cli-sdks-libraries path and replaced an informal &quot;e.g.&quot; with &quot;for example&quot;.</p>
+    <ul>
+      <li><strong>SDK docs links</strong> &mdash; Two references to <code>/docs/en/api/client-sdks</code> in the tool-use delta and full HTTP stream sections replaced with <code>/docs/en/cli-sdks-libraries/overview</code>.</li>
+      <li><strong>Phrasing</strong> &mdash; &quot;e.g. <code>event: message_stop</code>&quot; changed to &quot;for example, <code>event: message_stop</code>&quot; in the event types section.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/streaming" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/streaming &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="streaming-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Java SDK requirements cross-link to point to the new cli-sdks-libraries path.</p>
+    <ul>
+      <li><strong>Java SDK requirements link</strong> &mdash; The JDK 25 compact source file note now links to <code>/docs/en/cli-sdks-libraries/sdks/java#requirements</code> instead of <code>/docs/en/api/sdks/java#requirements</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Task budgets</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a note clarifying that the task budget countdown is invisible to API callers — no remaining-budget field is returned in responses or accessible via SDKs.</p>
+    <ul>
+      <li><strong>Budget visibility</strong> &mdash; New note explicitly states the countdown is model-only: there is no <code>task_budget</code> field in the response <code>usage</code> object and SDKs provide no accessor for remaining budget.</li>
+      <li><strong>Client-side tracking guidance</strong> &mdash; Directs callers to sum <code>usage</code> across loop requests or pass a <code>remaining</code> value forward manually when carrying a budget across compaction, rather than relying on API-returned state.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/task-budgets" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/task-budgets &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="task-budgets" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 18 docs analyzed &middot; 2026-06-09
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
