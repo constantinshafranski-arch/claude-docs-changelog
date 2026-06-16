@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 16, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 16, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 16 at 10:05 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">3</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">6</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat start">
+      <div class="num">1</div>
+      <div class="label">Getting Started</div>
+    </div>
+    <div class="stat other">
+      <div class="num">6</div>
+      <div class="label">Other</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">10</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Model retirement status</strong> &mdash; Claude Opus 4 and Sonnet 4 status updated from &quot;deprecated&quot; to &quot;retired&quot; (except on Vertex AI / Bedrock and Vertex AI) across all tool, pricing, and capability reference tables</li>
+      <li><strong>CMEK for Claude Enterprise</strong> &mdash; Customer-managed encryption keys now supported on Claude Enterprise with org-scoped configuration via <code>claude.ai &gt; Organization settings &gt; Data and privacy</code>; AWS KMS, Azure Key Vault, and Google Cloud KMS guides each updated with a new Claude Enterprise tab covering the self-service setup flow</li>
+      <li><strong>Claude Code settings</strong> &mdash; Four new settings documented for v2.1.119+: <code>agentPushNotifEnabled</code>, <code>autoCompactEnabled</code>, <code>fileCheckpointingEnabled</code>, <code>inputNeededNotifEnabled</code>, <code>theme</code>, and <code>verbose</code></li>
+      <li><strong>Agent SDK credit note removed</strong> &mdash; The June 15, 2026 Agent SDK credit callout banner removed from the headless and legal-and-compliance Claude Code docs</li>
+      <li><strong>Analytics API key location updated</strong> &mdash; Analytics API key creation path corrected to <code>claude.ai &gt; Organization settings &gt; API</code> (was <code>claude.ai &gt; Analytics &gt; API keys</code>) across the Analytics APIs and Compliance API access docs</li>
+      <li><strong>Stop reasons guide expanded</strong> &mdash; Multi-language code examples (cURL, CLI, Python, TypeScript, C#, Go, Java, PHP, Ruby) added for <code>end_turn</code> handling; TypeScript example added for the empty-response prevention pattern</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4 and Sonnet 4 model statuses updated from &quot;deprecated&quot; to &quot;retired&quot; in the supported-models table for the code execution tool.</p>
+    <ul>
+      <li><strong>Claude Opus 4 retirement</strong> &mdash; Status changed from &quot;deprecated&quot; to &quot;retired, except on Vertex AI&quot; in the model compatibility table</li>
+      <li><strong>Claude Sonnet 4 retirement</strong> &mdash; Status changed from &quot;deprecated&quot; to &quot;retired, except on Bedrock and Vertex AI&quot; in the model compatibility table</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Computer use tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4 and Sonnet 4 status updated to &quot;retired&quot; in the beta header compatibility note for the <code>computer-use-2025-01-24</code> header.</p>
+    <ul>
+      <li><strong>Claude Sonnet 4 retirement</strong> &mdash; Label updated to &quot;retired, except on Bedrock and Vertex AI&quot; in the <code>computer-use-2025-01-24</code> beta header compatibility list</li>
+      <li><strong>Claude Opus 4 retirement</strong> &mdash; Label updated to &quot;retired, except on Vertex AI&quot; in the <code>computer-use-2025-01-24</code> beta header compatibility list</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="computer-use-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool use with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4 and Sonnet 4 status updated from &quot;deprecated&quot; to &quot;retired&quot; in the tool system-prompt token count reference table.</p>
+    <ul>
+      <li><strong>Claude Opus 4 retirement</strong> &mdash; Status updated to &quot;retired, except on Vertex AI&quot; in the tool-system-prompt token table</li>
+      <li><strong>Claude Sonnet 4 retirement</strong> &mdash; Status updated to &quot;retired, except on Bedrock and Vertex AI&quot; in the tool-system-prompt token table</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-use-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">6 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Desktop application</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Troubleshooting support instructions updated to direct users to the in-app Help menu first and to scope GitHub Issues reports to problems that also reproduce in the standalone CLI.</p>
+    <ul>
+      <li><strong>Support path</strong> &mdash; Updated primary support step to &quot;Open Help → Get Support in the desktop app&quot; before falling back to the Claude support center</li>
+      <li><strong>GitHub Issues scope</strong> &mdash; Bug-filing guidance now specifies reporting only problems that also reproduce in the standalone <code>claude</code> CLI</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="desktop-application" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The June 15, 2026 Agent SDK credit callout banner has been removed from the headless (programmatic) usage page.</p>
+    <ul>
+      <li><strong>Agent SDK credit note removed</strong> &mdash; Removed the callout informing users that Agent SDK and <code>claude -p</code> usage on subscription plans draws from a new monthly Agent SDK credit</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Legal and compliance</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The June 15, 2026 Agent SDK credit callout banner has been removed from the legal and compliance page.</p>
+    <ul>
+      <li><strong>Agent SDK credit note removed</strong> &mdash; Removed the callout informing users that Agent SDK and <code>claude -p</code> usage on subscription plans draws from a new monthly Agent SDK credit</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/legal-and-compliance" target="_blank" rel="noopener">code.claude.com/docs/en/legal-and-compliance &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="legal-and-compliance" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Duplicate <code>theme={null}</code> attributes on all installation code blocks have been deduplicated to a single attribute each.</p>
+    <ul>
+      <li><strong>Code block cleanup</strong> &mdash; Removed repeated <code>theme={null}</code> attribute noise from bash, powershell, and batch install snippets across all installation tabs</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Duplicate <code>theme={null}</code> attributes on all installation code blocks have been deduplicated to a single attribute each.</p>
+    <ul>
+      <li><strong>Code block cleanup</strong> &mdash; Removed repeated <code>theme={null}</code> attribute noise from bash, powershell, and batch install snippets across all installation tabs</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Six new settings added for Claude Code v2.1.119+ covering push notifications, auto-compact, file checkpointing, theme, and verbose output; legacy <code>~/.claude.json</code> note updated to reflect the new set of keys moved to <code>settings.json</code>.</p>
+    <ul>
+      <li><strong>agentPushNotifEnabled</strong> &mdash; New setting (v2.1.119+) to allow Claude to send proactive push notifications via Remote Control when a long task finishes; default <code>false</code></li>
+      <li><strong>autoCompactEnabled</strong> &mdash; New setting (v2.1.119+) to automatically compact the conversation when context approaches the limit; default <code>true</code></li>
+      <li><strong>fileCheckpointingEnabled</strong> &mdash; New setting (v2.1.119+) to snapshot files before each edit for <code>/rewind</code> restore; default <code>true</code></li>
+      <li><strong>inputNeededNotifEnabled</strong> &mdash; New setting (v2.1.119+) to send a push notification when a permission prompt is waiting for input; default <code>false</code></li>
+      <li><strong>theme</strong> &mdash; New setting (v2.1.119+) to configure the interface color theme (<code>auto</code>, <code>dark</code>, <code>light</code>, daltonized, ANSI, or custom slug); default <code>dark</code></li>
+      <li><strong>verbose</strong> &mdash; New setting (v2.1.119+) to show full tool output instead of truncated summaries; default <code>false</code></li>
+      <li><strong>Legacy key note updated</strong> &mdash; <code>~/.claude.json</code> note now lists <code>theme</code>, <code>verbose</code>, <code>autoCompactEnabled</code>, and <code>preferredNotifChannel</code> as keys stored there in versions before v2.1.119</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-start">🚀</div>
+    <h2>Getting Started</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Intro to Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Claude Fable 5 announcement link has been updated to point to the combined Fable 5 and Mythos 5 announcement URL.</p>
+    <ul>
+      <li><strong>Announcement link</strong> &mdash; Claude Fable 5 announcement URL updated from <code>/news/claude-fable-5</code> to <code>/news/claude-fable-5-mythos-5</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/intro" target="_blank" rel="noopener">platform.claude.com/docs/en/intro &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="intro-to-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">6 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Analytics APIs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The path to create an Analytics API key for the Claude Enterprise Analytics API has been corrected to the new Organization settings location.</p>
+    <ul>
+      <li><strong>Analytics API key path</strong> &mdash; Creation URL updated from <code>claude.ai &gt; Analytics &gt; API keys</code> to <code>claude.ai &gt; Organization settings &gt; API</code> in both the comparison table and the step-by-step provisioning instructions</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/analytics-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/analytics-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="analytics-apis" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure AWS KMS for CMEK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The &quot;Register the key with Anthropic&quot; section has been restructured into a tabbed layout with separate flows for Claude Platform (Admin API) and Claude Enterprise (self-service UI in Organization settings).</p>
+    <ul>
+      <li><strong>Claude Enterprise tab added</strong> &mdash; New UI-based flow for Claude Enterprise: navigate to <code>claude.ai &gt; Organization settings &gt; Data and privacy &gt; Encryption keys</code>, add an AWS key ARN, and Anthropic validates it automatically</li>
+      <li><strong>Claude Platform tab</strong> &mdash; Existing Admin API register/validate/attach-to-workspace steps moved into a dedicated Claude Platform tab with no functional changes to the API calls</li>
+      <li><strong>Enterprise scope clarification</strong> &mdash; Added note that on Claude Enterprise CMEK applies org-wide (no workspace attach step) and only one key per organization is supported</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek-aws-kms" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek-aws-kms &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-aws-kms-for-cmek" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure Azure Key Vault for CMEK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The &quot;Register the key with Anthropic&quot; section has been restructured into a tabbed layout with separate flows for Claude Platform (Admin API) and Claude Enterprise (self-service UI in Organization settings).</p>
+    <ul>
+      <li><strong>Claude Enterprise tab added</strong> &mdash; New UI-based flow for Claude Enterprise: navigate to <code>claude.ai &gt; Organization settings &gt; Data and privacy &gt; Encryption keys</code>, enter vault URI, key name, and tenant ID, and Anthropic validates automatically</li>
+      <li><strong>Claude Platform tab</strong> &mdash; Existing Admin API register/validate/attach-to-workspace steps moved into a dedicated Claude Platform tab with no functional changes to the API calls</li>
+      <li><strong>Enterprise scope clarification</strong> &mdash; Added note that on Claude Enterprise CMEK applies org-wide (no workspace attach step) and only one key per organization is supported</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek-azure-key-vault" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek-azure-key-vault &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-azure-key-vault-for-cmek" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure Google Cloud KMS for CMEK</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The &quot;Register the key with Anthropic&quot; section has been restructured into a tabbed layout with separate flows for Claude Platform (Admin API) and Claude Enterprise (self-service UI in Organization settings).</p>
+    <ul>
+      <li><strong>Claude Enterprise tab added</strong> &mdash; New UI-based flow for Claude Enterprise: navigate to <code>claude.ai &gt; Organization settings &gt; Data and privacy &gt; Encryption keys</code>, paste the full GCP key resource name, and Anthropic validates automatically</li>
+      <li><strong>Claude Platform tab</strong> &mdash; Existing Admin API register/validate/attach-to-workspace steps moved into a dedicated Claude Platform tab with no functional changes to the API calls</li>
+      <li><strong>Enterprise scope clarification</strong> &mdash; Added note that on Claude Enterprise CMEK applies org-wide (no workspace attach step) and only one key per organization is supported</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek-google-cloud-kms" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek-google-cloud-kms &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-google-cloud-kms-for-cmek" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customer-managed encryption keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>CMEK documentation significantly expanded to cover Claude Enterprise alongside Claude Platform, detailing differences in scope, configuration path, admin prerequisites, protected data, and disabled features for each product.</p>
+    <ul>
+      <li><strong>Scope clarification</strong> &mdash; Updated &quot;How it works&quot; to distinguish Claude Platform (per-workspace, Admin API) from Claude Enterprise (per-organization, Organization settings UI)</li>
+      <li><strong>Admin prerequisites</strong> &mdash; Updated prerequisites to specify Organization Admin for Claude Platform and Owner/Primary Owner for Claude Enterprise</li>
+      <li><strong>What CMEK protects (Enterprise)</strong> &mdash; Added Claude Enterprise encrypted data list: chat content, skills, plugins, artifacts, chat/project attachments, and Claude Code CLI messages</li>
+      <li><strong>Disabled features (Enterprise)</strong> &mdash; Documented features disabled under CMEK on Claude Enterprise: conversation history search, some analytics, audit log exports, signed URLs, and personal preferences</li>
+      <li><strong>Not encrypted (Enterprise)</strong> &mdash; Listed Claude Code Desktop, Claude Code web, Cowork, Office agents, Claude in Slack, and beta features as not covered by CMEK on Claude Enterprise</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customer-managed-encryption-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get access to the Compliance API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Analytics API key creation path in the key-type comparison table has been corrected to the new Organization settings location.</p>
+    <ul>
+      <li><strong>Analytics API key path</strong> &mdash; Creation URL updated from <code>claude.ai &gt; Analytics &gt; API keys</code> to <code>claude.ai &gt; Organization settings &gt; API</code> in the key-type comparison table</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-api-access" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-api-access &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-access-to-the-compliance-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">10 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batch processing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4 and Sonnet 4 status updated from &quot;deprecated&quot; to &quot;retired&quot; in the Batches API pricing table.</p>
+    <ul>
+      <li><strong>Claude Opus 4 retirement</strong> &mdash; Status updated to &quot;retired, except on Vertex AI&quot; in the batch pricing table</li>
+      <li><strong>Claude Sonnet 4 retirement</strong> &mdash; Status updated to &quot;retired, except on Bedrock and Vertex AI&quot; in the batch pricing table</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/batch-processing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/batch-processing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batch-processing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Amazon Bedrock (legacy)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The dual-endpoint pricing note has been corrected to remove the erroneous reference to Opus 4 as an affected model.</p>
+    <ul>
+      <li><strong>Regional endpoint pricing note</strong> &mdash; Removed &quot;Opus 4 (deprecated)&quot; from the list of older models that maintain existing pricing structures, as the note applies only to models predating Sonnet 4.5</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-amazon-bedrock-(legacy)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context windows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The 200k-token context window model list has been updated to remove the retired Sonnet 4 reference, and a minor punctuation fix was applied to the tool-selection sentence.</p>
+    <ul>
+      <li><strong>200k context window list</strong> &mdash; Removed &quot;Sonnet 4 (deprecated)&quot; from the list of models with a 200k-token context window</li>
+      <li><strong>Tool-selection sentence</strong> &mdash; Fixed punctuation: em dash replaced with comma for grammatical consistency</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-windows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-windows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Building with extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4 and Sonnet 4 status updated from &quot;deprecated&quot; to &quot;retired&quot; in two interleaved-thinking compatibility notes.</p>
+    <ul>
+      <li><strong>Interleaved thinking model list</strong> &mdash; Opus 4 and Sonnet 4 labels updated to &quot;retired, except on Vertex AI&quot; and &quot;retired, except on Bedrock and Vertex AI&quot; respectively in the per-model instructions</li>
+      <li><strong>Partner platform request validation note</strong> &mdash; Same retirement labels applied to the note describing which models are accepted for <code>interleaved-thinking-2025-05-14</code> on Bedrock and Vertex AI</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="building-with-extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Stop reasons and fallback</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>end_turn</code> section has been expanded with multi-language code examples (cURL, CLI, Python, TypeScript, C#, Go, Java, PHP, Ruby) and a TypeScript example for the empty-response prevention pattern.</p>
+    <ul>
+      <li><strong>end_turn code examples</strong> &mdash; Added CodeGroup with cURL, CLI, Python, TypeScript, C#, Go, Java, PHP, and Ruby examples for handling <code>stop_reason == &quot;end_turn&quot;</code></li>
+      <li><strong>Empty response prevention</strong> &mdash; Added TypeScript example alongside the existing Python example showing correct vs. incorrect message structure after tool results</li>
+      <li><strong>Continuation prompt guidance</strong> &mdash; Added prose bridging the empty-response fix section to the continuation-prompt handler, wrapped in a CodeGroup</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/handling-stop-reasons &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="stop-reasons-and-fallback" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multilingual support</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The multilingual benchmark table has been trimmed to remove the retired Claude Opus 4 and Sonnet 4 columns, retaining Opus 4.1, Sonnet 4.5, and Haiku 4.5.</p>
+    <ul>
+      <li><strong>Benchmark table columns</strong> &mdash; Removed &quot;Claude Opus 4 (deprecated)&quot; and &quot;Claude Sonnet 4 (deprecated)&quot; columns from the zero-shot chain-of-thought evaluation table</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/multilingual-support" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/multilingual-support &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multilingual-support" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4 and Sonnet 4 status updated from &quot;deprecated&quot; to &quot;retired&quot; in the prompt caching pricing table and the minimum cacheable token list.</p>
+    <ul>
+      <li><strong>Pricing table</strong> &mdash; Opus 4 updated to &quot;retired, except on Vertex AI&quot; and Sonnet 4 updated to &quot;retired, except on Bedrock and Vertex AI&quot;</li>
+      <li><strong>Minimum token list</strong> &mdash; Same retirement labels applied to the 1,024-token minimum cache size entry covering Opus 4 and Sonnet 4</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Search results</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Opus 4 and Sonnet 4 status updated from &quot;deprecated&quot; to &quot;retired&quot; in the search results feature model compatibility list.</p>
+    <ul>
+      <li><strong>Claude Opus 4 retirement</strong> &mdash; Status updated to &quot;retired, except on Vertex AI&quot; in the supported models list</li>
+      <li><strong>Claude Sonnet 4 retirement</strong> &mdash; Status updated to &quot;retired, except on Bedrock and Vertex AI&quot; in the supported models list</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/search-results" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/search-results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="search-results" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Streaming messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A page description and a &quot;Next steps&quot; card group linking to related guides (stop reasons, fine-grained tool streaming, extended thinking, SDKs) were added to the streaming messages doc.</p>
+    <ul>
+      <li><strong>Page description</strong> &mdash; Added a one-sentence description under the title summarizing the page content</li>
+      <li><strong>Next steps cards</strong> &mdash; Added a CardGroup with four links: Stop reasons and fallback, Fine-grained tool streaming, Building with extended thinking, and Client SDKs</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/streaming" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/streaming &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="streaming-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Token counting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A page description, minor prose edits, and a &quot;Next steps&quot; card group linking to related API reference and guides were added to the token counting doc.</p>
+    <ul>
+      <li><strong>Page description</strong> &mdash; Added a subtitle summarizing the purpose of the token counting feature above the horizontal rule</li>
+      <li><strong>Intro prose</strong> &mdash; Minor wording improvements: added colon after &quot;you can&quot; list intro and corrected &quot;Optimize prompts to be a specific length&quot; to &quot;Optimize prompts to a specific length&quot;</li>
+      <li><strong>Next steps cards</strong> &mdash; Added a CardGroup with four links: Count message tokens (API reference), Context windows, Rate limits, and Prompt caching</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/token-counting" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/token-counting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="token-counting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 26 docs analyzed &middot; 2026-06-16
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
