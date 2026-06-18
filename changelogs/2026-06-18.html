@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 18, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 18, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 18 at 09:11 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">3</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat other">
+      <div class="num">3</div>
+      <div class="label">Other</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>CLAUDE.md import parsing</strong> &mdash; Import directives now skip Markdown code spans and fenced code blocks, allowing paths to be mentioned literally by wrapping them in backticks without triggering an import.</li>
+      <li><strong>Skills command naming</strong> &mdash; A new row in the command-name table documents nested <code>.claude/skills/</code> directories: when a name clashes, the command is namespaced using the subdirectory path relative to the working directory.</li>
+      <li><strong>Subagent MCP tool filtering</strong> &mdash; Added a concrete YAML example showing how <code>disallowedTools: mcp__&amp;lt;server&amp;gt;</code> removes every tool from a specific MCP server while preserving all other tools.</li>
+      <li><strong>Analytics API reference URLs</strong> &mdash; All three analytics docs (Analytics APIs, Claude Code Analytics API, Usage and Cost API) updated to point to the new consolidated <code>/docs/en/api/admin/</code> reference paths, replacing the old <code>admin-api/claude-code/</code> and external Support article links.</li>
+      <li><strong>Analytics API key distinction clarified</strong> &mdash; The Analytics APIs overview now explicitly notes that both APIs appear under the Admin API reference but are separate APIs with separate key types.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>How Claude remembers your project</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies that import parsing in CLAUDE.md skips Markdown code spans and fenced code blocks, so paths wrapped in backticks are treated as literal text rather than imports.</p>
+    <ul>
+      <li><strong>Import parsing</strong> &mdash; Added documentation that <code>@path</code> directives inside backtick code spans or fenced code blocks are not processed as imports, preventing unintended file inclusion when referencing paths as examples.</li>
+      <li><strong>Literal path syntax</strong> &mdash; Documented the workaround: wrap a path in backticks (e.g., <code>`@README`</code>) to keep it as literal text; bare <code>@README</code> outside backticks still triggers an import.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">code.claude.com/docs/en/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="how-claude-remembers-your-project" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a new command-naming rule for nested <code>.claude/skills/</code> directories with name clashes, and refines the <code>/doctor</code> description for the skill description budget.</p>
+    <ul>
+      <li><strong>Nested skills command naming</strong> &mdash; Added a new table row: when a nested <code>.claude/skills/</code> directory name clashes with another skill, the command is namespaced as <code>/&amp;lt;subdirectory-path&amp;gt;:&amp;lt;skill-name&amp;gt;</code> relative to the working directory (e.g., <code>apps/web/.claude/skills/deploy/SKILL.md</code> → <code>/apps/web:deploy</code>).</li>
+      <li><strong>/doctor output description</strong> &mdash; Updated the description of <code>/doctor</code> output to clarify it shows how many skill descriptions are being shortened or dropped, not just whether overflow is occurring.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a concrete YAML example demonstrating how to use an MCP server-level pattern in <code>disallowedTools</code> to strip all tools from a specific MCP server.</p>
+    <ul>
+      <li><strong>MCP server-level disallowedTools example</strong> &mdash; Added a YAML frontmatter code sample showing <code>disallowedTools: mcp__github</code>, which removes every tool from the <code>github</code> MCP server while retaining all built-in tools and tools from other MCP servers.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Analytics APIs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates reference links to use the new consolidated Admin API reference paths and adds a clarification that both analytics APIs appear under the Admin API reference but remain separate with distinct key types.</p>
+    <ul>
+      <li><strong>API reference URLs</strong> &mdash; Updated Claude Code Analytics API reference link from <code>/docs/en/api/admin-api/claude-code/get-claude-code-usage-report</code> to <code>/docs/en/api/admin/usage_report/retrieve_claude_code</code>.</li>
+      <li><strong>Enterprise Analytics API reference link</strong> &mdash; Replaced the external Support article URL for the Claude Enterprise Analytics API reference with the in-docs path <code>/docs/en/api/admin/analytics</code>, including the nav card in the Next Steps section.</li>
+      <li><strong>Key type separation note</strong> &mdash; Added a sentence clarifying that both APIs appear under the Admin API reference but are separate APIs with separate key types (<code>sk-ant-admin01-...</code> vs. Analytics API key) and are not interchangeable.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/analytics-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/analytics-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="analytics-apis" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code Analytics API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the API reference link to point to the new canonical Admin API reference path for the Claude Code usage report endpoint.</p>
+    <ul>
+      <li><strong>API reference URL</strong> &mdash; Updated the link for complete parameter details and response schemas from <code>/docs/en/api/admin-api/claude-code/get-claude-code-usage-report</code> to <code>/docs/en/api/admin/usage_report/retrieve_claude_code</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/claude-code-analytics-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/claude-code-analytics-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-analytics-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Usage and Cost API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the Claude Enterprise Analytics API link in the cost/usage routing table to point directly to the new in-docs API reference instead of the analytics overview page.</p>
+    <ul>
+      <li><strong>Enterprise Analytics API link</strong> &mdash; Changed the table entry for Claude Enterprise cost and usage from <code>/docs/en/manage-claude/analytics-api</code> to the direct reference path <code>/docs/en/api/admin/analytics</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/usage-cost-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/usage-cost-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="usage-and-cost-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 6 docs analyzed &middot; 2026-06-18
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
