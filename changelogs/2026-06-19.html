@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 19, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 19, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 19 at 09:29 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">17</div>
+      <div class="label">API Reference</div>
+    </div>
+    <div class="stat tools">
+      <div class="num">10</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">13</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat other">
+      <div class="num">11</div>
+      <div class="label">Other (1 new)</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">1</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>New activity types in Compliance API</strong> &mdash; 11 new filterable event types added across <code>activity_types</code> and <code>exclude_activity_types</code>, including <code>abuse_decision_received</code>, <code>claude_project_document_updated</code>, <code>claude_project_sync_source_*</code>, <code>design_project_*</code>, <code>org_capability_grant_*</code>, and <code>org_data_residency_updated</code>.</li>
+      <li><strong>New <code>code_execution_20260521</code> tool version</strong> &mdash; Discloses the 90-second per-cell wall-clock time limit in the tool description so Claude can budget long-running cells; added to the supported versions table for all compatible models.</li>
+      <li><strong>New web search and web fetch tool versions</strong> &mdash; <code>web_search_20260318</code> and <code>web_fetch_20260318</code> add a <code>response_inclusion</code> parameter to exclude consumed server-tool result blocks from API responses, reducing output token costs in agentic workflows; <code>web_fetch_20260309</code> adds cache-bypass control via <code>use_cache: false</code>.</li>
+      <li><strong>New Admin API key guide</strong> &mdash; Dedicated doc covering creation steps, key prefixes, and scope selection for both Claude Console (<code>sk-ant-admin01-</code>) and Claude Enterprise (<code>sk-ant-api01-</code>) organizations, with a full scope table for Compliance, Analytics, and Spend Limits APIs.</li>
+      <li><strong>Compliance API file metadata enriched</strong> &mdash; <code>files</code> and <code>generated_files</code> objects on chat messages and project attachments now include <code>md5</code>, <code>size_bytes</code>, and <code>created_at</code> fields across the Apps, Chats, Messages, and Projects endpoints.</li>
+      <li><strong>Organization settings now return <code>api_keys</code> array</strong> &mdash; <code>GET /v1/compliance/organizations/{id}/settings</code> response includes a new <code>api_keys</code> field listing all Compliance API keys for the hierarchy with <code>id</code>, <code>is_active</code>, <code>scopes</code>, and creator metadata.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">17 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Compliance API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the <code>activity_types</code> and <code>exclude_activity_types</code> filter enums with 11 new event types covering abuse decisions, project document updates, sync sources, Design projects, capability grants, and data residency changes.</p>
+    <ul>
+      <li><strong>abuse_decision_received</strong> &mdash; New activity type: an external anti-abuse service reported a consequential decision about a sign-in or sign-up attempt.</li>
+      <li><strong>claude_project_document_updated</strong> &mdash; New activity type: the content of a document in a Claude project was replaced in place.</li>
+      <li><strong>claude_project_sync_source_created / _deleted / _updated</strong> &mdash; Three new activity types tracking sync source connections to Claude project knowledge bases.</li>
+      <li><strong>design_project_created / _deleted / _updated</strong> &mdash; Three new activity types tracking Claude Design project lifecycle events.</li>
+      <li><strong>org_capability_grant_added / _removed</strong> &mdash; Two new activity types tracking capability grant changes on workspaces or roles.</li>
+      <li><strong>org_data_residency_updated</strong> &mdash; New activity type: organization inference data residency settings were updated.</li>
+      <li><strong>activity_types enum count</strong> &mdash; Total supported values increased from 315 to 326.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="compliance-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Activities</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Mirrors the Compliance API top-level page: added the same 11 new activity type values to both <code>activity_types</code> and <code>exclude_activity_types</code> filter parameters.</p>
+    <ul>
+      <li><strong>activity_types / exclude_activity_types</strong> &mdash; Enum count increased from 315 to 326; all 11 new types documented with descriptions.</li>
+      <li><strong>abuse_decision_received</strong> &mdash; Added to both include and exclude filter enumerations.</li>
+      <li><strong>design_project_* / org_capability_grant_* / org_data_residency_updated</strong> &mdash; New organizational and design-project lifecycle event types added to both filter enums.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/activities" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/activities &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="activities" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Query compliance activities Activities</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>GET /v1/compliance/activities</code> endpoint reference with the same 11 new activity type values in both filter parameters.</p>
+    <ul>
+      <li><strong>activity_types / exclude_activity_types</strong> &mdash; Enum count increased from 315 to 326 in the endpoint-level reference page.</li>
+      <li><strong>New event types</strong> &mdash; All 11 newly added types documented with descriptions consistent with parent pages.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/activities/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/activities/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="query-compliance-activities-activities" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Apps</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Made <code>user_ids</code> optional for org-wide chat queries and added <code>md5</code>, <code>size_bytes</code>, and <code>created_at</code> fields to file and generated-file objects in the messages response.</p>
+    <ul>
+      <li><strong>user_ids parameter</strong> &mdash; Changed from required (1–10 IDs) to optional; omit entirely for org-wide queries.</li>
+      <li><strong>project_ids / updated_at filters</strong> &mdash; Documented as requiring <code>user_ids[]</code>; not supported for org-wide queries.</li>
+      <li><strong>files object</strong> &mdash; Added <code>created_at</code> (file creation timestamp), <code>md5</code> (lowercase hex MD5), and <code>size_bytes</code> fields.</li>
+      <li><strong>generated_files object</strong> &mdash; Added <code>md5</code> and <code>size_bytes</code> fields to assistant-created file metadata.</li>
+      <li><strong>mime_type</strong> &mdash; Description updated to reflect the preferred downloadable variant rather than upload-time type.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="apps" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Chats</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Made <code>user_ids</code> optional for org-wide listing and enriched file metadata in both <code>files</code> and <code>generated_files</code> response objects with <code>md5</code>, <code>size_bytes</code>, and <code>created_at</code>.</p>
+    <ul>
+      <li><strong>user_ids parameter</strong> &mdash; Changed from required to optional (max 10); omit for org-wide chat queries.</li>
+      <li><strong>project_ids / updated_at filters</strong> &mdash; Noted as requiring <code>user_ids[]</code>; unsupported for org-wide queries.</li>
+      <li><strong>files object</strong> &mdash; Added <code>created_at</code>, <code>md5</code>, and <code>size_bytes</code> fields.</li>
+      <li><strong>generated_files object</strong> &mdash; Added <code>md5</code> and <code>size_bytes</code> fields.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="chats" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Generated Files</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed implementation-specific Filestore references and generalized field descriptions for <code>created_at</code>, <code>md5</code>, and <code>mime_type</code> on the generated file metadata endpoint.</p>
+    <ul>
+      <li><strong>Filestore references removed</strong> &mdash; Description no longer mentions &quot;Filestore&quot; as the backing store; endpoint description simplified.</li>
+      <li><strong>created_at</strong> &mdash; Description changed from &quot;File creation timestamp from Filestore&quot; to &quot;File creation timestamp, when available&quot;.</li>
+      <li><strong>md5</strong> &mdash; Removed &quot;as recorded by Filestore&quot; qualifier; description now reads &quot;Lowercase hex MD5 of the stored file&quot;.</li>
+      <li><strong>mime_type</strong> &mdash; Description updated from &quot;MIME type as recorded by Filestore&quot; to &quot;MIME type of the stored file, when available&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/generated_files" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/generated_files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="generated-files" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get Claude-generated file metadata Generated Files</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Same Filestore-reference cleanup as the parent Generated Files page: simplified descriptions for <code>created_at</code>, <code>md5</code>, and <code>mime_type</code> on the individual retrieve endpoint.</p>
+    <ul>
+      <li><strong>Filestore references removed</strong> &mdash; Endpoint description simplified; Filestore no longer mentioned as backing store.</li>
+      <li><strong>created_at / md5 / mime_type</strong> &mdash; Descriptions generalized to remove Filestore-specific wording.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/generated_files/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/generated_files/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-claude-generated-file-metadata-generated-files" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List chats Chats</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Made <code>user_ids</code> optional on the <code>GET /v1/compliance/apps/chats</code> endpoint and flagged <code>project_ids</code> and <code>updated_at</code> filters as requiring <code>user_ids[]</code>.</p>
+    <ul>
+      <li><strong>user_ids</strong> &mdash; Changed from required array to optional (max 10 per request); omit for org-wide queries.</li>
+      <li><strong>project_ids</strong> &mdash; Added note: requires <code>user_ids[]</code>; not supported for org-wide queries.</li>
+      <li><strong>updated_at (gt / gte / lt / lte)</strong> &mdash; Each sub-field now notes it requires <code>user_ids[]</code> and is unsupported for org-wide queries.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-chats-chats" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Enriched the <code>files</code> and <code>generated_files</code> response objects on <code>GET /v1/compliance/apps/chats/{id}/messages</code> with <code>md5</code>, <code>size_bytes</code>, and <code>created_at</code> fields.</p>
+    <ul>
+      <li><strong>files object</strong> &mdash; Added <code>created_at</code>, <code>md5</code> (lowercase hex, nullable), and <code>size_bytes</code> (nullable for older files) fields.</li>
+      <li><strong>generated_files object</strong> &mdash; Added <code>md5</code> (nullable) and <code>size_bytes</code> (nullable when expired) fields.</li>
+      <li><strong>mime_type (files)</strong> &mdash; Description updated to reflect preferred downloadable variant.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get chat messages Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Same file metadata enrichment as the Messages parent page: <code>files</code> and <code>generated_files</code> on the endpoint-level reference now include <code>md5</code>, <code>size_bytes</code>, and <code>created_at</code>.</p>
+    <ul>
+      <li><strong>files object</strong> &mdash; Added <code>created_at</code>, <code>md5</code>, and <code>size_bytes</code> fields.</li>
+      <li><strong>generated_files object</strong> &mdash; Added <code>md5</code> and <code>size_bytes</code> fields.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/messages/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/messages/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-chat-messages-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Projects</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added an <code>updated_at</code> filter to <code>GET /v1/compliance/apps/projects</code>, enriched <code>ComplianceProjectFileReference</code> with <code>md5</code> and <code>size_bytes</code>, and added <code>updated_at</code> to <code>ComplianceProjectDocReference</code>.</p>
+    <ul>
+      <li><strong>updated_at filter</strong> &mdash; New optional <code>{ gt, gte, lt, lte }</code> filter parameter for narrowing project results by last-modified time (RFC 3339).</li>
+      <li><strong>ComplianceProjectFileReference</strong> &mdash; Added <code>md5</code> and <code>size_bytes</code> fields; <code>mime_type</code> description updated to preferred downloadable variant.</li>
+      <li><strong>ComplianceProjectDocReference</strong> &mdash; Added <code>updated_at</code> field (reserved; currently always null).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/projects" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/projects &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="projects" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Attachments</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Enriched <code>ComplianceProjectFileReference</code> with <code>md5</code> and <code>size_bytes</code> fields and added an <code>updated_at</code> field to <code>ComplianceProjectDocReference</code> on the project attachments endpoint.</p>
+    <ul>
+      <li><strong>ComplianceProjectFileReference</strong> &mdash; Added <code>md5</code> (nullable hex MD5) and <code>size_bytes</code> (nullable); <code>mime_type</code> defaults to <code>application/octet-stream</code> when not recorded.</li>
+      <li><strong>ComplianceProjectDocReference</strong> &mdash; Added <code>updated_at</code> field (reserved for future use; currently always null).</li>
+      <li><strong>AttachmentListResponse schema</strong> &mdash; Updated field count from <code>{ id, created_at, filename, 2 more }</code> to <code>{ id, created_at, filename, 4 more }</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/projects/attachments" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/projects/attachments &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="attachments" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List project attachments Attachments</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Endpoint-level reference for <code>GET /v1/compliance/apps/projects/{project_id}/attachments</code> updated with same <code>md5</code>, <code>size_bytes</code>, and <code>updated_at</code> additions as parent Attachments page.</p>
+    <ul>
+      <li><strong>ComplianceProjectFileReference</strong> &mdash; Added <code>md5</code> and <code>size_bytes</code> fields.</li>
+      <li><strong>ComplianceProjectDocReference</strong> &mdash; Added <code>updated_at</code> (reserved; always null).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/projects/attachments/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/projects/attachments/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-project-attachments-attachments" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List projects Projects</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added an <code>updated_at</code> range filter (<code>gt / gte / lt / lte</code>) to the <code>GET /v1/compliance/apps/projects</code> endpoint.</p>
+    <ul>
+      <li><strong>updated_at filter</strong> &mdash; New optional object with <code>gt</code>, <code>gte</code>, <code>lt</code>, <code>lte</code> sub-fields for filtering projects by last-modified time in RFC 3339 format.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/projects/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/projects/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-projects-projects" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Organizations</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new <code>api_keys</code> array to the <code>GET /v1/compliance/organizations/{id}/settings</code> response and clarified retention-limit semantics for the <code>data_retention</code> setting.</p>
+    <ul>
+      <li><strong>api_keys field</strong> &mdash; New array on <code>SettingRetrieveResponse</code> returning all Compliance API keys for the hierarchy with <code>id</code>, <code>created_at</code>, <code>created_by_id</code>, <code>is_active</code>, <code>name</code>, <code>scopes</code>, and <code>type: &quot;compliance_api_key&quot;</code>.</li>
+      <li><strong>data_retention semantics</strong> &mdash; Clarified that a missing key means no administrator-configured retention period is in force; Anthropic&#x27;s service defaults may still apply (previously described as &quot;empty object means no retention limit&quot;).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/organizations" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/organizations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="organizations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>api_keys</code> array to the Settings page response schema and updated the retention-limit description, mirroring the Organizations page changes.</p>
+    <ul>
+      <li><strong>api_keys field</strong> &mdash; Added to the Settings endpoint response with full sub-field documentation.</li>
+      <li><strong>data_retention</strong> &mdash; Updated description: a missing key now means no administrator-configured retention period; Anthropic defaults may still apply.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/organizations/settings" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/organizations/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get effective organization settings Settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Endpoint-level reference for <code>GET /v1/compliance/organizations/{id}/settings</code> updated with the <code>api_keys</code> array and revised retention-limit semantics.</p>
+    <ul>
+      <li><strong>api_keys field</strong> &mdash; New array in the <code>SettingRetrieveResponse</code> with compliance API key metadata.</li>
+      <li><strong>data_retention</strong> &mdash; Missing key clarified as &quot;no administrator-configured retention period in force; Anthropic&#x27;s service defaults may still apply&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/organizations/settings/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/organizations/settings/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-effective-organization-settings-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">10 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>code_execution_20260521</code> as a new tool version that discloses the 90-second per-cell time limit in its description, and updated the free-usage condition to cover all versions at or after <code>web_search_20260209</code> and <code>web_fetch_20260209</code>.</p>
+    <ul>
+      <li><strong>code_execution_20260521</strong> &mdash; New tool version added to all compatible models (Fable 5, Mythos 5, Opus 4.5+, Sonnet 4.5+); same runtime as <code>_20260120</code> but discloses the 90-second per-cell wall-clock limit in the tool description; cells exceeding it return a <code>detection_timeout</code> result.</li>
+      <li><strong>Free-usage condition</strong> &mdash; Updated to read &quot;<code>web_search_20260209</code> (or later) or <code>web_fetch_20260209</code> (or later)&quot; so newer tool versions also qualify for free code execution.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Computer use tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Rewrote the screenshot sizing guidance to clarify that the API rejects oversized images with HTTP 400 rather than silently downscaling them, and updated the troubleshooting table accordingly.</p>
+    <ul>
+      <li><strong>Screenshot size heading</strong> &mdash; Renamed to &quot;Size screenshots to fit image limits&quot; with a new anchor; guidance now states the API rejects oversized images with HTTP 400.</li>
+      <li><strong>Model limits note</strong> &mdash; Updated to clarify that Opus 4.8/4.7 accept up to 2576 px on the long edge; earlier models accept up to 1568 px / ~1.15 MP.</li>
+      <li><strong>Coordinate scaling guidance</strong> &mdash; Simplified: resize the screenshot before sending and set <code>display_width_px</code>/<code>display_height_px</code> to match resized dimensions.</li>
+      <li><strong>Troubleshooting table</strong> &mdash; Removed &quot;silently downscaled&quot; as a cause for click offset; removed &quot;Screenshots sent above API limits&quot; as a cause for poor accuracy.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="computer-use-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool use with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added C#, Go, Java, PHP, and Ruby code examples for the web search tool quickstart, expanding SDK coverage from Python and TypeScript to seven languages.</p>
+    <ul>
+      <li><strong>SDK examples</strong> &mdash; Added C# (<code>AnthropicClient</code>), Go, Java (<code>AnthropicOkHttpClient</code>), PHP, and Ruby code samples for the <code>WebSearchTool20260209</code> quickstart.</li>
+      <li><strong>hidelines annotations</strong> &mdash; Added <code>hidelines</code> metadata to Python and TypeScript tabs to collapse import boilerplate.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-use-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Parallel tool use</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Rewrote the execution semantics section to make execution order the caller&#x27;s explicit choice and clarified how to handle batches with dependent or skipped calls.</p>
+    <ul>
+      <li><strong>Execution semantics</strong> &mdash; Clarified that execution order (concurrent, sequential, or mixed) is the caller&#x27;s decision, not prescribed by the API.</li>
+      <li><strong>Dependent calls guidance</strong> &mdash; Updated: if a call is skipped because an earlier call in the same sequential batch failed, return <code>is_error: true</code> with an explanation rather than the natural error message.</li>
+      <li><strong>Troubleshooting item 4</strong> &mdash; Reworded to acknowledge sequential execution as a valid strategy; parallel execution with retry on dependency failure also documented.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="parallel-tool-use" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Programmatic tool calling</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated model compatibility note to indicate that programmatic tool calling requires <code>code_execution_20260120</code> or later, covering the new <code>code_execution_20260521</code> version.</p>
+    <ul>
+      <li><strong>Model compatibility</strong> &mdash; Requirement updated from exactly <code>code_execution_20260120</code> to &quot;<code>code_execution_20260120</code> or later&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="programmatic-tool-calling" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Server tools</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Extended all references from version-specific <code>_20260209</code> strings to &quot;<code>_20260209</code> and later&quot; to cover the new <code>_20260318</code> web tool versions in ZDR and dynamic filtering guidance.</p>
+    <ul>
+      <li><strong>ZDR eligibility</strong> &mdash; Updated to state <code>_20260209</code> and later versions with dynamic filtering are not ZDR-eligible by default; <code>allowed_callers: [&quot;direct&quot;]</code> disables dynamic filtering to restore ZDR.</li>
+      <li><strong>Dynamic filtering warning</strong> &mdash; Warning about mixing a standalone code execution tool with web tools now covers <code>_20260209</code> or later versions.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="server-tools" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>web_search_20260318</code>, <code>web_fetch_20260318</code>, <code>web_fetch_20260309</code>, and <code>code_execution_20260521</code> to the tool directory and described each version&#x27;s capability additions.</p>
+    <ul>
+      <li><strong>web_search_20260318</strong> &mdash; New version added; adds <code>response_inclusion</code> control over previous <code>_20260209</code>.</li>
+      <li><strong>web_fetch_20260318</strong> &mdash; New version added; adds <code>response_inclusion</code> control.</li>
+      <li><strong>web_fetch_20260309</strong> &mdash; New version added; adds cache-bypass option over <code>_20260209</code>.</li>
+      <li><strong>code_execution_20260521</strong> &mdash; New version added; discloses per-cell time limit in tool description.</li>
+      <li><strong>allowed_callers interoperability</strong> &mdash; Documented that both <code>&quot;code_execution_20260120&quot;</code> and <code>&quot;code_execution_20260521&quot;</code> are accepted and interchangeable in <code>allowed_callers</code>; response blocks always tag caller as <code>code_execution_20260120</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool use with prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that server tool results (web search, web fetch, code execution) receive an automatic 5-minute cache breakpoint when prompt caching is active, explaining unexpected <code>ephemeral_5m_input_tokens</code> writes in usage.</p>
+    <ul>
+      <li><strong>Automatic server tool caching</strong> &mdash; New section: when at least one <code>cache_control</code> marker is present, the API automatically places a 5-minute cache breakpoint on each server tool result before the next agentic loop iteration.</li>
+      <li><strong>cache_creation.ephemeral_5m_input_tokens</strong> &mdash; These automatic writes appear under the 5-minute bucket regardless of TTLs set on user-defined <code>cache_control</code> markers.</li>
+      <li><strong>Opt-in only</strong> &mdash; Automatic breakpoints are not applied to requests that have no <code>cache_control</code> markers.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-use-with-prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-use-with-prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-use-with-prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web fetch tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Promoted <code>web_fetch_20260318</code> as the latest version, added the new <code>response_inclusion</code> parameter, and noted <code>web_fetch_20260309</code> for cache-bypass control via <code>use_cache</code>.</p>
+    <ul>
+      <li><strong>web_fetch_20260318</strong> &mdash; Now the latest version; adds <code>response_inclusion</code> parameter alongside dynamic filtering.</li>
+      <li><strong>response_inclusion</strong> &mdash; New parameter (requires <code>_20260318</code>+); set to <code>&quot;excluded&quot;</code> to drop nested server-tool result blocks consumed by completed code execution calls from the API response, reducing output token costs.</li>
+      <li><strong>use_cache / cache bypass</strong> &mdash; New parameter (requires <code>_20260309</code>+); set to <code>false</code> to bypass cache and fetch fresh content.</li>
+      <li><strong>Dynamic filtering</strong> &mdash; Updated to read &quot;<code>web_fetch_20260209</code> or later&quot; so all newer versions also enable dynamic filtering.</li>
+      <li><strong>Documentation heading hierarchy</strong> &mdash; Tool definition, max uses, domain filtering, content limits, and response sections promoted one level.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-fetch-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web search tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Promoted <code>web_search_20260318</code> as the latest version and added the new <code>response_inclusion</code> parameter for excluding consumed search result blocks from API responses.</p>
+    <ul>
+      <li><strong>web_search_20260318</strong> &mdash; Now the latest version; adds <code>response_inclusion</code> control alongside dynamic filtering from <code>_20260209</code>.</li>
+      <li><strong>response_inclusion</strong> &mdash; New parameter (requires <code>_20260318</code>+); set to <code>&quot;excluded&quot;</code> to omit search result blocks consumed by completed code execution calls from the API response.</li>
+      <li><strong>Dynamic filtering</strong> &mdash; Updated to read &quot;<code>web_search_20260209</code> or any later version&quot; to include new versions.</li>
+      <li><strong>Documentation heading hierarchy</strong> &mdash; Tool definition, localization, response, and error sections promoted one level.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-search-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">13 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that as of v2.1.181, Claude Code also accepts the flat <code>aws configure export-credentials --format process</code> output format with top-level credential keys.</p>
+    <ul>
+      <li><strong>awsCredentialExport flat format</strong> &mdash; As of v2.1.181, credentials with keys at the top level (rather than nested under <code>Credentials</code>) are accepted from the export command.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that commits and PR bodies created by Claude in web sessions now automatically include a session URL, and clarified when to manually construct the link.</p>
+    <ul>
+      <li><strong>Automatic session links</strong> &mdash; As of v2.1.179, commits include a <code>Claude-Session: &amp;lt;url&amp;gt;</code> git trailer and PR bodies include the session URL on a dedicated line.</li>
+      <li><strong>Manual link construction</strong> &mdash; Guidance updated: use the shell command to obtain the URL only for non-commit/PR outputs such as Slack messages or report files.</li>
+      <li><strong>Section title</strong> &mdash; Renamed from &quot;Link artifacts back to the session&quot; to &quot;Link output back to the session&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the <code>--ax-screen-reader</code> flag (v2.1.181+) and updated <code>--teammate-mode</code> to reflect the default changing from <code>auto</code> to <code>in-process</code> in v2.1.179.</p>
+    <ul>
+      <li><strong>--ax-screen-reader flag</strong> &mdash; New flag (v2.1.181+): renders screen-reader friendly flat text output without decorative borders or animations; forces classic renderer; takes precedence over the <code>CLAUDE_AX_SCREEN_READER</code> env var and <code>axScreenReader</code> setting.</li>
+      <li><strong>--teammate-mode default</strong> &mdash; Default changed from <code>auto</code> to <code>in-process</code> as of v2.1.179.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Noted that as of v2.1.181, <code>/config key=value</code> syntax can change a single setting from a <code>-p</code> invocation without opening the interactive dialog.</p>
+    <ul>
+      <li><strong>/config in -p mode</strong> &mdash; As of v2.1.181, pass <code>key=value</code> to <code>/config</code> from a <code>-p</code> invocation (e.g., <code>/config thinking=false</code>) to change a setting without opening the interactive interface.</li>
+      <li><strong>Built-in command list</strong> &mdash; Removed <code>/config</code> from the list of commands unavailable in <code>-p</code> mode.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the <code>claude_code.api_refusal</code> OpenTelemetry event with nine new attributes covering query source, speed, retry attempt, effort, server fallback, refusal category, and skill/plugin attribution.</p>
+    <ul>
+      <li><strong>query_source</strong> &mdash; Subsystem that issued the refused request (e.g., <code>repl_main_thread</code>, <code>compact</code>).</li>
+      <li><strong>speed</strong> &mdash; <code>&quot;fast&quot;</code> or <code>&quot;normal&quot;</code> depending on Fast mode state.</li>
+      <li><strong>attempt</strong> &mdash; Retry attempt number (1-indexed).</li>
+      <li><strong>effort</strong> &mdash; Effort level applied to the request; absent when model does not support effort.</li>
+      <li><strong>server_fallback_hop</strong> &mdash; <code>true</code> when a server-side model fallback retried the refusal; <code>false</code> when the request ended in a refusal visible to the user.</li>
+      <li><strong>has_category / category</strong> &mdash; Indicates whether and what refusal category was returned (<code>cyber</code>, <code>bio</code>, <code>frontier_llm</code>, <code>reasoning_extraction</code>); <code>category</code> only present with <code>OTEL_LOG_TOOL_DETAILS=1</code>.</li>
+      <li><strong>has_explanation</strong> &mdash; Whether the API response carried a <code>stop_details.explanation</code>.</li>
+      <li><strong>Skill/plugin attribution</strong> &mdash; Added <code>agent.name</code>, <code>skill.name</code>, <code>plugin.name</code>, <code>marketplace.name</code>, <code>mcp_server.name</code>, <code>mcp_tool.name</code> attributes.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added <code>*.claudeusercontent.com</code> to the network allowlist table as required for viewing Claude Code artifacts on claude.ai in the user&#x27;s browser.</p>
+    <ul>
+      <li><strong>*.claudeusercontent.com</strong> &mdash; New row in the allowlist table; required in the viewer&#x27;s browser (not by the CLI) for loading artifact content from sandboxed subdomains on claude.ai.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified how skills load when multiple plugin entries share a marketplace-root <code>source</code>, replacing a dense prose paragraph with structured examples.</p>
+    <ul>
+      <li><strong>skills path resolution</strong> &mdash; Restructured: when <code>source: &quot;./&quot;</code> is used for a marketplace-root entry, listing specific subdirectories under <code>skills</code> makes that list the complete set for the entry rather than adding to a default scan.</li>
+      <li><strong>Code examples</strong> &mdash; Added two JSON snippets illustrating the additive (multi-path) and exclusive (marketplace-root) behaviors.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified the exception for marketplace-root <code>source</code> entries: declaring specific subdirectories replaces the default <code>skills/</code> scan (not just adds to it).</p>
+    <ul>
+      <li><strong>skills path merge rule</strong> &mdash; Updated exception wording: for a marketplace-root source, declaring specific subdirectories replaces &quot;the default <code>skills/</code> scan&quot; (previously &quot;the scan&quot;).</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure the sandboxed Bash tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added troubleshooting entries and a security limitation for Apple Events on macOS, and documented the new <code>allowAppleEvents</code> sandbox setting.</p>
+    <ul>
+      <li><strong>allowAppleEvents troubleshooting</strong> &mdash; New entry: <code>open</code>, <code>osascript</code>, and browser auth flows that fail with error <code>-600</code> on macOS can be fixed by setting <code>allowAppleEvents: true</code> in user, managed, or CLI settings.</li>
+      <li><strong>Apple Events security limitation</strong> &mdash; New limitation: enabling <code>allowAppleEvents</code> removes code-execution isolation; sandboxed commands can launch other apps unsandboxed and send AppleScript commands to running apps, subject to TCC.</li>
+      <li><strong>allowAppleEvents scope</strong> &mdash; Only honored from user, managed, or CLI settings; project settings are ignored.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-the-sandboxed-bash-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added three new settings (<code>axScreenReader</code>, <code>disableArtifact</code>, <code>allowAppleEvents</code>), updated <code>teammateMode</code> default to <code>in-process</code>, and noted <code>/config key=value</code> inline editing from v2.1.181.</p>
+    <ul>
+      <li><strong>axScreenReader</strong> &mdash; New setting (v2.1.181+): enables screen-reader friendly flat text output; overridden by the env var and <code>--ax-screen-reader</code> flag.</li>
+      <li><strong>disableArtifact</strong> &mdash; New setting: set <code>true</code> to disable the Artifact tool that publishes session output as a private web page on claude.ai.</li>
+      <li><strong>sandbox.allowAppleEvents</strong> &mdash; New macOS-only sandbox setting: allows <code>open</code>, <code>osascript</code>, and browser auth flows; removes code-execution isolation; not honored from project settings.</li>
+      <li><strong>teammateMode default</strong> &mdash; Changed from <code>auto</code> to <code>in-process</code> as of v2.1.179.</li>
+      <li><strong>/config inline editing</strong> &mdash; From v2.1.181, <code>/config key=value</code> changes a single option without opening the Settings interface.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new &quot;Evaluate and iterate on a skill&quot; section documenting the <code>skill-creator</code> plugin, its eval loop, and links to agentskills.io resources.</p>
+    <ul>
+      <li><strong>Evaluate and iterate on a skill</strong> &mdash; New section covering how to measure skill invocation accuracy and output quality using baseline comparisons in fresh sessions.</li>
+      <li><strong>skill-creator plugin</strong> &mdash; Documents installation from the official marketplace, its automated eval loop (test cases, isolated runs, grading, benchmarking, A/B comparison, description tuning, and review viewer), and link to agentskills.io.</li>
+      <li><strong>--add-dir exception</strong> &mdash; Removed &quot;subagents&quot; from the list of config not loaded from additional directories.</li>
+      <li><strong>Related resources</strong> &mdash; Added links to agentskills.io eval workflow and platform.claude.com skill authoring best practices.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the custom status line renders above (not instead of) the built-in footer badges, and reworded the footer link badges tip.</p>
+    <ul>
+      <li><strong>Status line rendering</strong> &mdash; Clarified the status line renders in its own row above built-in footer badges and does not replace them.</li>
+      <li><strong>footerLinksRegexes tip</strong> &mdash; Reworded to make the distinction between the script-driven status line and the setting-driven footer badges clearer.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Simplified the subagent depth-limit description by consolidating foreground/background distinction into a single rule: any subagent at depth five cannot spawn further.</p>
+    <ul>
+      <li><strong>Depth limit</strong> &mdash; Unified rule: any subagent at depth five (regardless of foreground or background) does not receive the Agent tool and cannot spawn further; previously documented separately for each run mode.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">1 new + 10 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create an Admin API key</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New guide covering how to create Admin API keys for both Claude Console (<code>sk-ant-admin01-</code>, admin role required) and Claude Enterprise (<code>sk-ant-api01-</code>, primary owner required) organizations, including a full scope-selection table for Compliance, Analytics, and Spend Limits APIs.</p>
+    <ul>
+      <li><strong>Key types table</strong> &mdash; Side-by-side comparison of Console vs. Enterprise key prefixes, creation locations, who can create them, and which APIs each key works with.</li>
+      <li><strong>Claude Console key creation</strong> &mdash; Step-by-step guide; Console keys carry full Admin API access with no selectable scopes.</li>
+      <li><strong>Claude Enterprise key creation</strong> &mdash; Step-by-step guide via <code>claude.ai &gt; Organization settings &gt; API</code>; primary owner only.</li>
+      <li><strong>Scope table</strong> &mdash; Maps each Admin API endpoint group to the required scope(s): <code>read:spend_limits</code>, <code>write:spend_limits</code>, <code>read:analytics</code>, <code>read:compliance_activities</code>, <code>read:compliance_user_data</code>, <code>delete:compliance_user_data</code>, <code>read:compliance_org_data</code>, <code>read:compliance_org_settings</code>.</li>
+      <li><strong>403 behavior</strong> &mdash; Documented that a call exceeding key scopes returns 403 with a message listing both held and required scopes.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/admin-api-keys" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/admin-api-keys &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-an-admin-api-key" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Admin API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the authentication section to link to the new &quot;Create an Admin API key&quot; guide instead of repeating key creation steps inline.</p>
+    <ul>
+      <li><strong>Key creation reference</strong> &mdash; Added link to the new &lt;a href=&quot;/docs/en/manage-claude/admin-api-keys&quot;&gt;Create an Admin API key&lt;/a&gt; guide in both the access check callout and the authentication section.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/admin-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/admin-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="admin-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Analytics APIs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced inline Admin API key creation steps with a link to the new guide, added a product-analytics vs. compliance use-case note, and added extensive operational documentation for the Claude Enterprise Analytics API.</p>
+    <ul>
+      <li><strong>Admin key creation</strong> &mdash; Replaced five-step inline flow with a link to the new Admin API key guide.</li>
+      <li><strong>Governance use-case note</strong> &mdash; Added note directing individual-action / raw activity / conversation-content use cases to the Compliance API.</li>
+      <li><strong>Data availability and freshness</strong> &mdash; New section: engagement/adoption data available from 2026-01-01, aggregated at 10:00 UTC the following day, queryable three days after; cost/usage data typically within four hours but up to 24 hours, revisable for 30 days.</li>
+      <li><strong>Metric definitions</strong> &mdash; Defined active users (chat message, Claude Code session with tool/git activity, or Cowork session), per-product metric blocks (always present, zero rather than null for unused products), and connector name normalization.</li>
+      <li><strong>Working with the API</strong> &mdash; Documented cursor immutability (400 error on parameter change mid-sequence), bracket notation for list params, decimal-string currency amounts in cents, and 60 req/min org-level rate limit.</li>
+      <li><strong>Known limitations</strong> &mdash; Claude Code via Amazon Bedrock activity is not returned by the Claude Enterprise Analytics API.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/analytics-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/analytics-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="analytics-apis" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>API and data retention</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the computer use row in the ZDR/HIPAA eligibility table to mark it as HIPAA-eligible (previously marked No).</p>
+    <ul>
+      <li><strong>Computer use HIPAA eligibility</strong> &mdash; Changed from <code>No</code> to <code>Yes</code>; computer use is a client-side tool where screenshots and files are captured in the customer&#x27;s environment.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/api-and-data-retention &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="api-and-data-retention" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code Analytics API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the inline Admin API key requirement callout with a link to the new centralized Admin API key guide.</p>
+    <ul>
+      <li><strong>Admin API key callout</strong> &mdash; Condensed to a single sentence linking to &lt;a href=&quot;/docs/en/manage-claude/admin-api-keys&quot;&gt;Create an Admin API key&lt;/a&gt;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/claude-code-analytics-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/claude-code-analytics-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-analytics-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customer-managed encryption keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed the note stating CMEK is not supported for HIPAA-enabled organizations, indicating CMEK and HIPAA can now be used together.</p>
+    <ul>
+      <li><strong>HIPAA + CMEK restriction removed</strong> &mdash; The note warning that CMEK is not supported for organizations with HIPAA enabled has been deleted.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customer-managed-encryption-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get access to the Compliance API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the inline five-step Admin API key creation flow for Claude Console organizations with a link to the new centralized Admin API key guide.</p>
+    <ul>
+      <li><strong>Admin key creation steps</strong> &mdash; Removed inline steps; replaced with a link to &lt;a href=&quot;/docs/en/manage-claude/admin-api-keys#create-a-key-for-a-claude-console-organization&quot;&gt;Create an Admin API key&lt;/a&gt; followed by the export command.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-api-access" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-api-access &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-access-to-the-compliance-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Rate Limits API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the inline Admin API key requirement callout with a link to the new centralized Admin API key guide.</p>
+    <ul>
+      <li><strong>Admin API key callout</strong> &mdash; Condensed to a single sentence linking to &lt;a href=&quot;/docs/en/manage-claude/admin-api-keys&quot;&gt;Create an Admin API key&lt;/a&gt;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/rate-limits-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/rate-limits-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="rate-limits-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Spend Limits API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the key requirement callout to link to the new Admin API key guide, added API reference links to each endpoint section, and added Spend Limits API reference cards to the See also section.</p>
+    <ul>
+      <li><strong>Admin API key callout</strong> &mdash; Updated to link to the new guide for where the primary owner creates a key and which scopes to select.</li>
+      <li><strong>API reference links</strong> &mdash; Added &quot;For complete parameter details and response schemas, see [endpoint] in the API reference&quot; before each cURL example (list effective, retrieve, create, delete spend limit; list, retrieve, approve, deny increase requests).</li>
+      <li><strong>See also cards</strong> &mdash; Added Spend Limits API reference and Spend Limit Increase Requests API reference cards.</li>
+      <li><strong>UI label</strong> &mdash; &quot;request more usage&quot; updated to bold &quot;Request more usage&quot; to match the actual UI label.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/spend-limits-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/spend-limits-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="spend-limits-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Usage and Cost API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced the inline Admin API key requirement callout with a link to the new centralized guide and moved the Claude Enterprise note out of the callout.</p>
+    <ul>
+      <li><strong>Admin API key callout</strong> &mdash; Condensed to a single sentence linking to &lt;a href=&quot;/docs/en/manage-claude/admin-api-keys&quot;&gt;Create an Admin API key&lt;/a&gt;.</li>
+      <li><strong>Claude Enterprise note</strong> &mdash; Moved outside the callout as a standalone note directing Enterprise orgs to the Analytics API.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/usage-cost-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/usage-cost-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="usage-and-cost-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Admin API key note in the programmatic management section to link to the new Admin API key guide.</p>
+    <ul>
+      <li><strong>Admin API key note</strong> &mdash; Replaced inline provisioning instructions with a link to &lt;a href=&quot;/docs/en/manage-claude/admin-api-keys&quot;&gt;Create an Admin API key&lt;/a&gt;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/workspaces" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/workspaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a note explaining that <code>ephemeral_5m_input_tokens</code> writes seen while using server tools are caused by automatic cache breakpoints documented in the tool-use-with-prompt-caching guide.</p>
+    <ul>
+      <li><strong>ephemeral_5m_input_tokens explanation</strong> &mdash; Added a cross-reference note: unexpected 5-minute cache writes while using server tools such as web search are caused by automatic breakpoints; links to the new server-tool caching section.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 52 docs analyzed &middot; 2026-06-19
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
