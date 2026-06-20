@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 20, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 20, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 20 at 08:19 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">5</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">3</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>disableClaudeAiConnectors setting</strong> &mdash; New <code>disableClaudeAiConnectors</code> setting (v2.1.182+) lets any settings scope opt a repo or user out of claude.ai MCP connectors, with any-source-true semantics; individual connectors can be blocked via <code>deniedMcpServers</code> instead.</li>
+      <li><strong>attribution.sessionUrl</strong> &mdash; New <code>attribution.sessionUrl</code> key (v2.1.182+) in attribution settings controls whether the <code>Claude-Session</code> git trailer and PR-body session link are appended in web and Remote Control sessions; set to <code>false</code> to omit both.</li>
+      <li><strong>Background subagent wait cap</strong> &mdash; From v2.1.182, <code>claude -p</code> caps the wait for background subagents and workflows at 10 minutes by default; configurable via <code>CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS</code> or set to <code>0</code> for no limit.</li>
+      <li><strong>Model retirement warnings in non-interactive mode</strong> &mdash; From v2.1.182, model retirement and remapping warnings are written to stderr in headless mode (default text format); suppressed for <code>--output-format json</code> and <code>stream-json</code>, with actual model readable from the <code>modelUsage</code> field.</li>
+      <li><strong>remoteControlAtStartup setting</strong> &mdash; New <code>remoteControlAtStartup</code> setting (v2.1.119+) documented in the settings reference, enabling Remote Control auto-connect at every interactive session start.</li>
+      <li><strong>Multilingual support guide expanded</strong> &mdash; Added a new &quot;Set the response language&quot; section with full multi-SDK code examples (cURL, Python, TypeScript, C#, Go, Java, PHP, Ruby) and a &quot;Next steps&quot; card group linking to related guides.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents the new `attribution.sessionUrl` setting (v2.1.182+) that controls whether the `Claude-Session` git trailer and PR-body session link are appended in web sessions.</p>
+    <ul>
+      <li><strong>attribution.sessionUrl</strong> &mdash; From v2.1.182, set <code>attribution.sessionUrl</code> to <code>false</code> in attribution settings to omit the <code>Claude-Session</code> git trailer and the session URL from PR bodies in web sessions.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies background task termination wording and adds a new 10-minute wait cap for background subagents in `claude -p` runs (v2.1.182+).</p>
+    <ul>
+      <li><strong>Background Bash task wording</strong> &mdash; Corrected phrasing from &quot;task&quot; to &quot;shell&quot; when describing the five-second grace period after final result delivery.</li>
+      <li><strong>Background subagent wait cap</strong> &mdash; From v2.1.182, background subagents and workflows are exempt from the five-second shell termination grace but are subject to a new 10-minute cap; configurable via <code>CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS</code>, or set to <code>0</code> to wait indefinitely.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaces the environment-variable-only approach to disabling claude.ai connectors with a new `disableClaudeAiConnectors` settings key and clarifies its scope semantics, cloud session behavior, and per-connector blocking via `deniedMcpServers`.</p>
+    <ul>
+      <li><strong>disableClaudeAiConnectors setting</strong> &mdash; New JSON settings key <code>disableClaudeAiConnectors: true</code> (v2.1.182+) disables auto-fetching of claude.ai MCP connectors from any settings scope; uses any-source-true semantics so a project-level <code>false</code> cannot override a user- or policy-level <code>true</code>.</li>
+      <li><strong>ENABLE_CLAUDEAI_MCP_SERVERS env var</strong> &mdash; The existing environment variable remains supported and now documented as a session-scoped alternative to the new settings key.</li>
+      <li><strong>Per-connector blocking</strong> &mdash; Individual claude.ai connectors can be blocked by name or URL pattern via <code>deniedMcpServers</code> instead of disabling all connectors.</li>
+      <li><strong>Cloud session scoping note</strong> &mdash; Added a note clarifying that <code>disableClaudeAiConnectors</code> does not apply to Claude Code on the web sessions, where connectors arrive as explicit <code>--mcp-config</code> entries and URL patterns are rewritten through the session proxy.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents new model retirement and remapping warnings emitted to stderr in non-interactive mode from v2.1.182, including suppression behavior for JSON output formats.</p>
+    <ul>
+      <li><strong>Retirement warnings in headless mode</strong> &mdash; From v2.1.182, model retirement or remapping warnings are written to stderr in non-interactive mode when using the default text output format; also covers models set in subagent frontmatter.</li>
+      <li><strong>JSON output suppression</strong> &mdash; Retirement warnings are suppressed when <code>--output-format json</code> or <code>stream-json</code> is used; the actual model in use should be read from the <code>modelUsage</code> field of the result message instead.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds three new settings entries (`disableClaudeAiConnectors`, `remoteControlAtStartup`, `attribution.sessionUrl`), removes a startup-notice sentence about settings errors, and clarifies the attribution note to include `sessionUrl`.</p>
+    <ul>
+      <li><strong>disableClaudeAiConnectors</strong> &mdash; New setting (v2.1.182+) added to the available settings table; disables claude.ai MCP connector auto-fetch with any-source-true precedence rules.</li>
+      <li><strong>remoteControlAtStartup</strong> &mdash; New setting (v2.1.119+) documented; controls whether Remote Control connects automatically at each interactive session start (<code>true</code> to always, <code>false</code> to never, unset to follow org default).</li>
+      <li><strong>attribution.sessionUrl</strong> &mdash; New key added to the attribution settings table; controls whether the claude.ai session link is appended as a <code>Claude-Session</code> trailer on commits and as a link in PR descriptions; defaults to <code>true</code>.</li>
+      <li><strong>Settings error notice</strong> &mdash; Removed the sentence stating that settings file errors trigger a setup issues notice at startup; only <code>/status</code> and <code>/doctor</code> references remain.</li>
+      <li><strong>Attribution note</strong> &mdash; Updated the attribution precedence note to advise setting <code>commit</code>, <code>pr</code>, and <code>sessionUrl</code> all to empty/false to hide all attribution.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Effort</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor prose edits for clarity and a new &quot;Next steps&quot; card group linking to Task budgets, Adaptive thinking, and Extended thinking docs; no behavioral changes to the effort parameter.</p>
+    <ul>
+      <li><strong>Next steps card group</strong> &mdash; Added a new &quot;Next steps&quot; section at the end of the page with cards linking to Task budgets, Adaptive thinking, and Extended thinking guides.</li>
+      <li><strong>CLI example formatting</strong> &mdash; Reformatted multi-flag <code>ant messages create</code> CLI snippets to use line-continuation backslashes for readability.</li>
+      <li><strong>Prose cleanup</strong> &mdash; Minor wording simplifications throughout (e.g., &quot;lets you&quot; instead of &quot;allows you to&quot;, &quot;like&quot; instead of &quot;such as&quot;) with no change to documented behavior.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/effort" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/effort &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="effort" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Multilingual support</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a new &quot;Set the response language&quot; section with full multi-SDK code examples and runtime language-selection guidance, expands the &quot;Next steps&quot; card group from 1 to 4 cards, and applies prose and formatting improvements throughout.</p>
+    <ul>
+      <li><strong>Set the response language section</strong> &mdash; New section added with code examples for cURL, CLI, Python, TypeScript, C#, Go, Java, PHP, and Ruby showing how to pin response language via the system prompt.</li>
+      <li><strong>Runtime language selection guidance</strong> &mdash; Documents the pattern of interpolating a user&#x27;s language choice into the system prompt at runtime and provides a translation-specific system prompt example.</li>
+      <li><strong>Next steps card group</strong> &mdash; Expanded from a single &quot;Prompt Engineering Guide&quot; card to four cards covering prompt engineering, customer support agent, models overview, and evaluation guides.</li>
+      <li><strong>Prose and formatting</strong> &mdash; Updated overview, best practices, and language support sections with minor wording clarifications and consistent punctuation; no behavioral changes.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/multilingual-support" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/multilingual-support &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="multilingual-support" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a &quot;Next steps&quot; card group, makes the `transform_schema` Python example runnable with full imports and a complete `ContactInfo` model, reformats CLI flag arguments to multi-line style, and softens one schema-limitations list item.</p>
+    <ul>
+      <li><strong>Next steps card group</strong> &mdash; Added four-card &quot;Next steps&quot; section linking to Citations, Strict tool use, Tool use overview, and Pricing docs.</li>
+      <li><strong>transform_schema Python example</strong> &mdash; Converted the <code>transform_schema</code> snippet from a <code>nocheck</code> stub to a fully runnable example with <code>import anthropic</code>, <code>from pydantic import BaseModel</code>, a complete <code>ContactInfo</code> model definition, and a client instantiation.</li>
+      <li><strong>CLI snippet formatting</strong> &mdash; Reformatted <code>ant messages create</code> CLI examples across multiple sections to use backslash line continuation for multi-flag commands.</li>
+      <li><strong>Schema limitations wording</strong> &mdash; Changed &quot;Numerical constraints (<code>minimum</code>, <code>maximum</code>, <code>multipleOf</code>, etc.)&quot; to &quot;such as&quot; phrasing for consistency.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 8 docs analyzed &middot; 2026-06-20
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
