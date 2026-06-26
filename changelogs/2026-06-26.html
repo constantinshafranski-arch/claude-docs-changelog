@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 26, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 26, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 26 at 08:31 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">45</div>
+      <div class="label">API Reference</div>
+    </div>
+    <div class="stat tools">
+      <div class="num">10</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">8</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">4</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat other">
+      <div class="num">9</div>
+      <div class="label">Other</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">19</div>
+      <div class="label">Platform (1 new)</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Model deprecation cleanup</strong> &mdash; References to <code>claude-opus-4-0</code>, <code>claude-opus-4-20250514</code>, <code>claude-sonnet-4-0</code>, <code>claude-sonnet-4-20250514</code>, and <code>claude-3-haiku-20240307</code> removed from all API reference model enumerations across 7 SDKs and the REST reference; the supported model count in fallback-hop parameters drops from 17 to 12.</li>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; The <code>BetaFallbackBlockParam</code> object gains a <code>trigger</code> field (<code>BetaFallbackRefusalTrigger</code>) across all beta Messages, Batches, and Count Tokens endpoints; the <code>BetaFallbackBlock</code> response type gains the same field with a new <code>frontier_llm</code> refusal category alongside existing <code>cyber</code>, <code>bio</code>, and <code>reasoning_extraction</code> values.</li>
+      <li><strong>MCP server validation</strong> &mdash; Agent create and update endpoints now enforce that every entry in <code>mcp_servers</code> must be referenced by an <code>mcp_toolset</code> in <code>tools</code>; unreferenced servers are rejected. Updated across the REST reference and all 7 SDK docs.</li>
+      <li><strong>code_execution_20260521 tool version</strong> &mdash; A new <code>CodeExecutionTool20260521</code> type (allowed caller value <code>&quot;code_execution_20260521&quot;</code>) added to the <code>allowed_callers</code> enum in Messages, Batches, and Count Tokens across REST and 7-SDK references.</li>
+      <li><strong>New BetaWebhookSessionUpdatedEventData event type</strong> &mdash; A <code>session.updated</code> webhook event (<code>BetaWebhookSessionUpdatedEventData</code>) added to <code>BetaWebhookEventData</code> across the REST Webhooks reference and all 7 SDK webhook docs.</li>
+      <li><strong>Vertex AI rebranded to Google Cloud</strong> &mdash; All documentation references to &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; across 18+ platform and feature docs, including the claude-on-vertex-ai page title itself, which is now &quot;Claude on Google Cloud&quot;.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">45 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Beta</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the BetaFallbackBlockParam schema to add a trigger field and clarified fallback block echoing semantics; removed deprecated model identifiers (claude-opus-4-0, claude-sonnet-4-0, etc.) from the supported model enumeration.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam</strong> &mdash; Object signature changed from <code>{ from, to, type }</code> to <code>{ from, to, type, trigger }</code>; description simplified to remove language about sticky-routing cache key stripping and hash-chain verification, replacing it with clearer server-validation semantics.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; <code>claude-opus-4-0</code>, <code>claude-opus-4-20250514</code>, <code>claude-sonnet-4-0</code>, <code>claude-sonnet-4-20250514</code>, and <code>claude-3-haiku-20240307</code> removed from the model enum; supported model count in fallback-hop fields drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="beta" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The mcp_servers parameter on both Create Agent and Update Agent now requires that every listed server be referenced by an mcp_toolset in tools; unreferenced servers are rejected.</p>
+    <ul>
+      <li><strong>mcp_servers (create)</strong> &mdash; Documentation updated to state that every server must be referenced by an <code>mcp_toolset</code> in <code>tools</code>; unreferenced servers are rejected, with a link to the MCP connector guide.</li>
+      <li><strong>mcp_servers (update)</strong> &mdash; Same enforcement added; <code>null</code> value formatted as inline code for clarity.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/agents" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create Agent Agents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The POST /v1/agents mcp_servers parameter now enforces that every server entry must be referenced by an mcp_toolset in tools, or the request is rejected.</p>
+    <ul>
+      <li><strong>mcp_servers validation</strong> &mdash; Added constraint that every server must have a matching <code>mcp_toolset</code> in <code>tools</code>; unreferenced servers are rejected with a link to the MCP connector guide.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/agents/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/agents/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-agent-agents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Agent Agents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The PATCH /v1/agents/{agent_id} mcp_servers parameter now enforces that every server in the resulting tools list must be referenced by an mcp_toolset, and null is formatted as inline code.</p>
+    <ul>
+      <li><strong>mcp_servers validation</strong> &mdash; Added constraint that every server in the agent&#x27;s resulting <code>tools</code> must have a matching <code>mcp_toolset</code>; unreferenced servers are rejected.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/agents/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/agents/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-agent-agents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam to include the new trigger field, clarified fallback block validation semantics, and removed deprecated model identifiers from the model enum.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object signature extended to <code>{ from, to, type, trigger }</code>; echoing instructions simplified.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed from the fallback-hop model enum; count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batches</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam in the Batches context to add the trigger field and removed deprecated model identifiers from fallback-hop model enumerations.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object signature extended to <code>{ from, to, type, trigger }</code> in batch request schemas.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/messages/batches" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/messages/batches &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batches" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Batch Batches</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam in the Create Batch endpoint to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object signature extended to <code>{ from, to, type, trigger }</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/messages/batches/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/messages/batches/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-batch-batches" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Message Batch results Results</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlock in batch results to add a trigger field with BetaFallbackRefusalTrigger type and a new frontier_llm refusal category, and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlock.trigger</strong> &mdash; Response object gains a <code>trigger: BetaFallbackRefusalTrigger</code> field describing what caused the from-model to hand over.</li>
+      <li><strong>frontier_llm refusal category</strong> &mdash; New <code>&quot;frontier_llm&quot;</code> value added to the <code>category</code> enum alongside <code>&quot;cyber&quot;</code>, <code>&quot;bio&quot;</code>, and <code>&quot;reasoning_extraction&quot;</code>.</li>
+      <li><strong>Fallback block description</strong> &mdash; Wording for when a block is absent refined to &quot;a turn where no preceding model ran and declined&quot;.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/messages/batches/results" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/messages/batches/results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-message-batch-results-results" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Count tokens in a Message Count Tokens</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam in the Count Tokens endpoint to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object signature extended to <code>{ from, to, type, trigger }</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/messages/count_tokens" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/messages/count_tokens &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="count-tokens-in-a-message-count-tokens" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam in the Create Message endpoint to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object signature extended to <code>{ from, to, type, trigger }</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/messages/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/messages/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Webhooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new BetaWebhookSessionUpdatedEventData event type for the session.updated webhook event, expanding BetaWebhookEventData from 19 to 20 variants.</p>
+    <ul>
+      <li><strong>session.updated event</strong> &mdash; New <code>BetaWebhookSessionUpdatedEventData</code> object added with fields <code>id</code>, <code>organization_id</code>, <code>type: &quot;session.updated&quot;</code>, and <code>workspace_id</code>.</li>
+      <li><strong>BetaWebhookEventData union</strong> &mdash; Discriminated union expanded from 19 to 20 members.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/beta/webhooks" target="_blank" rel="noopener">platform.claude.com/docs/en/api/beta/webhooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="webhooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Completions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers (claude-opus-4-0, claude-sonnet-4-0, claude-3-haiku-20240307, and variants) from the Text Completions model enumeration.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed from the model enum; count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/completions" target="_blank" rel="noopener">platform.claude.com/docs/en/api/completions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="completions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Text Completion Complete</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers from the POST /v1/complete model enumeration.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/completions/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/completions/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-text-completion-complete" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers from the Messages API model enumeration and added code_execution_20260521 as a new allowed_callers value.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum for user-defined tools.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batches</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Message Batches API reference.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/messages/batches" target="_blank" rel="noopener">platform.claude.com/docs/en/api/messages/batches &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batches" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Batch Batches</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Create Message Batch endpoint.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/messages/batches/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/messages/batches/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-batch-batches" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Message Batch results Results</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added a new frontier_llm refusal category to the RefusalBlock in non-beta batch results.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>frontier_llm refusal category</strong> &mdash; New <code>&quot;frontier_llm&quot;</code> value added to the refusal <code>category</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/messages/batches/results" target="_blank" rel="noopener">platform.claude.com/docs/en/api/messages/batches/results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-message-batch-results-results" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Count tokens in a Message Count Tokens</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Count Tokens endpoint.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/messages/count_tokens" target="_blank" rel="noopener">platform.claude.com/docs/en/api/messages/count_tokens &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="count-tokens-in-a-message-count-tokens" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Create Message endpoint.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/messages/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/messages/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Beta (PHP)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new BetaCodeExecutionTool20260521 type, the trigger field on BetaFallbackBlock and BetaFallbackBlockParam, and removed deprecated model identifiers in the PHP SDK beta reference.</p>
+    <ul>
+      <li><strong>BetaCodeExecutionTool20260521</strong> &mdash; New tool type with name <code>&quot;code_execution&quot;</code>, type <code>&quot;code_execution_20260521&quot;</code>, and optional <code>allowedCallers</code>, <code>cacheControl</code>, <code>deferLoading</code>, and <code>strict</code> fields.</li>
+      <li><strong>BetaFallbackBlock.trigger</strong> &mdash; Response block gains a <code>BetaFallbackRefusalTrigger trigger</code> field.</li>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Input param gains an optional mixed <code>trigger</code> field echoed verbatim.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/php/beta" target="_blank" rel="noopener">platform.claude.com/docs/en/api/php/beta &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="beta-(php)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agents (PHP)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The PHP SDK mcp_servers parameter on both Create Agent and Update Agent now enforces that every server must be referenced by an mcp_toolset in tools.</p>
+    <ul>
+      <li><strong>mcpServers validation</strong> &mdash; Both create and update operations require every server to have a matching <code>mcp_toolset</code>; unreferenced servers are rejected.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/php/beta/agents" target="_blank" rel="noopener">platform.claude.com/docs/en/api/php/beta/agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agents-(php)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create Agent Agents (PHP)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The PHP SDK Create Agent mcpServers parameter now enforces mcp_toolset referencing for each declared server.</p>
+    <ul>
+      <li><strong>mcpServers validation</strong> &mdash; Added requirement that every server must be referenced by an <code>mcp_toolset</code> in <code>tools</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/php/beta/agents/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/php/beta/agents/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-agent-agents-(php)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Agent Agents (PHP)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The PHP SDK Update Agent mcpServers parameter now enforces mcp_toolset referencing for each declared server.</p>
+    <ul>
+      <li><strong>mcpServers validation</strong> &mdash; Added requirement that every server must be referenced by an <code>mcp_toolset</code> in the agent&#x27;s resulting <code>tools</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/php/beta/agents/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/php/beta/agents/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-agent-agents-(php)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages (PHP Beta)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added BetaCodeExecutionTool20260521 and the trigger field on BetaFallbackBlock/BetaFallbackBlockParam to the PHP SDK beta Messages reference.</p>
+    <ul>
+      <li><strong>BetaCodeExecutionTool20260521</strong> &mdash; New tool type added with <code>allowedCallers</code>, <code>deferLoading</code>, and <code>strict</code> fields.</li>
+      <li><strong>BetaFallbackBlock.trigger / BetaFallbackBlockParam.trigger</strong> &mdash; Trigger field added to both response and input types.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/php/beta/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/php/beta/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages-(php-beta)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Webhooks (PHP)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added BetaWebhookSessionUpdatedEventData for the session.updated webhook event to the PHP SDK beta Webhooks reference.</p>
+    <ul>
+      <li><strong>session.updated event</strong> &mdash; New <code>BetaWebhookSessionUpdatedEventData</code> class added with <code>id</code>, <code>organizationID</code>, <code>type: &quot;session.updated&quot;</code>, and <code>workspaceID</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/php/beta/webhooks" target="_blank" rel="noopener">platform.claude.com/docs/en/api/php/beta/webhooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="webhooks-(php)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages (PHP)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added CodeExecutionTool20260521 type to the PHP SDK non-beta Messages reference.</p>
+    <ul>
+      <li><strong>CodeExecutionTool20260521</strong> &mdash; New tool type with name <code>&quot;code_execution&quot;</code>, type <code>&quot;code_execution_20260521&quot;</code>, and optional <code>allowedCallers</code>, <code>cacheControl</code>, <code>deferLoading</code>, and <code>strict</code> fields, added to both the top-level types and the tools union.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/php/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/php/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages-(php)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Beta (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam across 7 SDK beta references (CLI, C#, Go, Java, Python, Ruby, TypeScript) to add the trigger field, clarify fallback echoing semantics, and remove deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object signature extended to include <code>trigger</code> across all 7 SDKs.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12 across all 7 SDKs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="beta-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agents (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The mcp_servers parameter on Create Agent and Update Agent now enforces mcp_toolset referencing across 7 SDK agent references (CLI, C#, Go, Java, Python, Ruby, TypeScript).</p>
+    <ul>
+      <li><strong>mcp_servers validation</strong> &mdash; Added requirement that every server must be referenced by an <code>mcp_toolset</code> in <code>tools</code> for both create and update operations across all 7 SDKs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/agents" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agents-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create Agent Agents (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Create Agent mcp_servers parameter now enforces mcp_toolset referencing across 7 SDKs.</p>
+    <ul>
+      <li><strong>mcp_servers validation</strong> &mdash; Every declared server must have a matching <code>mcp_toolset</code> in <code>tools</code> or the request is rejected.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/agents/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/agents/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-agent-agents-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Update Agent Agents (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Update Agent mcp_servers parameter now enforces mcp_toolset referencing across 7 SDKs.</p>
+    <ul>
+      <li><strong>mcp_servers validation</strong> &mdash; Every declared server must have a matching <code>mcp_toolset</code> in the agent&#x27;s resulting <code>tools</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/agents/update" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/agents/update &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="update-agent-agents-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam across 7 SDK beta Messages references to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object signature extended to include <code>trigger</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batches (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam in the beta Batches reference across 7 SDKs to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object extended to include <code>trigger</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/messages/batches" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/messages/batches &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batches-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Batch Batches (6 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam in the Create Message Batch endpoint across 6 SDKs (C#, Go, Java, Python, Ruby, TypeScript) to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object extended to include <code>trigger</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/messages/batches/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/messages/batches/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-batch-batches-(6-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Message Batch results Results (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlock across 7 SDK beta batch results to add the trigger field with a new frontier_llm refusal category, and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlock.trigger</strong> &mdash; Response gains <code>trigger: BetaFallbackRefusalTrigger</code> with <code>category</code> enum values <code>&quot;cyber&quot;</code>, <code>&quot;bio&quot;</code>, <code>&quot;frontier_llm&quot;</code>, and <code>&quot;reasoning_extraction&quot;</code>.</li>
+      <li><strong>Fallback block description</strong> &mdash; Wording for when a block is absent refined to &quot;a turn where no preceding model ran and declined&quot;.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/messages/batches/results" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/messages/batches/results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-message-batch-results-results-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Count tokens in a Message Count Tokens (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam across 7 SDK Count Tokens references to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object extended to include <code>trigger</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/messages/count_tokens" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/messages/count_tokens &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="count-tokens-in-a-message-count-tokens-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Messages (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated BetaFallbackBlockParam across 7 SDK Create Message references to add the trigger field and removed deprecated model identifiers.</p>
+    <ul>
+      <li><strong>BetaFallbackBlockParam.trigger</strong> &mdash; Object extended to include <code>trigger</code>.</li>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/messages/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/messages/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-messages-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Webhooks (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added BetaWebhookSessionUpdatedEventData for the session.updated webhook event across 7 SDK beta Webhooks references (CLI, C#, Go, Java, Python, Ruby, TypeScript).</p>
+    <ul>
+      <li><strong>session.updated event</strong> &mdash; New <code>BetaWebhookSessionUpdatedEventData</code> type added with <code>id</code>, <code>organization_id</code>, <code>type: &quot;session.updated&quot;</code>, and <code>workspace_id</code> across all 7 SDKs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/beta/webhooks" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/beta/webhooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="webhooks-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Completions (6 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers from the Text Completions model enumeration across 6 SDKs (CLI, Go, Java, Python, Ruby, TypeScript).</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12 across all 6 SDKs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/completions" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/completions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="completions-(6-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Text Completion Complete (6 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers from the Create Text Completion endpoint across 6 SDKs.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/completions/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/completions/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-text-completion-complete-(6-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to the allowed_callers enum in the Messages API across 7 SDKs.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batches (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Message Batches API across 7 SDKs.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/messages/batches" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/messages/batches &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batches-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Batch Batches (6 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Create Message Batch endpoint across 6 SDKs.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/messages/batches/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/messages/batches/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-batch-batches-(6-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve Message Batch results Results (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added a new frontier_llm refusal category to the RefusalBlock in non-beta batch results across 7 SDKs.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>frontier_llm refusal category</strong> &mdash; New <code>&quot;frontier_llm&quot;</code> value added to the refusal <code>category</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/messages/batches/results" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/messages/batches/results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-message-batch-results-results-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Count tokens in a Message Count Tokens (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Count Tokens endpoint across 7 SDKs.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/messages/count_tokens" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/messages/count_tokens &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="count-tokens-in-a-message-count-tokens-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create a Message Messages (7 SDKs)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removed deprecated model identifiers and added code_execution_20260521 to allowed_callers in the Create Message endpoint across 7 SDKs.</p>
+    <ul>
+      <li><strong>Deprecated models removed</strong> &mdash; Five deprecated/retired model identifiers removed; model count drops from 17 to 12.</li>
+      <li><strong>allowed_callers</strong> &mdash; New value <code>&quot;code_execution_20260521&quot;</code> added to the <code>allowed_callers</code> enum.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/python/messages/create" target="_blank" rel="noopener">platform.claude.com/docs/en/api/python/messages/create &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-a-message-messages-(7-sdks)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">10 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP connector</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected platform availability note to say Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; Updated availability statement to replace &quot;Vertex AI&quot; with &quot;Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-connector &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-connector" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advisor tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Corrected platform availability to reference Amazon Bedrock and Google Cloud instead of AWS Bedrock and Vertex AI, and clarified that Priority Tier applies to each model independently.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; Updated unavailability statement from &quot;AWS Bedrock, Vertex AI&quot; to &quot;Amazon Bedrock, Google Cloud&quot;.</li>
+      <li><strong>Priority Tier note</strong> &mdash; Clarified that a Priority Tier commitment on the executor model does not extend to the advisor; advisor calls run at Priority Tier only if the organization holds a separate commitment on the advisor model.</li>
+      <li><strong>Coding task guidance</strong> &mdash; Minor wording improvement: &quot;under-call the advisor in some domains — coding tasks in particular&quot; simplified to &quot;particularly coding tasks&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advisor-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tutorial: Build a tool-using agent</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added C# (Ring 1 and full agentic loop) code examples to the tool-using agent tutorial.</p>
+    <ul>
+      <li><strong>C# code examples</strong> &mdash; Added complete Ring 1 single-turn and multi-turn agentic loop implementations in C# using the <code>AnthropicClient</code>, filling a gap in the multi-language tutorial.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tutorial:-build-a-tool-using-agent" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform availability notes to replace Vertex AI with Google Cloud for code execution and Claude Mythos Preview availability.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; Changed &quot;Amazon Bedrock or Vertex AI&quot; to &quot;Amazon Bedrock or Google Cloud&quot; in the general availability note.</li>
+      <li><strong>Claude Mythos Preview note</strong> &mdash; Updated unavailability statement to reference &quot;Amazon Bedrock, Google Cloud&quot; instead of &quot;Amazon Bedrock, Vertex AI&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Computer use tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated model availability note for the computer-use-2025-01-24 beta header to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>computer-use-2025-01-24 header note</strong> &mdash; References to &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the model availability listing for retired models.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="computer-use-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Fine-grained tool streaming</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform support statement to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; &quot;Vertex AI&quot; replaced with &quot;Google Cloud&quot; in the list of supported platforms.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="fine-grained-tool-streaming" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool use with Claude</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated model deprecation notes in the tool system-prompt token counts table to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Retirement labels</strong> &mdash; &quot;Vertex AI&quot; replaced with &quot;Google Cloud&quot; in the retirement qualifiers for Claude Opus 4, Claude Sonnet 4, and Claude Haiku 3.5.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-use-with-claude" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Programmatic tool calling</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform availability to reference Google Cloud instead of Vertex AI for programmatic tool calling.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; &quot;Amazon Bedrock or Vertex AI&quot; updated to &quot;Amazon Bedrock or Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="programmatic-tool-calling" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web fetch tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform availability notes to reference Google Cloud instead of Vertex AI for web fetch and dynamic filtering.</p>
+    <ul>
+      <li><strong>Claude Mythos Preview note</strong> &mdash; &quot;Amazon Bedrock or Vertex AI&quot; updated to &quot;Amazon Bedrock or Google Cloud&quot;.</li>
+      <li><strong>Dynamic filtering note</strong> &mdash; &quot;Amazon Bedrock or Vertex AI&quot; updated to &quot;Amazon Bedrock or Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-fetch-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web search tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform availability notes to reference Google Cloud instead of Vertex AI for web search and dynamic filtering.</p>
+    <ul>
+      <li><strong>Claude Mythos Preview note</strong> &mdash; Web search availability updated to reference &quot;Google Cloud, and Microsoft Foundry&quot; instead of &quot;Vertex AI&quot;.</li>
+      <li><strong>Dynamic filtering note</strong> &mdash; &quot;On Vertex AI, only the basic web search tool&quot; updated to &quot;On Google Cloud, only the basic web search tool&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-search-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">8 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the /web-setup quick setup toggle is controlled by Team and Enterprise Owners (not just admins), and updated the cloud sessions error message wording.</p>
+    <ul>
+      <li><strong>Owner terminology</strong> &mdash; &quot;Team and Enterprise admins&quot; updated to &quot;Team and Enterprise Owners&quot; for the Quick web setup toggle.</li>
+      <li><strong>Error message wording</strong> &mdash; &quot;your admin has not enabled cloud sessions&quot; updated to &quot;an Owner has not enabled cloud sessions for your organization&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added --background as an alias for the --bg flag, making the background agent launch option more discoverable.</p>
+    <ul>
+      <li><strong>--background alias</strong> &mdash; The <code>--bg</code> flag now accepts <code>--background</code> as an equivalent alias.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate actions with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Noted that from Claude Code v2.1.191, tool-name matchers in hooks accept commas as interchangeable list separators with pipes.</p>
+    <ul>
+      <li><strong>Hook matcher separators</strong> &mdash; From v2.1.191, <code>Edit,Write</code> and <code>Edit|Write</code> are interchangeable in tool-name matchers on <code>PostToolUse</code> hooks.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-actions-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added guidance for filtering claude_code.token.usage by query_source = &#x27;main&#x27; to avoid attributing commits to auxiliary models, and documented the new &#x27;agents_view&#x27; start_type value for the session start counter.</p>
+    <ul>
+      <li><strong>Per-model commit attribution</strong> &mdash; Added note to filter token/cost metrics to <code>query_source = &quot;main&quot;</code> so auxiliary and subagent requests don&#x27;t misattribute session commits.</li>
+      <li><strong>start_type: agents_view</strong> &mdash; New <code>&quot;agents_view&quot;</code> value added to the <code>start_type</code> attribute, identifying the <code>claude agents</code> dashboard process; recommended to filter on this value to separate UI launches from conversational sessions.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added troubleshooting guidance for Windows installation failures involving syntax errors, 403 errors, or curl errors, pointing users to the Troubleshoot installation page.</p>
+    <ul>
+      <li><strong>Windows install troubleshooting</strong> &mdash; Added inline note linking to the Troubleshoot installation page for <code>syntax error near unexpected token &#x27;&amp;lt;&#x27;</code>, 403, or other curl failures.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the same Windows installation troubleshooting hint to the Quickstart guide.</p>
+    <ul>
+      <li><strong>Windows install troubleshooting</strong> &mdash; Added inline note linking to the Troubleshoot installation page for common curl-related install failures.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the same Windows installation troubleshooting hint to the Advanced setup guide.</p>
+    <ul>
+      <li><strong>Windows install troubleshooting</strong> &mdash; Added inline note linking to the Troubleshoot installation page for common curl-related install failures.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a cross-reference to the Feature availability page for a feature-by-feature breakdown across deployment options.</p>
+    <ul>
+      <li><strong>Feature availability link</strong> &mdash; Added paragraph pointing to the Feature availability page before the deployment option selector.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">4 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define your agent</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the model field accepts both a string ID and an object, removed the fast-mode deprecation note for Claude Opus 4.6, added installation context for code examples, and improved the CLI example to capture and use the created agent&#x27;s ID and version.</p>
+    <ul>
+      <li><strong>model field</strong> &mdash; Documentation updated to note that the field accepts either a model ID string or an object (e.g., <code>{&quot;id&quot;: &quot;claude-opus-4-8&quot;}</code>).</li>
+      <li><strong>mcp_servers link</strong> &mdash; Field description now links directly to the MCP connector doc.</li>
+      <li><strong>CLI example</strong> &mdash; Updated to capture the response in a variable and extract <code>AGENT_ID</code> and <code>AGENT_VERSION</code> using <code>jq</code>.</li>
+      <li><strong>Fast-mode deprecation</strong> &mdash; Removed the note that fast mode for Claude Opus 4.6 is deprecated and will be removed 30 days after the Claude Opus 4.8 launch.</li>
+      <li><strong>Update semantics</strong> &mdash; Clarified that the <code>version</code> field is required and must match the current version; a mismatch returns 409 and updates to archived agents are rejected.</li>
+      <li><strong>default_config note</strong> &mdash; Added note that the <code>default_config</code> on the toolset shows its default permission policy (<code>always_allow</code>).</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/agent-setup" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/agent-setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-your-agent" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP connector</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that each declared MCP server must have a matching mcp_toolset entry in tools, added transport requirements cross-reference, improved error handling wording, and added a Next steps card group.</p>
+    <ul>
+      <li><strong>mcp_toolset requirement</strong> &mdash; Documentation now explicitly states that each declared server needs a matching <code>mcp_toolset</code> entry whose <code>mcp_server_name</code> matches the server&#x27;s <code>name</code>.</li>
+      <li><strong>url field</strong> &mdash; Added cross-reference to Supported MCP server types for transport requirements.</li>
+      <li><strong>Credential matching</strong> &mdash; Sentence split for clarity; failure scenarios now link to the session event stream doc.</li>
+      <li><strong>Next steps</strong> &mdash; Added card group linking to Permission policies, Session event stream, and Supported MCP server types.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/mcp-connector" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/mcp-connector &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-connector" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Permission policies</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added explicit default policy documentation for each toolset kind, clarified when policy changes take effect, and improved the CLI example for per-tool policy overrides.</p>
+    <ul>
+      <li><strong>Default policies</strong> &mdash; Documented that agent toolset defaults to <code>always_allow</code> and MCP toolsets default to <code>always_ask</code>.</li>
+      <li><strong>Policy scope</strong> &mdash; Clarified that running sessions keep the toolset configuration they were created with; updates apply to sessions created afterward.</li>
+      <li><strong>Disabling vs. policy</strong> &mdash; Added note distinguishing permission policies (when a tool runs) from disabling a tool (removing it entirely).</li>
+      <li><strong>CLI override example</strong> &mdash; Rewrote to use the full <code>ant beta:agents create</code> inline YAML form.</li>
+      <li><strong>configs name reference</strong> &mdash; Added note that Name values for the agent toolset are listed in Available tools.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/permission-policies" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/permission-policies &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="permission-policies" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tools</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the Name column values are used in the configs array, updated filesystem references to &#x27;sandbox&#x27;, added a link to the MCP connector for MCP-based tools, and noted that each config entry can set a permission_policy.</p>
+    <ul>
+      <li><strong>Available tools table</strong> &mdash; Added note that Name column values are used to reference tools in the <code>configs</code> array.</li>
+      <li><strong>Filesystem references</strong> &mdash; &#x27;local filesystem&#x27; updated to &#x27;sandbox filesystem&#x27; for read/write tool descriptions.</li>
+      <li><strong>MCP connector reference</strong> &mdash; Added note directing users to the MCP connector doc for MCP-based tools.</li>
+      <li><strong>Tool output truncation</strong> &mdash; &#x27;sandbox&#x27; linked to the environments doc.</li>
+      <li><strong>per-tool config</strong> &mdash; Added note that each <code>configs</code> entry can set a <code>permission_policy</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/tools" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/tools &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tools" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">9 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Access Transparency</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated references from Vertex AI to Google Cloud in the partner-operated platforms exclusion list.</p>
+    <ul>
+      <li><strong>Partner-operated platforms</strong> &mdash; &quot;Vertex AI&quot; replaced with &quot;Google Cloud&quot; in both the exclusions description and the coverage table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/access-transparency" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/access-transparency &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="access-transparency" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>API and data retention</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated partner-platform references from Vertex AI to Google Cloud in the covered-model data retention and HIPAA sections.</p>
+    <ul>
+      <li><strong>Covered model retention</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the cross-platform requirement note.</li>
+      <li><strong>HIPAA exclusions</strong> &mdash; &quot;Amazon Bedrock or Vertex AI&quot; updated to &quot;Amazon Bedrock or Google Cloud&quot;.</li>
+      <li><strong>FAQ entry</strong> &mdash; Section title and body updated to reference &quot;Amazon Bedrock or Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/api-and-data-retention &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="api-and-data-retention" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code Analytics API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the unsupported deployment list to reference Claude on Google Cloud instead of Claude on Vertex AI.</p>
+    <ul>
+      <li><strong>Unsupported deployments</strong> &mdash; &quot;Claude on Vertex AI&quot; updated to &quot;Claude on Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/claude-code-analytics-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/claude-code-analytics-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-analytics-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customer-managed encryption keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a prerequisite requiring ZDR to be turned off, added Cowork in Claude Desktop to CMEK coverage, and removed Claude Code Desktop / Cowork from the not-covered list.</p>
+    <ul>
+      <li><strong>Prerequisites</strong> &mdash; Added requirement that Zero Data Retention must be turned off for the organization before enabling CMEK.</li>
+      <li><strong>Cowork coverage</strong> &mdash; Cowork in Claude Desktop added to the list of features covered under CMEK for Claude Enterprise.</li>
+      <li><strong>Not-covered list</strong> &mdash; Cowork removed from the Claude Enterprise not-covered list now that it is covered.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customer-managed-encryption-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data residency</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform availability notes for inference_geo to reference Google Cloud instead of Vertex AI, and clarified Priority Tier wording.</p>
+    <ul>
+      <li><strong>inference_geo availability</strong> &mdash; &quot;Amazon Bedrock, Vertex AI, and Microsoft Foundry&quot; updated to &quot;Amazon Bedrock, Google Cloud, and Microsoft Foundry&quot;.</li>
+      <li><strong>Data residency pricing</strong> &mdash; &quot;Bedrock and Vertex AI&quot; updated to &quot;Bedrock and Google Cloud&quot;.</li>
+      <li><strong>Priority Tier wording</strong> &mdash; &quot;If you use Priority Tier&quot; updated to &quot;If you have a Priority Tier commitment&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/data-residency" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/data-residency &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-residency" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Spend Limits API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new Example workflows section with three practical automation patterns: automating the increase-request review flow, identifying members close to their spend limit, and surfacing members with rapidly changing usage.</p>
+    <ul>
+      <li><strong>Example workflows section</strong> &mdash; New section documenting how to combine the Spend Limits API with the Analytics APIs cost endpoints, with cURL examples for the three most common automation patterns.</li>
+      <li><strong>Automate review flow</strong> &mdash; Step-by-step workflow for fetching pending requests, applying an approval policy, and resolving each request via approve/deny endpoints.</li>
+      <li><strong>Members near limit</strong> &mdash; Workflow for pulling month-to-date spend from Analytics, fetching effective caps in batches, computing utilization ratios, and flagging members at or above a threshold.</li>
+      <li><strong>Rapidly changing usage</strong> &mdash; Workflow for surfacing members whose spend has jumped week over week.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/spend-limits-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/spend-limits-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="spend-limits-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Usage and Cost API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated a Priority Tier internal anchor link to point to the existing-commitments section.</p>
+    <ul>
+      <li><strong>Priority Tier link</strong> &mdash; Updated anchor from <code>#get-started-with-priority-tier</code> to <code>#existing-priority-tier-commitments</code>.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/usage-cost-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/usage-cost-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="usage-and-cost-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated prompt cache isolation note to reference Google Cloud instead of Vertex AI, and removed the &#x27;currently in beta&#x27; qualifier for Microsoft Foundry.</p>
+    <ul>
+      <li><strong>Prompt cache isolation</strong> &mdash; &quot;Bedrock and Vertex AI&quot; updated to &quot;Bedrock and Google Cloud&quot; in the workspace isolation note.</li>
+      <li><strong>Microsoft Foundry qualifier</strong> &mdash; Removed &#x27;currently in beta&#x27; parenthetical.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/workspaces" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/workspaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompting best practices</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added cURL and CLI code examples alongside the existing Python example for role-setting, and expanded the code group format for the system prompt example.</p>
+    <ul>
+      <li><strong>Code group expansion</strong> &mdash; The system prompt role-setting example now includes cURL and CLI (<code>ant messages create</code>) tabs alongside Python and TypeScript.</li>
+      <li><strong>Few-shot wording</strong> &mdash; Minor simplification: &quot;can dramatically improve accuracy&quot; changed to &quot;improve accuracy&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/prompt-library" target="_blank" rel="noopener">platform.claude.com/docs/en/prompt-library &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompting-best-practices" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">1 new + 18 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Adaptive thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated thinking signature compatibility note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Signature compatibility</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the cross-platform signature compatibility note.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/adaptive-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="adaptive-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Batch processing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated model retirement qualifiers and extended-output availability note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Retirement qualifiers</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; for Claude Opus 4, Claude Sonnet 4, and Claude Haiku 3.5 retirement rows.</li>
+      <li><strong>Extended output note</strong> &mdash; &quot;Amazon Bedrock, Vertex AI, or Microsoft Foundry&quot; updated to &quot;Amazon Bedrock, Google Cloud, or Microsoft Foundry&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/batch-processing" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/batch-processing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="batch-processing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Cache diagnostics</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated availability note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Availability note</strong> &mdash; &quot;Amazon Bedrock or Vertex AI&quot; updated to &quot;Amazon Bedrock or Google Cloud&quot; in both the beta note and the limitations table.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/cache-diagnostics" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/cache-diagnostics &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cache-diagnostics" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the API response consistency note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>API response note</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the cross-platform usage object consistency note.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude on Google Cloud</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed the documentation page from &#x27;Claude on Vertex AI&#x27; to &#x27;Claude on Google Cloud&#x27; and updated all references from Vertex AI to Google Cloud&#x27;s Agent Platform throughout.</p>
+    <ul>
+      <li><strong>Page renamed</strong> &mdash; Title changed from &quot;Claude on Vertex AI&quot; to &quot;Claude on Google Cloud&quot;.</li>
+      <li><strong>Agent Platform references</strong> &mdash; All references to &quot;Vertex AI&quot; updated to &quot;Google Cloud&#x27;s Agent Platform&quot; or &quot;Agent Platform&quot; throughout the guide, including the model table header, authentication instructions, and SDK installation section.</li>
+      <li><strong>Documentation links</strong> &mdash; External links updated to reference Google Cloud&#x27;s Agent Platform documentation for model availability and setup.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-on-google-cloud" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context windows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the 1M-token context window availability note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>1M context window note</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the platform availability statement for 1M-token context window models.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-windows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-windows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extended thinking</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated interleaved-thinking model retirement qualifiers and partner-platform error guidance to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Earlier Claude 4 models definition</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in retirement qualifiers for Claude Opus 4 and Claude Sonnet 4.</li>
+      <li><strong>Partner platform error guidance</strong> &mdash; &quot;Amazon Bedrock and Vertex AI&quot; updated to &quot;Amazon Bedrock and Google Cloud&quot; in the unsupported-model error note.</li>
+      <li><strong>Signature compatibility</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the cross-platform signature note.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/extended-thinking &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extended-thinking" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Fallback credit</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform availability and token scope notes to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the where-it-works section.</li>
+      <li><strong>allowed_fallback_models</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the programmatic lookup note.</li>
+      <li><strong>Token scope</strong> &mdash; &quot;Amazon Bedrock and Vertex AI&quot; updated to &quot;Amazon Bedrock and Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/fallback-credit" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/fallback-credit &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="fallback-credit" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Fast mode (research preview)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated unavailability note for fast mode to reference Google Cloud instead of Vertex AI, and clarified that Priority Tier refers to a commitment.</p>
+    <ul>
+      <li><strong>Third-party unavailability</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the research-preview availability note.</li>
+      <li><strong>Priority Tier wording</strong> &mdash; &quot;with Priority Tier&quot; updated to &quot;with a Priority Tier commitment&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/fast-mode" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/fast-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="fast-mode-(research-preview)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Files API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated availability note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; &quot;Amazon Bedrock or Vertex AI&quot; updated to &quot;Amazon Bedrock or Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/files" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="files-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Mid-conversation system messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the unavailability note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Availability note</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the platform availability note.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mid-conversation-system-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Features overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the platform label for the Google-operated platform from Vertex AI to Google Cloud.</p>
+    <ul>
+      <li><strong>Platform label</strong> &mdash; &quot;Vertex AI (Google-operated)&quot; updated to &quot;Google Cloud (Google-operated)&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="features-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>PDF support</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated platform availability and base64 restriction note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Supported platforms</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in the supported-platforms list.</li>
+      <li><strong>Base64 restriction</strong> &mdash; &quot;Amazon Bedrock and Vertex AI&quot; updated to &quot;Amazon Bedrock and Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/pdf-support" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/pdf-support &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="pdf-support" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated all Vertex AI references to Google Cloud across pricing tables, minimum token lengths, cache isolation warnings, and availability notes.</p>
+    <ul>
+      <li><strong>Pricing table retirement qualifiers</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; for Claude Opus 4, Claude Sonnet 4, Claude Haiku 3.5, and Claude Haiku 3.5 rows.</li>
+      <li><strong>Automatic caching note</strong> &mdash; &quot;Bedrock and Vertex AI&quot; updated to &quot;Bedrock and Google Cloud&quot;.</li>
+      <li><strong>Minimum cacheable length</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; in platform reference and minimum-length list.</li>
+      <li><strong>Cache isolation warning</strong> &mdash; &quot;Bedrock and Vertex AI&quot; updated to &quot;Bedrock and Google Cloud&quot; in both the warning callout and the following bullet.</li>
+      <li><strong>1-hour cache duration</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Refusals and fallback</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated server-side fallback unavailability note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Server-side fallback availability</strong> &mdash; &quot;Amazon Bedrock, Vertex AI, or Microsoft Foundry&quot; updated to &quot;Amazon Bedrock, Google Cloud, or Microsoft Foundry&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/refusals-and-fallback &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="refusals-and-fallback" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Search results</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated model retirement qualifiers and platform availability note to reference Google Cloud instead of Vertex AI.</p>
+    <ul>
+      <li><strong>Retirement qualifiers</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot; for Claude Opus 4, Claude Sonnet 4, and Claude Haiku 3.5.</li>
+      <li><strong>Platform availability</strong> &mdash; &quot;Google Cloud&#x27;s Vertex AI&quot; updated to &quot;Google Cloud&quot;.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/search-results" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/search-results &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="search-results" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated Vertex AI availability references to Google Cloud and removed the Microsoft Foundry beta qualifier from the structured outputs note.</p>
+    <ul>
+      <li><strong>Platform availability note</strong> &mdash; &quot;Vertex AI&quot; updated to &quot;Google Cloud&quot;; Microsoft Foundry structured outputs availability reordered to end of sentence.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Coordinates and bounding boxes</h3>
+      <span class="tag tag-new">New</span>
+    </div>
+    <p>New guide explaining how Claude resizes and pads images before processing, how to interpret returned pixel coordinates for bounding boxes and points, and how to either pre-resize images or rescale coordinates in post-processing to align with the original image.</p>
+    <ul>
+      <li><strong>Image resize algorithm</strong> &mdash; Documents the two-constraint resize rule: edge limit (1568 px standard / 2576 px high-res) and visual token limit (1568 / 4784 tokens); explains that the visual token limit is the most common cause of unexpected resizes for portrait documents.</li>
+      <li><strong>Padding behavior</strong> &mdash; Explains that Claude pads every image to the next multiple of 28 px; emphasizes that coordinates must be normalized against resized (not padded) dimensions.</li>
+      <li><strong>Pre-resize approach</strong> &mdash; Provides a reference Python implementation of <code>resized_size()</code> to compute the exact post-resize dimensions for both standard and high-resolution tiers.</li>
+      <li><strong>Rescale approach</strong> &mdash; Documents the coordinate rescaling formula for cases where pre-resizing is impractical.</li>
+      <li><strong>PDF caveat</strong> &mdash; Notes that server-side PDF rasterization produces dimensions the caller cannot control, so coordinates cannot be reliably mapped back; recommends rasterizing pages to images manually.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/vision-coordinates" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/vision-coordinates &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="coordinates-and-bounding-boxes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Vision</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Refactored the Vision page to focus on how to send images rather than coordinate workflows, adding a reference to the new Coordinates and bounding boxes guide and renaming the Workbench reference from &#x27;Console Workbench&#x27; to &#x27;Anthropic Workbench&#x27;.</p>
+    <ul>
+      <li><strong>Page focus</strong> &mdash; Introduction updated to reference the new <code>vision-coordinates</code> guide for coordinate-based workflows.</li>
+      <li><strong>Workbench name</strong> &mdash; &quot;Console Workbench&quot; updated to &quot;Anthropic Workbench&quot;.</li>
+      <li><strong>Content reorganization</strong> &mdash; Coordinate and bounding-box guidance extracted into the new standalone Coordinates and bounding boxes page; remaining content restructured around image source types.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/vision" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/vision &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="vision" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 95 docs analyzed &middot; 2026-06-26
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
