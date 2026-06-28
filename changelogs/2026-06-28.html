@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 28, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 28, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 28 at 08:18 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">7</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat other">
+      <div class="num">1</div>
+      <div class="label">Other</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Advisor tool model compatibility matrix expanded</strong> &mdash; Claude Fable 5 and Mythos 5 added as advisor options; minimum advisor model set to Claude Sonnet 4.6; equal-capability advisor pairings now supported; Fable 5 and Mythos 5 advisors return <code>advisor_redacted_result</code> instead of <code>advisor_result</code></li>
+      <li><strong>Server tools: mixed server + client tool turns documented</strong> &mdash; new section explains how to detect and handle responses where Claude calls a server tool and a client tool in the same turn, including the correct follow-up message format and how this differs from <code>pause_turn</code></li>
+      <li><strong>Parallel tool use: disable instructions moved and expanded</strong> &mdash; <code>disable_parallel_tool_use</code> behavior fully documented in a dedicated section with cURL, CLI, and SDK examples for both <code>auto</code> and <code>any</code>/<code>tool</code> choice modes</li>
+      <li><strong>Memory tool GA: beta header no longer required</strong> &mdash; tool now available on the Messages API without a beta header; Go SDK example migrated from <code>Beta.Messages</code> to <code>Messages</code>; getting-started steps simplified</li>
+      <li><strong>Programmatic tool calling: container lifecycle and continuation semantics clarified</strong> &mdash; idle container reclaim time updated to ~5 minutes; <code>container</code> ID now required (not optional) on continuation requests; full cURL example added for Step 3</li>
+      <li><strong>Web fetch tool: platform availability and error codes updated</strong> &mdash; availability on Claude Platform on AWS and Microsoft Foundry clarified; <code>invalid_input</code> renamed to <code>invalid_tool_input</code>; new <code>url_not_in_prior_context</code> error code added; <code>blocked_domains</code> cannot be combined with <code>allowed_domains</code></li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">7 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advisor tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The advisor tool&#x27;s model compatibility matrix was expanded to include Claude Fable 5 and Mythos 5 as advisor options, the minimum advisor model was set to Claude Sonnet 4.6, equal-capability pairings were permitted, and result type behavior was clarified per model family.</p>
+    <ul>
+      <li><strong>Model compatibility table</strong> &mdash; Claude Fable 5 (<code>claude-fable-5</code>) and Claude Mythos 5 (<code>claude-mythos-5</code>) added as valid advisors for all executor tiers; executor rows for Fable 5 and Mythos 5 added</li>
+      <li><strong>Minimum advisor requirement</strong> &mdash; advisor must now be Claude Sonnet 4.6 or a more capable model; models of equal capability (e.g., Opus 4.7 and Opus 4.8) can advise each other</li>
+      <li><strong>Result type by model</strong> &mdash; Fable 5 and Mythos 5 advisors return <code>advisor_redacted_result</code>; all other compatibility-table models return <code>advisor_result</code>; <code>stop_reason</code> field presence now tied to whether <code>max_tokens</code> is set</li>
+      <li><strong>Advisor inference details</strong> &mdash; clarified that the advisor runs under its own Anthropic-supplied system prompt and receives the executor&#x27;s full transcript as quoted context, including text produced so far in the current turn</li>
+      <li><strong>Multi-turn examples</strong> &mdash; TypeScript and C# code tabs added to the multi-turn conversation section alongside the existing Python example</li>
+      <li><strong>Token output description</strong> &mdash; removed specific token-count estimates (400–700 text / 1,400–1,800 total) from the introductory description</li>
+      <li><strong>TypeScript client initialization</strong> &mdash; <code>const client = new Anthropic();</code> added to TypeScript code examples that were previously missing it</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advisor-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Memory tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The memory tool is now generally available on the Messages API without a beta header, the Go SDK example was migrated from the Beta client to the standard Messages client, and getting-started guidance was simplified.</p>
+    <ul>
+      <li><strong>GA availability</strong> &mdash; memory tool (<code>memory_20250818</code>) is now available on the Messages API with no beta header required</li>
+      <li><strong>Go SDK example</strong> &mdash; migrated from <code>client.Beta.Messages.New</code> / <code>BetaMessageNewParams</code> to <code>client.Messages.New</code> / <code>MessageNewParams</code> and from <code>BetaMemoryTool20250818Param</code> to <code>MemoryTool20250818Param</code></li>
+      <li><strong>Getting started steps</strong> &mdash; SDK helper note removed; steps simplified to: (1) add the <code>memory_20250818</code> tool entry, (2) implement a client-side handler with path-traversal protection</li>
+      <li><strong>Path handling</strong> &mdash; clarified that <code>/memories</code> is a prefix your handler maps to real storage (per-user directory, database keys, etc.) and that memory continuity depends on sending the same <code>tools</code> entry to the same store</li>
+      <li><strong>Model support note</strong> &mdash; memory tool availability explicitly scoped to Claude 4 and later models</li>
+      <li><strong>Code example content</strong> &mdash; all SDK snippets updated to use a simpler user message (&quot;Help me respond to this customer service ticket.&quot;) and consistent client initialization</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="memory-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Parallel tool use</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A new dedicated section documents how to disable parallel tool use, and the worked example was retitled and restructured with cURL/CLI stubs and tighter result-formatting rules.</p>
+    <ul>
+      <li><strong>Disable parallel tool use section</strong> &mdash; new section documents <code>disable_parallel_tool_use: true</code> inside <code>tool_choice</code>; covers both <code>auto</code> mode (at most one call) and <code>any</code>/<code>tool</code> mode (exactly one call), with cURL, CLI, and SDK examples</li>
+      <li><strong>Result formatting rules</strong> &mdash; added explicit requirement to match each result to its call with <code>tool_use_id</code> and place every <code>tool_result</code> block before any text content; link to Handle tool calls for full rules</li>
+      <li><strong>Worked example retitled</strong> &mdash; section renamed from &quot;Worked example&quot; to &quot;Test parallel tool calls&quot; with cURL and CLI stub tabs added</li>
+      <li><strong>Final response extraction</strong> &mdash; Python and Ruby examples updated to locate the text block by type rather than assuming <code>content[0]</code> is text</li>
+      <li><strong>C# example fixes</strong> &mdash; Unicode escapes replaced with literal characters; <code>tool.Input.ToString()</code> replaced with <code>JsonSerializer.Serialize(tool.Input)</code> for correct input inspection</li>
+      <li><strong>Go example</strong> &mdash; manual <code>contentParams</code> conversion loop replaced with <code>response.ToParam()</code></li>
+      <li><strong>Ruby example</strong> &mdash; input accessed via symbol keys (<code>:location</code>, <code>:timezone</code>) instead of string keys; final response text extracted by type filter</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="parallel-tool-use" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Programmatic tool calling</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Container lifecycle semantics were tightened, the continuation request requirements were clarified (container ID now required, not optional), a full cURL example was added for the tool-result step, and async tool function signatures were described more precisely.</p>
+    <ul>
+      <li><strong>Container ID on continuation</strong> &mdash; container ID is now required (not optional) on any follow-up request that has pending programmatic tool calls; the API rejects the request without it</li>
+      <li><strong>Container expiration timing</strong> &mdash; idle reclaim updated from 4.5 minutes to ~5 minutes; pending tool call timeout updated to ~4 minutes; <code>expires_at</code> timestamp described as the definitive signal</li>
+      <li><strong>Step 3 cURL example</strong> &mdash; full cURL snippet added for the tool-result continuation request, showing message history, <code>container</code> field, and complete <code>tools</code> array</li>
+      <li><strong>Tools array on continuation</strong> &mdash; explicitly documented that the same <code>tools</code> array from the original request must be resent; code execution tool must still be present</li>
+      <li><strong>Async tool function signature</strong> &mdash; clarified that tools exposed to code as async Python functions take a single dict and return a string; Claude awaits them with top-level <code>await</code> and parses results with e.g. <code>json.loads</code></li>
+      <li><strong><code>allowed_callers</code> version interoperability</strong> &mdash; both <code>code_execution_20260120</code> and <code>code_execution_20260521</code> are now accepted and interchangeable in <code>allowed_callers</code>; response blocks always tag the caller as <code>code_execution_20260120</code></li>
+      <li><strong>Java example</strong> &mdash; migrated to a <code>void main()</code> method entry point and updated to use <code>Model.CLAUDE_OPUS_4_8</code> constant</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="programmatic-tool-calling" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Server tools</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A major new section was added documenting how to handle turns where Claude calls both a server tool and a client tool in the same response, including detection, continuation format, and the distinction from pause_turn.</p>
+    <ul>
+      <li><strong>Mixed server + client tool turns</strong> &mdash; new section explains that when Claude calls a server tool and a client tool together, the API returns <code>stop_reason: tool_use</code> immediately; detect the deferred server call by finding a <code>server_tool_use</code> block with no matching result in the response</li>
+      <li><strong>Continuation message format</strong> &mdash; follow-up user message must contain only <code>tool_result</code> blocks for the client tools; the same <code>tools</code> array must be kept, or the API returns a 400 naming the missing server tool</li>
+      <li><strong>MCP tool equivalence</strong> &mdash; <code>mcp_tool_use</code> blocks from the MCP connector behave the same as <code>server_tool_use</code> blocks in this mixed-call pattern</li>
+      <li><strong>Distinction from pause_turn</strong> &mdash; explicit comparison: <code>pause_turn</code> never leaves a client <code>tool_use</code> block waiting; mixed turns never have <code>stop_reason: pause_turn</code></li>
+      <li><strong>400 error messages documented</strong> &mdash; exact API error strings for missing server tool result and missing client tool result added in a Warning block</li>
+      <li><strong>Python, TypeScript, cURL, and CLI examples</strong> &mdash; full code examples added for the mixed web_fetch + run_command scenario across all major SDK languages</li>
+      <li><strong>Page subtitle updated</strong> &mdash; subtitle now includes &quot;mixed server and client tool turns&quot; to reflect the new section</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="server-tools" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool Runner (SDK)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Tool runner documentation was updated with SDK-specific behavior clarifications for error logging, tool error interception hooks, C# state-mutation side effects, Ruby message-history takeover scoping, and Java strict-mode annotation.</p>
+    <ul>
+      <li><strong>Tool return types</strong> &mdash; return type guidance moved to the top of Basic usage; clarified that a returned string becomes a single text content block and structured data must be encoded as a string</li>
+      <li><strong>Java strict mode</strong> &mdash; Java tool runner now marks tools with <code>strict: true</code> (strict tool use) derived from the class structure</li>
+      <li><strong>Error logging by SDK</strong> &mdash; Python logs full exceptions (type + message + stack trace) via the <code>logging</code> module; Go, Ruby, C#, and PHP do not read <code>ANTHROPIC_LOG</code> and don&#x27;t log failed tools automatically</li>
+      <li><strong>Tool error interception hooks</strong> &mdash; <code>generate_tool_call_response()</code> (Python) and <code>generateToolResponse()</code> (TypeScript) are the only SDKs with this hook; other SDKs&#x27; tabs describe the closest alternative</li>
+      <li><strong>C# state mutation warning</strong> &mdash; clarified that calling <code>SetParams()</code> or <code>PushMessages()</code> still runs the matched tools for that turn; a tool also run inside the loop body executes twice unless accounted for</li>
+      <li><strong>Ruby message-history takeover scoping</strong> &mdash; takeover via <code>runner.params[:messages]</code> reassignment or <code>feed_messages</code> only occurs when called from inside an <code>each_message</code> or <code>each_streaming</code> block</li>
+      <li><strong>Automatic compaction deprecation</strong> &mdash; Python, TypeScript, and Ruby client-side compaction noted as deprecated in favor of server-side context editing; Go, Java, C#, and PHP tool runners don&#x27;t include client-side compaction</li>
+      <li><strong>max_iterations</strong> &mdash; loop exit condition updated: runner also exits when it reaches <code>max_iterations</code> if set</li>
+      <li><strong>Client initialization snippets</strong> &mdash; <code>client = ...</code> initialization lines added to all SDK tabs in the until_done and error-interception sections</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-runner-(sdk)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web fetch tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Platform availability was clarified (Claude API, Claude Platform on AWS, and Microsoft Foundry; not Bedrock or Google Cloud), several error codes were renamed or added, and parameter documentation was tightened.</p>
+    <ul>
+      <li><strong>Platform availability</strong> &mdash; web fetch (with and without dynamic filtering) explicitly documented as available on Claude API, Claude Platform on AWS, and Microsoft Foundry; not available on Amazon Bedrock or Google Cloud</li>
+      <li><strong>Dynamic filtering code execution</strong> &mdash; clarified that dynamic filtering uses the code execution tool, which the API enables automatically; users do not need to add it to the <code>tools</code> array</li>
+      <li><strong>Error code updates</strong> &mdash; <code>invalid_input</code> renamed to <code>invalid_tool_input</code>; new <code>url_not_in_prior_context</code> error code added; <code>url_not_allowed</code> expanded to cover org-level domain settings and Anthropic-side restrictions; <code>unsupported_content_type</code> updated to include HTML explicitly</li>
+      <li><strong>Error type field</strong> &mdash; error object <code>type</code> corrected from <code>web_fetch_tool_error</code> to <code>web_fetch_tool_result_error</code> in the example JSON</li>
+      <li><strong>blocked_domains restriction</strong> &mdash; documented that <code>blocked_domains</code> cannot be combined with <code>allowed_domains</code></li>
+      <li><strong>max_uses and failed fetches</strong> &mdash; clarified that failed fetches count against the <code>max_uses</code> limit</li>
+      <li><strong>max_content_tokens scope</strong> &mdash; noted that the limit applies to text content only, not binary content such as PDFs</li>
+      <li><strong>Citations default</strong> &mdash; explicitly stated that citations are disabled by default for web fetch</li>
+      <li><strong>PDF handling</strong> &mdash; clarified that PDFs are returned as base64-encoded data and processed like a directly attached PDF document</li>
+      <li><strong>Cache bypass example</strong> &mdash; added a JSON snippet showing the <code>use_cache: false</code> parameter in context; added note that <code>use_cache</code> and <code>response_inclusion</code> are version-gated to <code>web_fetch_20260309</code> and <code>web_fetch_20260318</code> respectively</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-fetch-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customer-managed encryption keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A cross-reference link to the CMEK content preservation section of the Access Transparency page was added to the preservation explanation.</p>
+    <ul>
+      <li><strong>Content preservation cross-reference</strong> &mdash; added link to &lt;a href=&#x27;/docs/en/manage-claude/access-transparency#cmek-content-preservation&#x27;&gt;CMEK content preservation&lt;/a&gt; in the Access Transparency doc for readers who need full details on when and how Anthropic preserves records under its own encryption</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customer-managed-encryption-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 8 docs analyzed &middot; 2026-06-28
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
