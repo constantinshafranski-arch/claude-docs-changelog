@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; June 30, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">June 30, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jun 30 at 08:29 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat tools">
+      <div class="num">10</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">21</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">3</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat other">
+      <div class="num">3</div>
+      <div class="label">Other</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">14</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Microsoft Foundry hosting options</strong> &mdash; Across 10+ docs, advanced features (Agent Skills, MCP connector, code execution, web fetch/search, Files API, programmatic tool calling, structured outputs) now require a &quot;Hosted on Anthropic&quot; deployment on Microsoft Foundry; the &quot;beta&quot; label has been removed, reflecting GA status.</li>
+      <li><strong>Claude apps gateway</strong> &mdash; New self-hosted gateway is referenced throughout Claude Code CLI docs, adding SSO/IdP sign-in, per-user spend limits, OTLP telemetry with user attribution, and managed settings delivery in front of Bedrock, Vertex AI, Foundry, or the Anthropic API.</li>
+      <li><strong>Fine-grained tool streaming</strong> &mdash; Major doc rewrite with per-tool `eager_input_streaming` field replacing the legacy beta header, expanded code examples across Python, TypeScript, C#, and Go that now print streamed fragments, and clarified behavior for partial/invalid JSON and `max_tokens` truncation.</li>
+      <li><strong>Tool search tool</strong> &mdash; Added explicit model compatibility table (Fable 5 through Haiku 4.5), rewrote introduction with quantified context-bloat and accuracy figures, and clarified `defer_loading` semantics and quick-start walkthrough.</li>
+      <li><strong>Claude Code hooks (v2.1.195/v2.1.196)</strong> &mdash; Hooks reference updated with hyphen support in exact-match matchers, new `prompt_id` common field for OTel correlation, `MessageDisplay` event added to no-matcher list, and plugin-scoped agent type naming for `SubagentStart`/`SubagentStop`.</li>
+      <li><strong>Claude Code settings</strong> &mdash; Multiple new settings added: `autoMode.classifyAllShell`, `disableSideloadFlags`, `enableArtifact`, `forceLoginGatewayUrl`, `skillListingMaxDescChars` (renamed from `maxSkillDescriptionChars`), and `forceLoginMethod` now accepts `gateway`.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">10 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agent Skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies that pre-built Agent Skills on Microsoft Foundry require a Hosted on Anthropic deployment, not the default Hosted on Azure option.</p>
+    <ul>
+      <li><strong>Microsoft Foundry requirement</strong> &mdash; Both the overview paragraph and the Available Skills section now note that Agent Skills on Microsoft Foundry require a Hosted on Anthropic deployment, with a link to the features-not-supported-on-Azure anchor.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/agent-skills/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agent-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP connector</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a Hosted on Anthropic deployment requirement for using the MCP connector on Microsoft Foundry.</p>
+    <ul>
+      <li><strong>Microsoft Foundry restriction</strong> &mdash; Platform availability note updated to specify that the MCP connector requires a Hosted on Anthropic deployment when used on Microsoft Foundry.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-connector &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-connector" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code execution tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents that code execution on Microsoft Foundry requires a Hosted on Anthropic deployment, and updates a TypeScript import to use the Node.js built-in module specifier.</p>
+    <ul>
+      <li><strong>Microsoft Foundry restriction</strong> &mdash; Code execution availability note now states a Hosted on Anthropic deployment is required on Microsoft Foundry.</li>
+      <li><strong>TypeScript import</strong> &mdash; Two TypeScript examples updated to import from `node:fs` and `node:fs/promises` instead of bare `fs` and `fs/promises`.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code-execution-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Fine-grained tool streaming</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Major revision introducing per-tool `eager_input_streaming` control, replacing the legacy beta header approach, with updated code examples across five languages that actively print streamed fragments.</p>
+    <ul>
+      <li><strong>Per-tool field</strong> &mdash; `eager_input_streaming: true` on individual tool definitions replaces the `fine-grained-tool-streaming-2025-05-14` beta header; explicit `false` keeps buffered streaming even when the legacy header is present.</li>
+      <li><strong>Introductory description</strong> &mdash; Rewritten to clarify that the API delivers tool input as Claude generates it without server-side buffering, and that fragments arrive through standard `input_json_delta` streaming events.</li>
+      <li><strong>Warning updated</strong> &mdash; Expanded to note that `max_tokens` truncation can cut a parameter mid-stream and advises accumulating fragments and guarding the parse.</li>
+      <li><strong>Python example</strong> &mdash; Now iterates stream events and prints `event.partial_json` for `input_json` events, then logs the complete tool input from the final message.</li>
+      <li><strong>TypeScript example</strong> &mdash; Adds `stream.on(&#x27;inputJson&#x27;, ...)` handler and logs complete tool input from `finalMessage`.</li>
+      <li><strong>C# example</strong> &mdash; Rewritten to accumulate `PartialJson` fragments per content-block index using `StringBuilder`, replacing the previous token-count-only output.</li>
+      <li><strong>Go example</strong> &mdash; Adds `ContentBlockDeltaEvent` / `InputJSONDelta` handling to print partial JSON as it arrives.</li>
+      <li><strong>cURL example</strong> &mdash; Pipeline changed to `jq -rj &#x27;select(.delta.type == &quot;input_json_delta&quot;) | .delta.partial_json&#x27;` to display streamed fragments.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="fine-grained-tool-streaming" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Parallel tool use</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor TypeScript code cleanup replacing a `forEach` loop with a `for...of` loop in the verification script.</p>
+    <ul>
+      <li><strong>TypeScript style</strong> &mdash; Tool-use iteration in the test script changed from `toolUses.forEach(...)` to `for (const tool of toolUses)` for consistency with modern style guidelines.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="parallel-tool-use" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Programmatic tool calling</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the Hosted on Anthropic deployment requirement for programmatic tool calling on Microsoft Foundry in both the model compatibility section and the managed-solution recommendation.</p>
+    <ul>
+      <li><strong>Microsoft Foundry restriction</strong> &mdash; Both the model-compatibility paragraph and the &quot;consider using Anthropic&#x27;s managed solution&quot; callout now note that programmatic tool calling on Microsoft Foundry requires a Hosted on Anthropic deployment.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="programmatic-tool-calling" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Server tools</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixes the inline code formatting of an error message in the mixed server-and-client tools section.</p>
+    <ul>
+      <li><strong>Error message formatting</strong> &mdash; The 400 error message fragment `but no web_fetch tool was provided` is now formatted as inline code using backticks for clarity.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="server-tools" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool search tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a formal model compatibility table, rewrites the introduction with quantified context-bloat and accuracy metrics, clarifies `defer_loading` semantics, and expands the quick-start with post-search instructions.</p>
+    <ul>
+      <li><strong>Model compatibility table</strong> &mdash; New section lists all supported models from Fable 5 and Mythos 5 down to Haiku 4.5, with supported tool version strings; Opus 4.1 and earlier are explicitly unsupported.</li>
+      <li><strong>Introduction rewrite</strong> &mdash; Context-bloat figure updated to &quot;over 85 percent&quot; reduction; tool-selection accuracy degradation threshold clarified as 30–50 tools; prose tightened throughout.</li>
+      <li><strong>`defer_loading` clarification</strong> &mdash; Documentation now states at least one non-deferred tool must remain in the request; the field controls context-window visibility, not request payload.</li>
+      <li><strong>Quick-start walkthrough</strong> &mdash; Post-search note added explaining that Claude ends with `stop_reason: &quot;tool_use&quot;` and directing readers to the handle-tool-calls guide and response-format section.</li>
+      <li><strong>TypeScript example</strong> &mdash; `client` variable now declared before the `messages.create` call.</li>
+      <li><strong>Regex variant warning</strong> &mdash; Clarifies matching is case-insensitive and replaces `(?i)slack` example with cleaner pattern list; maximum renamed from &quot;query length&quot; to &quot;pattern length&quot;.</li>
+      <li><strong>BM25 note</strong> &mdash; Adds maximum query length of 500 characters.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-search-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web fetch tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a Hosted on Anthropic deployment requirement for web fetch on Microsoft Foundry, and documents the mixed server-and-client-tool parallel-call exception to the no-`tool_result` rule.</p>
+    <ul>
+      <li><strong>Microsoft Foundry restriction</strong> &mdash; Web fetch availability note updated to require a Hosted on Anthropic deployment on Microsoft Foundry.</li>
+      <li><strong>Parallel tool call exception</strong> &mdash; How-it-works section now documents the edge case where Claude calls web fetch alongside a client tool in the same parallel batch, causing the API to return `stop_reason: &quot;tool_use&quot;` before the fetch runs, then execute it when the client `tool_result` is sent.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-fetch-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Web search tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a Hosted on Anthropic deployment requirement for web search on Microsoft Foundry.</p>
+    <ul>
+      <li><strong>Microsoft Foundry restriction</strong> &mdash; Dynamic filtering note updated to state that web search on Microsoft Foundry requires a Hosted on Anthropic deployment.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="web-search-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">21 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents a new troubleshooting entry for zero token counts in `/context` on Bedrock, fixed in v2.1.196.</p>
+    <ul>
+      <li><strong>Zero token counts in /context</strong> &mdash; Versions before v2.1.196 sent tool schemas to Bedrock&#x27;s count-tokens API with unsupported fields, causing all tool-group rows to show 0 tokens; upgrading to v2.1.196 resolves the issue.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a new trusted-network allowlist domain and documents the live setup checklist added in v2.1.195 for `--remote` sessions.</p>
+    <ul>
+      <li><strong>Trusted network allowlist</strong> &mdash; `browser-intake-us5-datadoghq.com` added to the default allowed domains for Trusted network access.</li>
+      <li><strong>`--remote` setup checklist</strong> &mdash; As of v2.1.195, the CLI displays a live checklist of container-startup steps (clone, setup script, etc.) while the cloud VM provisions; messages typed during provisioning are queued.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the new `claude gateway` command for administrators deploying the self-hosted Claude apps gateway.</p>
+    <ul>
+      <li><strong>`claude gateway` command</strong> &mdash; New command starts the self-hosted Claude apps gateway server; requires `--config` pointing at a `gateway.yaml`; available in v2.1.195 and later.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the cost-tracking guidance for Bedrock/Vertex/Foundry to reference the new Claude apps gateway as the recommended per-user attribution solution.</p>
+    <ul>
+      <li><strong>Claude apps gateway cost tracking</strong> &mdash; Replaces generic &quot;LLM gateway&quot; mention with the Claude apps gateway, which provides per-user usage attribution, OTLP metrics with token counts, and per-user spend limits on Bedrock, Vertex, and Foundry.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data usage</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents two Claude apps gateway–specific data-handling behaviors: local feedback-bundle archiving instead of uploading, and automatic disabling of analytics on gateway sessions.</p>
+    <ul>
+      <li><strong>Feedback bundle local archiving</strong> &mdash; On Bedrock, Vertex AI, Foundry, and signed-in Claude apps gateway sessions, &quot;Yes&quot; on the transcript-upload prompt writes the payload to `~/.claude/feedback-bundles/` rather than uploading it to Anthropic.</li>
+      <li><strong>Gateway session analytics</strong> &mdash; Signed-in Claude apps gateway sessions automatically disable usage analytics, error reporting, and survey ratings to Anthropic via the gateway credential; these cannot be re-enabled.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">code.claude.com/docs/en/data-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-usage" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expands matcher semantics with hyphen support (v2.1.195), adds the new `prompt_id` common field (v2.1.196), documents plugin-scoped agent type names for `SubagentStart`, adds `MessageDisplay` to the no-matcher event list, and clarifies the `shell` field default on Windows.</p>
+    <ul>
+      <li><strong>Hyphen in exact-match set</strong> &mdash; Hyphens are now part of the exact-match character set as of v2.1.195; on earlier versions a hyphenated matcher is evaluated as an unanchored regex, so `^name$` anchoring is advised for backward compatibility.</li>
+      <li><strong>`prompt_id` common field</strong> &mdash; New UUID field on all hook events (v2.1.196) that matches the `prompt.id` OTel attribute, enabling correlation of hook output with telemetry for a single prompt.</li>
+      <li><strong>Plugin-scoped agent names</strong> &mdash; `SubagentStart` and `SubagentStop` now document that plugin-shipped agents use scoped identifiers like `my-plugin:reviewer`; the colon triggers regex evaluation, so anchor with `^` and `$` for exact matches.</li>
+      <li><strong>`MessageDisplay` event</strong> &mdash; Added to the list of events that do not support matchers and always fire.</li>
+      <li><strong>`shell` field default</strong> &mdash; Default is now `&quot;bash&quot;`, or `&quot;powershell&quot;` on Windows when Git Bash is not installed, instead of a fixed `&quot;bash&quot;`.</li>
+      <li><strong>`UserPromptSubmit` timeout notice</strong> &mdash; As of v2.1.196, when a `UserPromptSubmit` hook times out the transcript shows a notice naming the hook and timeout; earlier versions cancel silently.</li>
+      <li><strong>MCP hyphenated server names</strong> &mdash; Documents that `mcp__brave-search__.*` is required to match tools from a server whose name contains a hyphen; bare `mcp__brave-search` now lands in the exact-match path as of v2.1.195.</li>
+      <li><strong>Regex path clarification</strong> &mdash; Notes that `RegExp.prototype.test` is unanchored and advises `^` and `$` for whole-string matches.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents background-task memory-pressure reaping on macOS/Linux (v2.1.193) and live file-path autocomplete in shell mode (v2.1.193).</p>
+    <ul>
+      <li><strong>Memory-pressure reaping</strong> &mdash; As of v2.1.193, background tasks are terminated when the OS signals memory pressure if the session has been idle for at least 30 minutes; set `CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP=1` to disable.</li>
+      <li><strong>Background task session handoff</strong> &mdash; Clarifies that backgrounding a session (rather than exiting) hands running background tasks to the background session.</li>
+      <li><strong>Shell mode file-path autocomplete</strong> &mdash; As of v2.1.193, typing a token containing `/` (e.g. `./src/`) shows a file/directory dropdown; `Tab` accepts; works on all platforms including Windows with forward slashes.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>JetBrains IDEs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the security considerations section to reference the `acceptEdits` permission mode by its canonical name instead of the informal &quot;auto-edit permissions&quot; phrase.</p>
+    <ul>
+      <li><strong>Permission mode terminology</strong> &mdash; Security warning updated to reference `acceptEdits` permission mode explicitly, with a link to the permission-modes docs, replacing the vague &quot;auto-edit permissions enabled&quot; phrasing.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/jetbrains" target="_blank" rel="noopener">code.claude.com/docs/en/jetbrains &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="jetbrains-ides" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Other LLM gateways</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Restructured to scope the page to third-party gateway products only, with the gateway architecture overview and subscription sections moved or shortened, and links added to the new Claude apps gateway and gateway-overview pages.</p>
+    <ul>
+      <li><strong>Page scope narrowed</strong> &mdash; Page renamed to &quot;Other LLM gateways&quot; and repositioned as the guide for organizations using an existing third-party proxy, with a pointer to the new gateway-overview page for architecture background and gateway selection.</li>
+      <li><strong>&quot;How a gateway works&quot; section removed</strong> &mdash; Architecture diagram and credential explanation moved to the gateway-overview page.</li>
+      <li><strong>&quot;Third-party gateways&quot; section collapsed</strong> &mdash; Content merged into page intro; explicit &quot;Anthropic doesn&#x27;t endorse&quot; disclaimer retained.</li>
+      <li><strong>Subscription clarification</strong> &mdash; `ANTHROPIC_BASE_URL` named explicitly as the variable that points Claude Code at a gateway; reference to &quot;Bedrock, Agent Platform, or Foundry&quot; replaces earlier phrasing.</li>
+      <li><strong>Related pages updated</strong> &mdash; Links to the new gateway-overview and Claude apps gateway pages added.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">code.claude.com/docs/en/llm-gateway &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="other-llm-gateways" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents new untrusted-workspace MCP approval security (v2.1.196), improved OAuth token-refresh and scope-narrowing behavior (v2.1.196), automatic re-authentication on 401/403 for header-based auth (v2.1.193), and `CLAUDE_PLUGIN_ROOT` environment variable for plugin-provided servers.</p>
+    <ul>
+      <li><strong>Untrusted workspace MCP security</strong> &mdash; As of v2.1.196, `.mcp.json` approvals from `enableAllProjectMcpServers` or `enabledMcpjsonServers` in a project&#x27;s `.claude/settings.json` are ignored until the workspace is trusted; user settings, managed settings, and `.claude/settings.local.json` still apply.</li>
+      <li><strong>Token refresh failure notice</strong> &mdash; As of v2.1.195, failed refresh tokens immediately surface a notice pointing to `/mcp` with a Re-authenticate option.</li>
+      <li><strong>Startup auth notice</strong> &mdash; As of v2.1.193, Claude Code shows a startup notice when configured servers need authentication.</li>
+      <li><strong>Non-interactive OAuth info</strong> &mdash; As of v2.1.196, during `claude -p` or Agent SDK runs with tool search enabled, Claude Code tells Claude which servers are unavailable pending authorization.</li>
+      <li><strong>OAuth scope narrowing</strong> &mdash; As of v2.1.196, when `oauth.scopes` is unset Claude Code requests only the scope from the server&#x27;s `WWW-Authenticate` header or protected-resource metadata, no longer pulling the full `scopes_supported` catalog from auto-discovered auth server metadata.</li>
+      <li><strong>`CLAUDE_PLUGIN_ROOT` env var</strong> &mdash; Added to the `headersHelper` environment variable table; set only when a plugin provides the MCP server. As of v2.1.195, the helper&#x27;s working directory is also set to the plugin root.</li>
+      <li><strong>Header-based auth retry</strong> &mdash; As of v2.1.193, a 401/403 from a tool call automatically re-runs the `headersHelper`, reconnects, and retries once before marking the server as needing authentication.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies that `--model` and `ANTHROPIC_DEFAULT_OPUS_MODEL` family variables take precedence over a resumed session&#x27;s saved model as of v2.1.195, and that the Default model picker resolves to the account&#x27;s runtime default rather than a tier-based default.</p>
+    <ul>
+      <li><strong>Model override on resume</strong> &mdash; As of v2.1.195, `--model`, `ANTHROPIC_MODEL`, and `ANTHROPIC_DEFAULT_OPUS_MODEL` family variables override the model restored from a resumed session&#x27;s transcript.</li>
+      <li><strong>Default model wording</strong> &mdash; &quot;system default based on subscription tier&quot; replaced with &quot;runtime default for the account&quot; for accuracy.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a new `claude_code.assistant_response` OTel event (v2.1.193) and the `OTEL_LOG_ASSISTANT_RESPONSES` variable, and documents Claude apps gateway identity stamping on exported telemetry.</p>
+    <ul>
+      <li><strong>`OTEL_LOG_ASSISTANT_RESPONSES` variable</strong> &mdash; New env var (v2.1.193) controls whether assistant response text is included in `assistant_response` events; falls back to `OTEL_LOG_USER_PROMPTS` when unset.</li>
+      <li><strong>`assistant_response` event</strong> &mdash; New OTel log event (v2.1.193) emitted after each API request that returns text; includes `response_length`, `response` (redacted by default), `model`, `request_id`, and `query_source` attributes; thinking and tool-use blocks excluded.</li>
+      <li><strong>Claude apps gateway identity</strong> &mdash; When signed in to a Claude apps gateway, exports are stamped with `user.id` (IdP subject), `user.email`, `user.groups`, and `identity.source: gateway-oidc`; these override any `OTEL_RESOURCE_ATTRIBUTES` keys with the same names.</li>
+      <li><strong>User attribution clarification</strong> &mdash; `user.id` is described as installation-scoped except on gateway sessions where it is the IdP subject; gateway sessions are noted as not requiring manual `OTEL_RESOURCE_ATTRIBUTES` identity setup.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies the OS certificate-store runtime requirement (Node 22.15+) and adds Claude apps gateway to the list of providers that redirect model traffic away from Anthropic endpoints.</p>
+    <ul>
+      <li><strong>OS CA store runtime requirement</strong> &mdash; Reading the OS trust store requires `tls.getCACertificates`; the native installer always has it, but npm installs need Node 22.15 or later; older Node versions fall back to the bundled set and `NODE_EXTRA_CA_CERTS`.</li>
+      <li><strong>Claude apps gateway network routing</strong> &mdash; Signed-in Claude apps gateway sessions added to the list of providers that route model traffic and authentication away from `api.anthropic.com`.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the `renames` field for migrating users when plugins are renamed or removed (v2.1.193), the `disableSideloadFlags` policy pairing note, improved marketplace validator behavior (v2.1.196), and a URL scheme requirement for marketplace add commands.</p>
+    <ul>
+      <li><strong>`renames` field</strong> &mdash; New top-level marketplace manifest field (v2.1.193) maps former plugin names to current names or `null` for removed plugins; Claude Code rewrites user/project settings automatically and shows a one-time notice.</li>
+      <li><strong>Rename chain following</strong> &mdash; `renames` is treated as append-only history; chains are followed across multiple renames; `claude plugin validate .` rejects cycles.</li>
+      <li><strong>`disableSideloadFlags` pairing</strong> &mdash; `strictKnownMarketplaces` documentation now notes it should be paired with `disableSideloadFlags` to also block `--plugin-dir`, `--plugin-url`, `--agents`, and `--mcp-config` CLI flags.</li>
+      <li><strong>Marketplace validator improvements</strong> &mdash; As of v2.1.196, the per-entry validation pass includes plugins whose `source` is `.`, runs when `marketplace.json` is outside a `.claude-plugin` directory, and reports each entry&#x27;s problems independently of schema errors.</li>
+      <li><strong>URL scheme requirement</strong> &mdash; As of v2.1.196, a marketplace source URL without a scheme is rejected with an explicit error; earlier versions misread bare hostnames as GitHub `owner/repo` shorthands.</li>
+      <li><strong>Example fix</strong> &mdash; Quick-start local-test commands corrected to use `./my-marketplace` and `quality-review-plugin@my-plugins` matching the tutorial&#x27;s actual names.</li>
+      <li><strong>`disable-model-invocation` removed from skill example</strong> &mdash; Removed from the marketplace quickstart skill frontmatter sample.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies that a marketplace entry&#x27;s `name` field takes precedence over a plugin&#x27;s own `plugin.json` `name` for `enabledPlugins` keying and `/plugin` commands.</p>
+    <ul>
+      <li><strong>Marketplace entry name precedence</strong> &mdash; `plugin.json` `name` field description updated to note that when a marketplace entry references the plugin under a different name, the marketplace entry name is what `enabledPlugins` and `/plugin` use.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the Claude apps gateway as a supported login method, with a note that admins pre-configure the gateway URL and users see the Cloud gateway sign-in screen directly.</p>
+    <ul>
+      <li><strong>Claude apps gateway login method</strong> &mdash; Added to the supported account types list; when an organization runs a gateway, the admin pre-configures the URL and `/login` opens directly on the Cloud gateway screen for SSO sign-in.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds several new settings (`autoMode.classifyAllShell`, `disableSideloadFlags`, `enableArtifact`, `forceLoginGatewayUrl`, `skillListingMaxDescChars`), adds `gateway` as a `forceLoginMethod` value, tightens the managed-settings precedence description to include the Claude apps gateway, and notes identity-variable sandboxing in `env`.</p>
+    <ul>
+      <li><strong>`autoMode.classifyAllShell`</strong> &mdash; New setting (v2.1.193); when `true`, suspends all Bash/PowerShell allow rules in auto mode so every shell command routes through the classifier.</li>
+      <li><strong>`disableSideloadFlags`</strong> &mdash; New managed-only setting (v2.1.193) that rejects `--plugin-dir`, `--plugin-url`, `--agents`, and `--mcp-config` at startup; `--mcp-config` with in-process SDK entries is still accepted.</li>
+      <li><strong>`enableArtifact`</strong> &mdash; New user-level setting (v2.1.196) to enable or disable the Artifact tool; ignored in project and local settings.</li>
+      <li><strong>`forceLoginGatewayUrl`</strong> &mdash; New managed-only setting pre-fills and locks the gateway URL on the `/login` Cloud gateway screen; works alongside `forceLoginMethod: &quot;gateway&quot;`.</li>
+      <li><strong>`forceLoginMethod` gateway value</strong> &mdash; Now accepts `&quot;gateway&quot;` to restrict login to a Claude apps gateway; when set to any value, `ANTHROPIC_API_KEY`/`ANTHROPIC_AUTH_TOKEN`/`apiKeyHelper` sessions are blocked.</li>
+      <li><strong>`skillListingMaxDescChars` rename</strong> &mdash; Setting renamed from `maxSkillDescriptionChars` to `skillListingMaxDescChars`; same behavior, 1536-character default.</li>
+      <li><strong>`enableAllProjectMcpServers` / `enabledMcpjsonServers` update</strong> &mdash; As of v2.1.196, these keys are honored in untrusted folders only from settings files not tracked by git.</li>
+      <li><strong>`env` identity-variable sandboxing</strong> &mdash; As of v2.1.195, identity variables set by Claude Code&#x27;s hosting environments (e.g. `CLAUDE_CODE_REMOTE`) are ignored when set via `env` in settings.</li>
+      <li><strong>Managed-settings precedence</strong> &mdash; Precedence order updated to show `policyHelper` output as highest, followed by remote (claude.ai server-managed or Claude apps gateway-delivered), then MDM/OS, then file-based.</li>
+      <li><strong>`teammateMode` `auto` clarification</strong> &mdash; `auto` now uses split panes when running inside tmux, or inside iTerm2 with `it2` on `PATH`; updated from previous &quot;tmux or iTerm2&quot; wording.</li>
+      <li><strong>Server-managed settings delivery</strong> &mdash; Description updated to include Claude apps gateway as an additional remote delivery source alongside the claude.ai admin console.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the `${CLAUDE_PROJECT_DIR}` substitution variable (v2.1.196), documents `disable-model-invocation` interaction with scheduled tasks (v2.1.196), fixes the `/context` skills-row measurement, and renames the character-cap setting.</p>
+    <ul>
+      <li><strong>`${CLAUDE_PROJECT_DIR}` substitution</strong> &mdash; New variable (v2.1.196) resolves to the project root directory; available in skill body and `allowed-tools` frontmatter, enabling project-relative permission rules like `Bash(${CLAUDE_PROJECT_DIR}/scripts/lint.sh *)`.</li>
+      <li><strong>`disable-model-invocation` and scheduled tasks</strong> &mdash; As of v2.1.196, `disable-model-invocation: true` also prevents the skill from running when a scheduled task fires with the skill as its prompt.</li>
+      <li><strong>`/context` skills row accuracy</strong> &mdash; As of v2.1.196, the Skills row reports post-budget size matching what the model receives; earlier versions showed the full text of every description, inflating the count.</li>
+      <li><strong>Setting rename</strong> &mdash; References to `maxSkillDescriptionChars` updated to `skillListingMaxDescChars`.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customize your status line</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the `prompt_id` field to the status-line JSON input schema (v2.1.196) for correlating status-line output with OTel events.</p>
+    <ul>
+      <li><strong>`prompt_id` field</strong> &mdash; New field (v2.1.196) in the status-line JSON sent to scripts; UUID matching the `prompt.id` OTel attribute; absent until first user input.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/statusline" target="_blank" rel="noopener">code.claude.com/docs/en/statusline &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customize-your-status-line" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents `/doctor` duplicate-agent detection (v2.1.196), `CLAUDE_CODE_SUBAGENT_MODEL=inherit` behavior fix (v2.1.196), plugin-scoped matcher anchoring guidance, and the nested-subagent panel showing siblings (v2.1.193).</p>
+    <ul>
+      <li><strong>`/doctor` duplicate name detection</strong> &mdash; As of v2.1.196, `/doctor` reports same-scope duplicate agent names and shows which definition is active.</li>
+      <li><strong>`CLAUDE_CODE_SUBAGENT_MODEL=inherit`</strong> &mdash; As of v2.1.196, setting the variable to `inherit` is treated as unset; earlier versions incorrectly forced subagents onto the main conversation&#x27;s model, bypassing per-invocation and frontmatter values.</li>
+      <li><strong>Plugin-scoped hook matchers</strong> &mdash; `SubagentStart`/`SubagentStop` matcher note updated: plugin-scoped names contain a colon, triggering regex evaluation; anchor with `^` and `$` for exact matching.</li>
+      <li><strong>Hyphenated matcher backward compatibility</strong> &mdash; Advises anchoring hyphenated agent names as `^db-agent$` on Claude Code versions before v2.1.195 to prevent unintended partial matches.</li>
+      <li><strong>Nested subagent panel</strong> &mdash; As of v2.1.193, opening a row in the subagent panel shows that subagent&#x27;s siblings and direct children, not just children.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds the Claude apps gateway as a supported deployment option in the authentication section.</p>
+    <ul>
+      <li><strong>Claude apps gateway option</strong> &mdash; Listed as a new authentication and deployment path that adds IdP sign-in in front of Bedrock, Vertex AI, Foundry, or the Anthropic API.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Define your agent</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates the fast-mode tip to reflect that Opus 4.6 fast mode has been removed, leaving only Opus 4.8 and Opus 4.7 as supported fast-mode models in the managed-agent model object.</p>
+    <ul>
+      <li><strong>Fast mode model list</strong> &mdash; Tip updated to reference Claude Opus 4.8 and Claude Opus 4.7 only; Claude Opus 4.6 removed from the fast-mode model object example and deprecation note updated accordingly.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/agent-setup" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/agent-setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="define-your-agent" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Using agent memory</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies how memory store mount paths are derived from the store&#x27;s display name and documents that writes outside the mount path land in ephemeral container scratch space.</p>
+    <ul>
+      <li><strong>Mount path derivation</strong> &mdash; The directory name under `/mnt/memory/` is now the store&#x27;s display name sanitized to a lowercase hyphenated slug (e.g. &quot;Demo Memory&quot; → `/mnt/memory/demo-memory/`); `mount_path` is returned in the session resource and should be read from there rather than constructed.</li>
+      <li><strong>Ephemeral scratch space</strong> &mdash; Writes to any path under `/mnt/memory/` other than the exact mount path land in container-local scratch and are discarded when the session ends.</li>
+      <li><strong>System prompt description update</strong> &mdash; Auto-added system prompt description now includes the mount path and display name in addition to access mode, store description, and instructions.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/memory" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/memory &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="using-agent-memory" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a new &quot;Create a custom skill&quot; section with multi-language code examples for uploading skills via the Skills API, and clarifies pre-built skill identifiers.</p>
+    <ul>
+      <li><strong>Create a custom skill section</strong> &mdash; New section covers uploading a skill zip or directory via `POST /v1/skills` with examples in cURL, CLI, Python, TypeScript, C#, Go, and Java.</li>
+      <li><strong>Pre-built skill identifiers</strong> &mdash; Pre-built skills now list their file-type identifiers (`pptx`, `xlsx`, `docx`, `pdf`) explicitly.</li>
+      <li><strong>Authoring pointer updated</strong> &mdash; Paragraph linking to skill-authoring docs now also directs readers to the new Create a custom skill section within the page.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/skills" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Customer-managed encryption keys</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Moves Office agents from the CMEK exclusion list to the covered-features list, meaning Office agent data is now encrypted under customer-managed keys.</p>
+    <ul>
+      <li><strong>Office agents now CMEK-covered</strong> &mdash; Office agents added to the list of features whose data is encrypted under the customer&#x27;s key on Claude Enterprise; removed from the list of features not covered by CMEK.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/cmek" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/cmek &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="customer-managed-encryption-keys" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data residency</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarifies that `inference_geo` is not applicable on Microsoft Foundry (Azure-hosted deployments use US Data Zone Standard instead), and that Foundry&#x27;s US Data Zone Standard deployment type carries a 1.1x pricing multiplier equivalent to `inference_geo: &quot;us&quot;`.</p>
+    <ul>
+      <li><strong>Microsoft Foundry `inference_geo` inapplicability</strong> &mdash; Note updated: `inference_geo` is not supported on Foundry; Azure-hosted Foundry deployments use the US Data Zone Standard deployment type to keep inference within the US.</li>
+      <li><strong>Foundry US Data Zone pricing</strong> &mdash; Foundry US Data Zone Standard deployments carry the same 1.1x pricing multiplier as `inference_geo: &quot;us&quot;` on the Claude API.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/data-residency" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/data-residency &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-residency" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Workspaces</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removes the &quot;(beta)&quot; qualifier from the Microsoft Foundry prompt-cache isolation note, reflecting that Foundry is now generally available.</p>
+    <ul>
+      <li><strong>Microsoft Foundry beta label removed</strong> &mdash; Prompt-cache isolation note updated to reference Microsoft Foundry without the &quot;(beta)&quot; qualifier.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/workspaces" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/workspaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="workspaces" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">14 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Rewrites the Foundry setup guide to document two hosting options (Hosted on Azure vs. Hosted on Anthropic), update provisioning steps for the new Foundry portal, and clarify authentication and data-processing terms.</p>
+    <ul>
+      <li><strong>Hosting options table</strong> &mdash; New section documents Hosted on Azure (latest Opus and Haiku families, Global Standard + US Data Zone Standard) vs. Hosted on Anthropic (all Foundry models, Global Standard only); recommended use cases listed for each.</li>
+      <li><strong>Hosted on Azure model availability update</strong> &mdash; Sonnet family removed from Hosted on Azure availability; only latest Opus and Haiku families listed.</li>
+      <li><strong>Deployment steps updated for new portal</strong> &mdash; Steps rewritten for the new Foundry portal (&quot;New Foundry&quot; toggle on): navigate via Discover → Models, select Custom settings to choose hosting option and region scope, and find endpoint details under Build → Models.</li>
+      <li><strong>US Data Zone Standard deployment type</strong> &mdash; Selecting Data Zone in the region-scope dropdown creates a US Data Zone Standard deployment equivalent to `inference_geo: &quot;us&quot;` on the Claude API.</li>
+      <li><strong>Model version per hosting option</strong> &mdash; Each hosting option is a separate model version in the deployment settings (e.g., version 1 = Hosted on Anthropic, version 2 = Hosted on Azure).</li>
+      <li><strong>Pricing clarification</strong> &mdash; Billing described as Claude Consumption Units through the Azure Marketplace; &quot;preview&quot; language removed; Global Standard and US Data Zone Standard deployment types documented.</li>
+      <li><strong>Data-processing terms</strong> &mdash; Added note that for Hosted on Azure deployments, prompts and completions remain within Azure; only usage metadata and safety-flagged content egress to Anthropic.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Compaction</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Revises introductory framing to emphasize response-quality degradation as a motivation alongside token limits, updates the trigger parameter documentation to show its full default object, and adds a cURL example for trigger configuration.</p>
+    <ul>
+      <li><strong>Motivation reframe</strong> &mdash; Introduction updated to lead with response-quality degradation as a reason for compaction alongside the token-cap reason.</li>
+      <li><strong>`trigger` parameter default</strong> &mdash; Parameter table now shows the full default object `{&quot;type&quot;: &quot;input_tokens&quot;, &quot;value&quot;: 150000}` and clarifies `input_tokens` is the only supported trigger type.</li>
+      <li><strong>cURL trigger example added</strong> &mdash; New cURL code snippet added to the trigger configuration section to match existing SDK examples.</li>
+      <li><strong>cURL formatting</strong> &mdash; Basic usage cURL example reformatted with consistent indentation and inline `-d` flag.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/compaction" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/compaction &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="compaction" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Context windows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expands the context-windows guide with a new model-size table, per-model thinking-block preservation behavior, and updated Microsoft Foundry context window size (now 1M for Opus 4.8).</p>
+    <ul>
+      <li><strong>Microsoft Foundry 1M context</strong> &mdash; Claude Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6 now have a 1M-token context window on Microsoft Foundry; previous text stated 200k for Opus 4.8 on Foundry.</li>
+      <li><strong>Context window sizes section</strong> &mdash; New dedicated section lists 1M models, 200k models, Fable 5/Mythos 5 128k output limit, and notes no beta header is required for long-context requests.</li>
+      <li><strong>Thinking-block preservation by model</strong> &mdash; Clarifies that on Opus 4.5+, Sonnet 4.6+, Fable 5, Mythos 5, and Mythos Preview, the API keeps previous thinking blocks by default; earlier Opus/Sonnet and all Haiku models strip them automatically.</li>
+      <li><strong>Extended thinking billing update</strong> &mdash; Notes that on models keeping previous thinking blocks, those blocks are billed as input tokens on subsequent requests.</li>
+      <li><strong>What counts toward the context window</strong> &mdash; New paragraph explicitly lists system prompt, messages array contents, tool definitions, and model output (including thinking) as contributors; references `usage` field and token-counting API.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/context-windows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="context-windows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Fast mode (research preview)</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documents Opus 4.6 fast-mode removal (June 29, 2026) with a silent standard-speed fallback, removes Opus 4.6 from the pricing table, updates the deprecation warning for Opus 4.7, and adds a note distinguishing the opt-in client-side fallback from the Opus 4.6 automatic behavior.</p>
+    <ul>
+      <li><strong>Opus 4.6 fast mode removed</strong> &mdash; As of June 29, 2026, fast mode is unavailable on Opus 4.6; requests with `speed: &quot;fast&quot;` run at standard speed, are billed at standard rates, and return `usage.speed: &quot;standard&quot;`.</li>
+      <li><strong>Opus 4.7 deprecation updated</strong> &mdash; Warning clarified: Opus 4.7 fast mode removes on July 24, 2026 with an error (not a silent fallback); the model itself remains at standard speed.</li>
+      <li><strong>Pricing table updated</strong> &mdash; Opus 4.6 row removed; Opus 4.7 pricing row kept separately from Opus 4.8.</li>
+      <li><strong>Fallback section note</strong> &mdash; New note distinguishes the opt-in client-side `max_retries=0` fallback pattern from Opus 4.6&#x27;s automatic standard-speed behavior.</li>
+      <li><strong>`usage.speed` clarification</strong> &mdash; Description updated: on Opus 4.6, `usage.speed` returns `&quot;standard&quot;` even when `speed: &quot;fast&quot;` is requested; on supported models it returns `&quot;fast&quot;` when fast mode runs.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/fast-mode" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/fast-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="fast-mode-(research-preview)" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Files API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds a Hosted on Anthropic deployment requirement for the Files API on Microsoft Foundry, and updates a TypeScript import to use the Node.js module specifier.</p>
+    <ul>
+      <li><strong>Microsoft Foundry restriction</strong> &mdash; Files API availability note updated to require a Hosted on Anthropic deployment on Microsoft Foundry.</li>
+      <li><strong>TypeScript import</strong> &mdash; Example updated to import from `node:fs/promises` instead of `fs/promises`.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/files" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/files &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="files-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Stop reasons and fallback</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixes inline code formatting of the `web_fetch` tool error message in the `pause_turn` continuation rules.</p>
+    <ul>
+      <li><strong>Error message formatting</strong> &mdash; `but no web_fetch tool was provided` now formatted as inline code, matching the server-tools page fix.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/handling-stop-reasons &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="stop-reasons-and-fallback" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Mid-conversation system messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Adds Microsoft Foundry to the list of supported platforms for mid-conversation system messages.</p>
+    <ul>
+      <li><strong>Microsoft Foundry support added</strong> &mdash; Availability note updated: mid-conversation system messages are now available on Microsoft Foundry in addition to the Claude API and Claude Platform on AWS; Amazon Bedrock and Google Cloud remain unsupported.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mid-conversation-system-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Features overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removes the `azureAiBeta` flag from multiple features, replacing it with `azureAi` (GA), and adds a footnote clarifying that Microsoft Foundry feature availability differs by hosting option.</p>
+    <ul>
+      <li><strong>Microsoft Foundry GA status</strong> &mdash; Context windows, adaptive thinking, citations, effort, extended thinking, PDF support, search results, structured outputs, prompt caching, token counting, bash tool, memory tool, text editor, fine-grained tool streaming, and tool search all updated from `azureAiBeta` to `azureAi`.</li>
+      <li><strong>Hosting-option footnote</strong> &mdash; New footnote (†) added to features available only on Hosted on Anthropic deployments: code execution, web fetch, web search, Agent Skills, MCP connector, programmatic tool calling, tool search, and Files API.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="features-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>PDF support</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates a TypeScript example to use the `node:fs` module specifier instead of the bare `fs` specifier.</p>
+    <ul>
+      <li><strong>TypeScript import</strong> &mdash; Example updated to import from `node:fs` instead of bare `fs`.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/pdf-support" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/pdf-support &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="pdf-support" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Prompt caching</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Removes the &quot;(beta)&quot; qualifier from all Microsoft Foundry references in automatic caching, cache limitations, cache storage/sharing, 1-hour cache, and ZDR sections.</p>
+    <ul>
+      <li><strong>Microsoft Foundry beta label removed</strong> &mdash; &quot;(beta)&quot; removed from Microsoft Foundry in the automatic caching availability note, cache-limitations section, cache-storage-and-sharing warning, 1-hour cache note, and the ZDR data-retention section.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/prompt-caching &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="prompt-caching" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Using Agent Skills with the API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates three TypeScript examples to import from `node:fs` instead of bare `fs`.</p>
+    <ul>
+      <li><strong>TypeScript imports</strong> &mdash; Three TypeScript code examples updated to use `node:fs` module specifier for skill upload, versioning, and DCF analysis examples.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/skills-guide" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/skills-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="using-agent-skills-with-the-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Promotes structured outputs on Microsoft Foundry from beta to generally available, with a note that a Hosted on Anthropic deployment is required.</p>
+    <ul>
+      <li><strong>Microsoft Foundry GA</strong> &mdash; Availability note updated from &quot;available in beta on Microsoft Foundry&quot; to &quot;generally available on Microsoft Foundry&quot; with a requirement for a Hosted on Anthropic deployment.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Token counting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates a TypeScript example to import from `node:fs/promises` instead of the bare `fs/promises` specifier.</p>
+    <ul>
+      <li><strong>TypeScript import</strong> &mdash; Example updated to import `readFile` from `node:fs/promises` instead of `fs/promises`.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/token-counting" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/token-counting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="token-counting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Vision</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updates a TypeScript example to import from `node:fs` instead of the bare `fs` specifier.</p>
+    <ul>
+      <li><strong>TypeScript import</strong> &mdash; Example updated to import from `node:fs` instead of bare `fs`.</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/vision" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/vision &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="vision" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 51 docs analyzed &middot; 2026-06-30
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
