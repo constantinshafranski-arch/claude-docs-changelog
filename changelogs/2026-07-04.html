@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; July 04, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">July 04, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jul 04 at 07:42 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">28</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Google Vertex AI renamed to Google Cloud&#x27;s Agent Platform</strong> &mdash; All documentation across 20+ pages updated to replace &quot;Google Vertex AI&quot; and &quot;Vertex AI&quot; references with &quot;Google Cloud&#x27;s Agent Platform&quot;, including setup guides, CI/CD integrations, and settings references</li>
+      <li><strong><code>--cloud</code> flag introduced</strong> &mdash; The <code>--remote</code> flag for creating web sessions is now deprecated in favor of <code>--cloud</code>; <code>--remote</code> remains as a deprecated alias</li>
+      <li><strong><code>manual</code> permission mode alias added (v2.1.200)</strong> &mdash; <code>manual</code> is now accepted as an alias for the <code>default</code> permission mode across <code>--permission-mode</code>, <code>defaultMode</code> settings, hooks <code>setMode</code>, subagent frontmatter, and the VS Code <code>initialPermissionMode</code> setting</li>
+      <li><strong><code>modelOverrides</code> now applies to <code>--model</code> and <code>ANTHROPIC_MODEL</code> (v2.1.200)</strong> &mdash; Anthropic model IDs passed via CLI flag or environment variable are now mapped through <code>modelOverrides</code> on Amazon Bedrock, Google Cloud&#x27;s Agent Platform, and Mantle, instead of being forwarded as-is</li>
+      <li><strong><code>askUserQuestionTimeout</code> setting added (v2.1.200)</strong> &mdash; New setting controls auto-continue timeout for <code>AskUserQuestion</code> dialogs; accepts <code>&quot;60s&quot;</code>, <code>&quot;5m&quot;</code>, <code>&quot;10m&quot;</code>, or <code>&quot;never&quot;</code></li>
+      <li><strong>Amazon Bedrock naming standardized</strong> &mdash; All references to plain &quot;Bedrock&quot; updated to &quot;Amazon Bedrock&quot; for consistency across authentication, IAM, and cost-tracking documentation</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">28 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Amazon Bedrock</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Standardized all references from plain &quot;Bedrock&quot; to &quot;Amazon Bedrock&quot; throughout the page, and documented that the `--model`/`ANTHROPIC_MODEL` override map now applies via `modelOverrides` as of v2.1.200.</p>
+    <ul>
+      <li><strong>Naming</strong> &mdash; All occurrences of &quot;Bedrock&quot; updated to &quot;Amazon Bedrock&quot; across prerequisites, setup wizard steps, environment variable descriptions, IAM docs, and resource links</li>
+      <li><strong>modelOverrides (v2.1.200)</strong> &mdash; Documented that `--model` and `ANTHROPIC_MODEL` Anthropic model IDs are now routed through `modelOverrides` before reaching the provider; before v2.1.200 values were forwarded as-is</li>
+      <li><strong>Mantle endpoint</strong> &mdash; Updated description clarifying that Mantle routes against the Amazon Bedrock Invoke API and that model IDs outside the Mantle subset are sent raw unless covered by `modelOverrides`</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/amazon-bedrock" target="_blank" rel="noopener">code.claude.com/docs/en/amazon-bedrock &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-amazon-bedrock" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed the `--remote` flag to `--cloud` for creating web sessions, with `--remote` kept as a deprecated alias, and updated the Teleport unavailability note to reference Google Cloud&#x27;s Agent Platform instead of Vertex AI.</p>
+    <ul>
+      <li><strong><code>--cloud</code> flag</strong> &mdash; `--remote` is now a deprecated alias; all examples updated to use `--cloud` for starting cloud sessions from the terminal</li>
+      <li><strong>Environment table</strong> &mdash; &quot;Set the default for `--remote`&quot; action row relabeled to &quot;Set the default environment for CLI cloud sessions&quot;</li>
+      <li><strong>Teleport unavailability</strong> &mdash; Provider list in the `--teleport` unavailable section updated from &quot;Vertex AI&quot; to &quot;Google Cloud&#x27;s Agent Platform&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the `--cloud` flag entry, deprecated `--remote` to an alias, updated `--permission-mode` to document the new `manual` alias, and corrected `claude gateway` provider names.</p>
+    <ul>
+      <li><strong><code>--cloud</code> flag</strong> &mdash; New entry documents that `--cloud` creates a web session on claude.ai; replaces `--remote`</li>
+      <li><strong><code>--remote</code> flag</strong> &mdash; Now documented as a deprecated alias for `--cloud`</li>
+      <li><strong><code>--permission-mode</code></strong> &mdash; Added `manual` as an alias for `default` (requires v2.1.200); `claude --help` now lists `manual` in place of `default`</li>
+      <li><strong><code>claude gateway</code></strong> &mdash; Updated provider list from &quot;Bedrock, Vertex AI, or Foundry&quot; to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, or Microsoft Foundry&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified the `--from-pr` example to explicitly show replacing the placeholder PR number.</p>
+    <ul>
+      <li><strong><code>--from-pr</code> example</strong> &mdash; Example text updated from `--from-pr &lt;number&gt;` to `--from-pr 123` with explicit instruction to replace 123 with the actual PR number</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated provider names in the cloud cost-tracking paragraph from shorthand to full product names.</p>
+    <ul>
+      <li><strong>Provider naming</strong> &mdash; &quot;Bedrock, Vertex, and Foundry&quot; replaced with &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, and Microsoft Foundry&quot; in the Claude apps gateway cost-attribution note</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data usage</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated all provider name references to their full official names and renamed the &quot;Google Cloud Vertex AI&quot; row in the encryption-at-rest table to &quot;Google Cloud&#x27;s Agent Platform&quot;.</p>
+    <ul>
+      <li><strong>Development Partner Program</strong> &mdash; Clarified exclusion applies to &quot;Amazon Bedrock or Google Cloud&#x27;s Agent Platform&quot; rather than generic &quot;Bedrock or Vertex&quot;</li>
+      <li><strong>Feedback upload behavior</strong> &mdash; Provider list updated to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, Microsoft Foundry&quot; for the local archive path</li>
+      <li><strong>Encryption table</strong> &mdash; &quot;Google Cloud Vertex AI&quot; row renamed to &quot;Google Cloud&#x27;s Agent Platform&quot;</li>
+      <li><strong>Default behaviors table</strong> &mdash; Column headers updated to &quot;Google Cloud&#x27;s Agent Platform API&quot;, &quot;Amazon Bedrock API&quot;, and &quot;Microsoft Foundry API&quot;</li>
+      <li><strong><code>CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST</code></strong> &mdash; Provider list in the v2.1.126 note updated to full official names</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">code.claude.com/docs/en/data-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-usage" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Desktop application</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated provider names to official branding throughout and added a link correction for the auto-mode enable setting.</p>
+    <ul>
+      <li><strong>Auto mode availability</strong> &mdash; &quot;Google Cloud Vertex AI&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot;; anchor link corrected to `#enable-auto-mode-on-bedrock-agent-platform-or-foundry`</li>
+      <li><strong>CLI-to-Desktop command</strong> &mdash; Provider restriction list updated to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, or Microsoft Foundry&quot;</li>
+      <li><strong>CLI vs Desktop comparison table</strong> &mdash; Third-party providers row updated for both CLI and Desktop columns to use full official product names</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="desktop-application" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Development containers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the authentication prompt description and credential guidance to use the official &quot;Google Cloud&#x27;s Agent Platform&quot; name.</p>
+    <ul>
+      <li><strong>Provider naming</strong> &mdash; &quot;Google Vertex AI&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot; in the auth prompt and credential setup instructions</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/devcontainer" target="_blank" rel="noopener">code.claude.com/docs/en/devcontainer &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="development-containers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitHub Actions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced all &quot;Google Vertex AI&quot; references with &quot;Google Cloud&#x27;s Agent Platform&quot; throughout setup steps, workflow examples, secrets tables, and the configuration reference.</p>
+    <ul>
+      <li><strong>Section heading</strong> &mdash; &quot;Using with Amazon Bedrock &amp; Google Vertex AI&quot; renamed to &quot;Using with Amazon Bedrock and Google Cloud&quot;</li>
+      <li><strong>Prerequisites and setup steps</strong> &mdash; All GCP setup instructions updated to reference Google Cloud&#x27;s Agent Platform API instead of Vertex AI API</li>
+      <li><strong>Secrets table</strong> &mdash; `GCP_SERVICE_ACCOUNT` description updated to &quot;Google Cloud&#x27;s Agent Platform access&quot;</li>
+      <li><strong><code>use_vertex</code> input</strong> &mdash; Description updated to &quot;Use Google Cloud&#x27;s Agent Platform instead of Claude API&quot;</li>
+      <li><strong>IAM role naming</strong> &mdash; &quot;IAM role with Bedrock permissions&quot; updated to &quot;IAM role with Amazon Bedrock permissions&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/github-actions" target="_blank" rel="noopener">code.claude.com/docs/en/github-actions &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-github-actions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitLab CI/CD</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced all &quot;Google Vertex AI&quot; references with &quot;Google Cloud&#x27;s Agent Platform&quot; across enterprise setup, job examples, prerequisites, and CI/CD variable descriptions.</p>
+    <ul>
+      <li><strong>Section heading</strong> &mdash; &quot;Using with Amazon Bedrock &amp; Google Vertex AI&quot; renamed to &quot;Using with Amazon Bedrock and Google Cloud&quot;</li>
+      <li><strong>Job example heading</strong> &mdash; &quot;Google Vertex AI job example&quot; renamed to &quot;Agent Platform job example&quot;</li>
+      <li><strong>Prerequisites and setup tabs</strong> &mdash; All Vertex AI API references updated to Google Cloud&#x27;s Agent Platform API</li>
+      <li><strong>CI/CD variable descriptions</strong> &mdash; `CLOUD_ML_REGION` description updated to &quot;Google Cloud&#x27;s Agent Platform region&quot;</li>
+      <li><strong>Amazon Bedrock naming</strong> &mdash; IAM role and `AWS_REGION` variable descriptions updated to use &quot;Amazon Bedrock&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/gitlab-ci-cd" target="_blank" rel="noopener">code.claude.com/docs/en/gitlab-ci-cd &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-gitlab-ci/cd" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Google Cloud&#x27;s Agent Platform</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed the entire page from &quot;Claude Code on Google Vertex AI&quot; to &quot;Claude Code on Google Cloud&#x27;s Agent Platform&quot;, updating all setup instructions, IAM docs, region configuration, and resource links throughout.</p>
+    <ul>
+      <li><strong>Page title and description</strong> &mdash; Renamed from &quot;Google Vertex AI&quot; to &quot;Google Cloud&#x27;s Agent Platform, formerly Vertex AI&quot;</li>
+      <li><strong>Prerequisites</strong> &mdash; &quot;Vertex AI API&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform API&quot; in all enable/request steps</li>
+      <li><strong>Login wizard</strong> &mdash; Step text updated; noted that the login prompt UI still shows &quot;Google Vertex AI&quot; as its label</li>
+      <li><strong>Region configuration</strong> &mdash; All hostname and endpoint references updated to Google Cloud&#x27;s Agent Platform branding</li>
+      <li><strong>MCP tool search</strong> &mdash; Behavior notes updated to reference Google Cloud&#x27;s Agent Platform for tool search support matrix</li>
+      <li><strong>Model pinning and defaults</strong> &mdash; All alias resolution and Haiku fallback notes updated to use new provider name</li>
+      <li><strong>IAM and resource links</strong> &mdash; &quot;Vertex IAM documentation&quot; and all additional resource links updated to Google Cloud&#x27;s Agent Platform URLs</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/google-vertex-ai" target="_blank" rel="noopener">code.claude.com/docs/en/google-vertex-ai &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-google-cloud&#x27;s-agent-platform" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the bare mode authentication note to use official provider names.</p>
+    <ul>
+      <li><strong>Bare mode provider names</strong> &mdash; &quot;Bedrock, Vertex, and Foundry&quot; updated to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, and Microsoft Foundry&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the `permission_mode` field reports `&quot;default&quot;` for the Manual mode label, and added `manual` as a valid value for `setMode` as of v2.1.200.</p>
+    <ul>
+      <li><strong><code>permission_mode</code> field</strong> &mdash; Added note that the mode labeled Manual in the UI arrives as `&quot;default&quot;` in hook JSON, never as `&quot;manual&quot;`, so scripts matching `&quot;default&quot;` continue to work</li>
+      <li><strong><code>setMode</code> output field</strong> &mdash; Added `manual` as an alias for `default` in the valid modes list; requires Claude Code v2.1.200 or later</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Shift+Tab permission mode cycling description to note that `default` is labeled &quot;Manual&quot; in the mode indicator.</p>
+    <ul>
+      <li><strong>Mode indicator label</strong> &mdash; Shift+Tab cycle description updated to note `default` is displayed as &quot;Manual&quot; in the mode indicator</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Legal and compliance</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated third-party provider reference in the commercial agreements section to use official product names.</p>
+    <ul>
+      <li><strong>Provider naming</strong> &mdash; &quot;Google Vertex&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot; in the commercial agreements description</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/legal-and-compliance" target="_blank" rel="noopener">code.claude.com/docs/en/legal-and-compliance &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="legal-and-compliance" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Other LLM gateways</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated provider names in the subscriptions and gateways section to use official branding.</p>
+    <ul>
+      <li><strong>Provider naming</strong> &mdash; &quot;Bedrock, Agent Platform, or Foundry&quot; updated to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, or Microsoft Foundry&quot; in the billing note</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">code.claude.com/docs/en/llm-gateway &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="other-llm-gateways" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated MCP tool search configuration notes and connector loading conditions to use &quot;Google Cloud&#x27;s Agent Platform&quot; instead of &quot;Vertex AI&quot;.</p>
+    <ul>
+      <li><strong>WaitForMcpServers fallback</strong> &mdash; &quot;Vertex AI&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot; in the tool search disabled configurations list</li>
+      <li><strong>Connector loading</strong> &mdash; Third-party provider exclusion note updated from &quot;Bedrock or Vertex&quot; to &quot;Amazon Bedrock or Google Cloud&#x27;s Agent Platform&quot;</li>
+      <li><strong>ENABLE_TOOL_SEARCH table</strong> &mdash; All Vertex AI references in the behavior column updated to Google Cloud&#x27;s Agent Platform</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code on Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Replaced shorthand &quot;Foundry&quot; with &quot;Microsoft Foundry&quot; throughout model pinning warnings and startup notes, and updated the provider comparison to use full official names.</p>
+    <ul>
+      <li><strong>Model pinning warning</strong> &mdash; &quot;Foundry&quot; replaced with &quot;Microsoft Foundry&quot; in the pin requirement warning and opus alias resolution note</li>
+      <li><strong>Haiku default note</strong> &mdash; Updated to &quot;On Microsoft Foundry, Claude Code defaults this to the primary model&quot;</li>
+      <li><strong>No setup wizard note</strong> &mdash; Updated comparison from &quot;Unlike Bedrock and Vertex AI&quot; to &quot;Unlike Amazon Bedrock and Google Cloud&#x27;s Agent Platform&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/microsoft-foundry" target="_blank" rel="noopener">code.claude.com/docs/en/microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-on-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added model ID validation logic for `setModel()` calls (v2.1.200), extended `modelOverrides` to apply to `--model` and `ANTHROPIC_MODEL` on third-party providers (v2.1.200), and updated all provider name references to official branding.</p>
+    <ul>
+      <li><strong>Model ID validation (v2.1.200)</strong> &mdash; New section documents that `setModel()` calls from the Agent SDK or Desktop app are validated against known model IDs on the Anthropic API; unrecognized strings are rejected with an error rather than saved</li>
+      <li><strong><code>modelOverrides</code> scope (v2.1.200)</strong> &mdash; Overrides now apply when Anthropic model IDs are passed via `--model`, `ANTHROPIC_MODEL`, or `ANTHROPIC_DEFAULT_*_MODEL` on Amazon Bedrock, Google Cloud&#x27;s Agent Platform, and Mantle</li>
+      <li><strong>Managed source restriction (v2.1.200)</strong> &mdash; When `availableModels` is set in managed settings, only `modelOverrides` from that managed source apply to IDs passed via `--model` or environment variables</li>
+      <li><strong>Provider naming</strong> &mdash; &quot;Bedrock&quot;, &quot;Vertex AI&quot;, and &quot;Foundry&quot; replaced with full official names throughout model alias resolution, pinning tables, and capability detection notes</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated provider names in the internal error event description and cost metrics note to use official branding.</p>
+    <ul>
+      <li><strong>Internal error event</strong> &mdash; &quot;Bedrock, Vertex, or Foundry&quot; updated to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, or Microsoft Foundry&quot;</li>
+      <li><strong>Cost metrics note</strong> &mdash; &quot;Google Cloud Vertex&quot; updated to &quot;Google Cloud&#x27;s Agent Platform&quot; in the official billing data reference</li>
+      <li><strong>User identity attribution</strong> &mdash; Provider list updated to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, or Microsoft Foundry&quot;</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the third-party provider list in the model traffic routing note to use &quot;Google Cloud&#x27;s Agent Platform&quot;.</p>
+    <ul>
+      <li><strong>Provider naming</strong> &mdash; &quot;Google Vertex AI&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot; in the network routing paragraph</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the login account type list to reference &quot;Google Cloud&#x27;s Agent Platform&quot; instead of &quot;Google Vertex AI&quot;.</p>
+    <ul>
+      <li><strong>Provider naming</strong> &mdash; &quot;Google Vertex AI&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot; in the login options list</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new `askUserQuestionTimeout` setting, added `manual` as an alias in `defaultMode`, clarified `.claude/settings.local.json` workspace trust behavior, and updated provider references throughout.</p>
+    <ul>
+      <li><strong><code>askUserQuestionTimeout</code> (v2.1.200)</strong> &mdash; New setting controlling idle auto-continue for `AskUserQuestion` dialogs; accepts `&quot;60s&quot;`, `&quot;5m&quot;`, `&quot;10m&quot;`, or `&quot;never&quot;`; appears in `/config` as &quot;Question auto-continue timeout&quot;</li>
+      <li><strong><code>defaultMode</code> setting</strong> &mdash; Added `manual` as an alias for `default` (labeled Manual in the CLI and extensions); requires v2.1.200 or later</li>
+      <li><strong><code>settings.local.json</code> trust</strong> &mdash; Clarified that allow rules in user-created `settings.local.json` take effect without workspace trust, but workspace trust still applies if the repo commits the file</li>
+      <li><strong><code>forceLoginMethod</code> / <code>forceLoginOrgUUID</code></strong> &mdash; Third-party provider exceptions updated from &quot;Bedrock, Vertex, and Foundry&quot; to full official names</li>
+      <li><strong>Provider naming</strong> &mdash; &quot;Bedrock, Vertex, or Foundry&quot; references updated to official names in `feedbackSurveyRate`, `skipWebFetchPreflight`, and `modelOverrides` descriptions</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Fixed duplicate `theme={null}` attributes in code block snippets and updated the binary verification instructions to cover installed native binaries.</p>
+    <ul>
+      <li><strong>Code block cleanup</strong> &mdash; Removed duplicate `theme={null}` attributes from install command snippets across Native Install, Homebrew, and WinGet tabs</li>
+      <li><strong>Binary verification</strong> &mdash; Checksum step clarified to specify commands assume a `claude` binary in the current directory and explains how to verify an installed native binary at `~/.local/share/claude/versions/VERSION`</li>
+      <li><strong>Provider naming</strong> &mdash; &quot;Google Vertex AI&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot; in the authentication section</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added `manual` as a valid `permissionMode` frontmatter value (v2.1.200) and refined subagent API error reporting for foreground agents with tool-calls-only output.</p>
+    <ul>
+      <li><strong><code>permissionMode</code> frontmatter (v2.1.200)</strong> &mdash; `manual` added as an alias for `default` in the `permissionMode` field</li>
+      <li><strong>Foreground subagent error handling (v2.1.200)</strong> &mdash; Subagents that produced only tool calls (no text output) now fail with `Agent terminated early due to an API error` instead of returning an empty partial result; behavior in v2.1.199 noted for reference</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise deployment overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated all provider name references from &quot;Google Vertex AI&quot; to &quot;Google Cloud&#x27;s Agent Platform&quot; across the comparison table, proxy configuration tabs, and deployment option links.</p>
+    <ul>
+      <li><strong>Comparison table</strong> &mdash; Column header updated to &quot;Google Cloud&#x27;s Agent Platform, formerly Vertex AI&quot;</li>
+      <li><strong>Proxy configuration tabs</strong> &mdash; Google Cloud&#x27;s Agent Platform tab renamed and all environment variable comments updated</li>
+      <li><strong>Deployment option links</strong> &mdash; &quot;Google Vertex AI&quot; link text updated to &quot;Google Cloud&#x27;s Agent Platform&quot;</li>
+      <li><strong>Model pinning guidance</strong> &mdash; Provider list updated to use full official names</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/third-party-integrations" target="_blank" rel="noopener">code.claude.com/docs/en/third-party-integrations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-deployment-overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the symptom routing table to expand the credential troubleshooting row with full provider names.</p>
+    <ul>
+      <li><strong>Credential symptom row</strong> &mdash; &quot;Bedrock/Vertex/Foundry credentials&quot; expanded to &quot;Amazon Bedrock, Google Cloud&#x27;s Agent Platform, or Microsoft Foundry credentials&quot; in the routing table</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Renamed permission modes in the UI description to match new labels (Manual, Plan mode, Edit automatically), added `manual` alias to `initialPermissionMode`, and updated provider references to Google Cloud&#x27;s Agent Platform.</p>
+    <ul>
+      <li><strong>Permission mode labels</strong> &mdash; UI mode descriptions updated to separate bullet points: &quot;Manual&quot; (was &quot;normal mode&quot;), &quot;Plan mode&quot;, and &quot;Edit automatically&quot; (was &quot;auto-accept mode&quot;)</li>
+      <li><strong><code>initialPermissionMode</code> setting</strong> &mdash; Added `manual` as an alias for `default` in the extension setting (requires v2.1.200)</li>
+      <li><strong>Provider naming</strong> &mdash; &quot;Google Vertex AI&quot; replaced with &quot;Google Cloud&#x27;s Agent Platform&quot; in prerequisites and third-party provider setup section</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 28 docs analyzed &middot; 2026-07-04
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
