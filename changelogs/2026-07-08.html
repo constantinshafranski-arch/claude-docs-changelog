@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; July 08, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">July 08, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jul 08 at 07:28 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat api">
+      <div class="num">16</div>
+      <div class="label">API Reference</div>
+    </div>
+    <div class="stat tools">
+      <div class="num">7</div>
+      <div class="label">Agents &amp; Tools</div>
+    </div>
+    <div class="stat cli">
+      <div class="num">5</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat managed">
+      <div class="num">1</div>
+      <div class="label">Managed Agents</div>
+    </div>
+    <div class="stat other">
+      <div class="num">12</div>
+      <div class="label">Other</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">3</div>
+      <div class="label">Platform</div>
+    </div>
+    <div class="stat test">
+      <div class="num">1</div>
+      <div class="label">Testing &amp; Evaluation</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Compliance API activity types expanded</strong> &mdash; 42 new activity types added across Claude Code agent lifecycle events (<code>ccr_agent_*</code>), CMEK key management (<code>org_external_key_*</code>), trusted device enrollment, step-up authentication, plugin directory submissions, and more; <code>activity_types</code> filter now covers 384 values.</li>
+      <li><strong>Code Artifacts API path migration</strong> &mdash; All Code Artifact endpoints moved from <code>/v1/compliance/code/artifacts</code> to <code>/v1/compliance/apps/code/artifacts</code>; <code>organization_uuid</code> query param removed from download and delete routes; <code>organization_id</code> field removed from list response in favor of <code>organization_uuid</code>.</li>
+      <li><strong>Chat list endpoint gains <code>order_by</code> parameter</strong> &mdash; <code>GET /v1/compliance/apps/chats</code> now accepts <code>order_by=created_at|updated_at</code> for org-wide queries, enabling incremental exports sorted by last-modified time without enumerating users first; backward pagination restricted to per-user queries.</li>
+      <li><strong>Compliance API key creation extended to organization owners</strong> &mdash; Claude Enterprise organization owners (not just primary owners) can now create Compliance Access Keys scoped to their own organization; &quot;Get access to the Compliance API&quot; page renamed to &quot;Set up the Compliance API&quot; with a revised step-by-step setup flow.</li>
+      <li><strong>Organization settings response adds new boolean and string setting types</strong> &mdash; 12 new boolean settings added (e.g., <code>claude_code_web_enabled</code>, <code>claude_code_workflows_enabled</code>, <code>claude_design_enabled</code>); new <code>String</code> setting type introduced for <code>claude_code_default_worker_environment_id</code> and <code>claude_code_default_worker_pool_id</code>; <code>expires_at</code> field added to compliance API key objects.</li>
+      <li><strong>Agent Skills and MCP tunnel artifacts updated</strong> &mdash; Skills API now uses <code>code_execution_20260521</code> tool type (GA, no beta header required); MCP proxy image digest bumped and Helm chart updated to version 2.0.1; Java SDK examples added to advisor tool docs.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-api">⚡</div>
+    <h2>API Reference</h2>
+    <span class="count">16 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Compliance API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added 42 new activity types covering Claude Code agent lifecycle, CMEK key management, trusted devices, step-up authentication, plugin directory submissions, and clarified Cowork MCP always-allow descriptions to specify read-only tools are unaffected.</p>
+    <ul>
+      <li><strong>activity_types count</strong> &mdash; Filter enum expanded from 339 to 381 additional values (384 total named types)</li>
+      <li><strong>ccr_agent_* events</strong> &mdash; New activity types for Claude Code agent create/delete/update and agent proxy credential and profile lifecycle (created, deleted, rotated, updated, bound, unbound)</li>
+      <li><strong>ccr_agent_slack_* events</strong> &mdash; New types for Slack channel/workspace binding and access scope management for Claude Code agents</li>
+      <li><strong>claude_file_exported</strong> &mdash; New activity type fired when a file is exported from Claude to an external storage destination</li>
+      <li><strong>group_member_addition_failed / group_member_removal_failed</strong> &mdash; New failure-path activity types for RBAC group membership changes</li>
+      <li><strong>org_claude_code_zero_data_retention_disabled</strong> &mdash; New event for primary owner disabling ZDR for Claude Code</li>
+      <li><strong>org_connector_domain_guard_updated</strong> &mdash; New event tracking enterprise admin changes to connector domain verification restriction</li>
+      <li><strong>org_cowork_mcp_always_allow_*</strong> &mdash; Descriptions clarified: setting applies only to connector tools that can make changes; read-only tools are unaffected</li>
+      <li><strong>org_external_key_* events</strong> &mdash; Four new CMEK external key events: created, deleted, updated, validated</li>
+      <li><strong>org_model_default_updated</strong> &mdash; New event for administrator changes to org or role default model settings</li>
+      <li><strong>org_user_trusted_devices_revoked</strong> &mdash; New event for admin-initiated revocation of a member&#x27;s trusted devices and active sessions</li>
+      <li><strong>pending_share_* events</strong> &mdash; New events for pending project/skill shares to non-members (created and revoked)</li>
+      <li><strong>platform_billing_upgraded_to_prepaid / platform_federated_authentication</strong> &mdash; New platform-level billing and OIDC federation audit events</li>
+      <li><strong>platform_plugin_directory_submission_* events</strong> &mdash; Three new events for plugin directory submission lifecycle on the API platform</li>
+      <li><strong>step_up_authentication_* / step_up_credential_enrolled</strong> &mdash; New events for step-up identity verification success, failure, and passkey enrollment</li>
+      <li><strong>trusted_device_* events</strong> &mdash; New events for trusted device enrollment, credential rotation, and revocation</li>
+      <li><strong>workspace_spend_limit_alert_emails_updated</strong> &mdash; New event for spend limit alert email configuration changes</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="compliance-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Activities</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Identical activity type additions as the Compliance API overview page — 42 new types added to the <code>GET /v1/compliance/activities</code> endpoint&#x27;s <code>activity_types</code> filter enum, with the same Cowork MCP description clarifications.</p>
+    <ul>
+      <li><strong>activity_types count</strong> &mdash; Filter enum expanded from 339 to 381 additional values</li>
+      <li><strong>ccr_agent_* events</strong> &mdash; Full set of Claude Code agent and agent proxy lifecycle audit events added</li>
+      <li><strong>org_external_key_* events</strong> &mdash; CMEK key create, delete, update, and validate events added</li>
+      <li><strong>step_up_authentication_* / trusted_device_* events</strong> &mdash; Identity verification and trusted device management events added</li>
+      <li><strong>org_cowork_mcp_always_allow_*</strong> &mdash; Descriptions updated to clarify read-only connector tools are not affected by this setting</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/activities" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/activities &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="activities" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Query compliance activities Activities</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>GET /v1/compliance/activities</code> endpoint reference was updated with the same 42 new activity types and Cowork MCP clarifications as the parent Activities page.</p>
+    <ul>
+      <li><strong>activity_types count</strong> &mdash; Expanded from 339 to 381 additional values in the filter enum</li>
+      <li><strong>New event categories</strong> &mdash; ccr_agent, org_external_key, step_up_authentication, trusted_device, pending_share, and platform_plugin_directory_submission events all added</li>
+      <li><strong>org_cowork_mcp_always_allow_*</strong> &mdash; Descriptions clarified to note read-only connector tools are unaffected</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/activities/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/activities/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="query-compliance-activities-activities" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Apps</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>GET /v1/compliance/apps/chats</code> endpoint gained an <code>order_by</code> query parameter, <code>updated_at.*</code> filters were opened to org-wide queries, backward pagination was restricted to per-user queries, and truncation field descriptions were generalized.</p>
+    <ul>
+      <li><strong>order_by parameter</strong> &mdash; New optional <code>&quot;created_at&quot; | &quot;updated_at&quot;</code> sort key; <code>updated_at</code> is only supported for org-wide queries (no <code>user_ids[]</code>); time filters must match the sort key</li>
+      <li><strong>updated_at.* filters</strong> &mdash; Removed the requirement that these filters need <code>user_ids[]</code>; now available for org-wide queries when <code>order_by=updated_at</code></li>
+      <li><strong>first_id / backward pagination</strong> &mdash; <code>before_id</code> is now documented as supported only for per-user queries; org-wide queries do not accept <code>before_id</code></li>
+      <li><strong>data sort description</strong> &mdash; Response <code>data</code> description updated to reference the <code>order_by</code> key rather than hardcoded <code>created_at</code></li>
+      <li><strong>truncated field descriptions</strong> &mdash; Generalized wording for text, tool_use_input, and tool_result truncation; param names replaced with generic endpoint-agnostic language</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="apps" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Chats</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Chats reference received the same <code>order_by</code> parameter, updated filter constraints, backward-pagination restriction, and generalized truncation descriptions as the Apps page.</p>
+    <ul>
+      <li><strong>order_by parameter</strong> &mdash; Added <code>&quot;created_at&quot; | &quot;updated_at&quot;</code> sort key with org-wide <code>updated_at</code> support</li>
+      <li><strong>updated_at.* filters</strong> &mdash; Removed per-user-only restriction for org-wide queries</li>
+      <li><strong>backward pagination</strong> &mdash; <code>before_id</code> now documented as unsupported for org-wide queries</li>
+      <li><strong>truncated descriptions</strong> &mdash; Endpoint-specific parameter names replaced with generic descriptions for tool_use and tool_result truncation</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="chats" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List chats Chats</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The list chats endpoint reference was updated with the <code>order_by</code> parameter, relaxed <code>updated_at</code> filter constraints, and backward-pagination restriction aligned with the Chats page.</p>
+    <ul>
+      <li><strong>order_by parameter</strong> &mdash; New optional sort key accepting <code>&quot;created_at&quot;</code> or <code>&quot;updated_at&quot;</code>; org-wide <code>updated_at</code> sorting requires omitting <code>user_ids[]</code></li>
+      <li><strong>updated_at.* filters</strong> &mdash; Restriction to <code>user_ids[]</code>-only queries removed</li>
+      <li><strong>first_id / before_id</strong> &mdash; Backward pagination now explicitly restricted to per-user queries</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-chats-chats" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Truncation field descriptions for text blocks, tool_use inputs, and tool_result content were generalized to remove endpoint-specific parameter names.</p>
+    <ul>
+      <li><strong>text truncated description</strong> &mdash; Removed reference to &quot;remote-sessions messages endpoint&quot;; now applies generically to the 1 MiB per-string bound</li>
+      <li><strong>tool_use input truncated</strong> &mdash; Parameter name <code>tool_use_input_max_chars=-1</code> replaced with generic &quot;endpoint&#x27;s tool-use input max parameter&quot;</li>
+      <li><strong>tool_result truncated</strong> &mdash; Parameter name <code>tool_result_max_chars=-1</code> replaced with generic &quot;endpoint&#x27;s tool-result max parameter&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/messages" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/messages &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get chat messages Messages</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Identical truncation description updates as the Messages page — endpoint-specific parameter names replaced with generic language for tool_use and tool_result truncation flags.</p>
+    <ul>
+      <li><strong>text truncated description</strong> &mdash; Removed remote-sessions endpoint reference</li>
+      <li><strong>tool_use / tool_result truncated</strong> &mdash; Replaced hardcoded parameter names with generic endpoint-agnostic wording</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/apps/chats/messages/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/apps/chats/messages/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-chat-messages-messages" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>All Code Artifact API paths migrated from <code>/v1/compliance/code/artifacts</code> to <code>/v1/compliance/apps/code/artifacts</code>, the <code>organization_uuid</code> query parameter was removed from download and delete routes, and the <code>organization_id</code> tagged-ID field was removed from list responses.</p>
+    <ul>
+      <li><strong>endpoint paths</strong> &mdash; List, download-version, and delete endpoints moved to <code>/v1/compliance/apps/code/artifacts/*</code></li>
+      <li><strong>organization_id field removed</strong> &mdash; Tagged-ID <code>organization_id</code> field dropped from <code>ArtifactListResponse</code>; <code>organization_uuid</code> remains</li>
+      <li><strong>organization_uuid query param removed</strong> &mdash; Optional <code>organization_uuid</code> parameter removed from download-version and delete routes</li>
+      <li><strong>pagination description</strong> &mdash; <code>has_more</code> description simplified; cross-organization batching caveat removed</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/code" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Artifacts</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Same endpoint path migration, field removal, and pagination simplification as the Code page — <code>organization_id</code> removed, <code>organization_uuid</code> query param dropped, paths updated to <code>/v1/compliance/apps/code/artifacts</code>.</p>
+    <ul>
+      <li><strong>endpoint paths</strong> &mdash; All artifact routes updated to use <code>/v1/compliance/apps/code/artifacts</code></li>
+      <li><strong>organization_id field</strong> &mdash; Removed from list response and ArtifactListResponse schema</li>
+      <li><strong>organization_uuid query param</strong> &mdash; Removed from download-version and delete endpoints</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/code/artifacts" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/code/artifacts &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="artifacts" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Delete Code Artifact Artifacts</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The delete endpoint path changed from <code>/v1/compliance/code/artifacts/{artifact_id}</code> to <code>/v1/compliance/apps/code/artifacts/{artifact_id}</code> and the optional <code>organization_uuid</code> query parameter was removed.</p>
+    <ul>
+      <li><strong>endpoint path</strong> &mdash; Moved to <code>/v1/compliance/apps/code/artifacts/{artifact_id}</code></li>
+      <li><strong>organization_uuid param removed</strong> &mdash; Query parameter no longer accepted on the delete route</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/code/artifacts/delete" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/code/artifacts/delete &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="delete-code-artifact-artifacts" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List Code Artifacts Artifacts</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The list endpoint path changed to <code>/v1/compliance/apps/code/artifacts</code>, <code>organization_id</code> was removed from the response schema, and the pagination description was simplified.</p>
+    <ul>
+      <li><strong>endpoint path</strong> &mdash; Updated to <code>/v1/compliance/apps/code/artifacts</code></li>
+      <li><strong>organization_id removed</strong> &mdash; Tagged-ID field dropped from the response <code>data</code> array items</li>
+      <li><strong>has_more description</strong> &mdash; Removed cross-organization batching caveat; simplified to general next-page guidance</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/code/artifacts/list" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/code/artifacts/list &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-code-artifacts-artifacts" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Download Code Artifact Version Content Versions</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The download endpoint path changed to <code>/v1/compliance/apps/code/artifacts/{artifact_id}/versions/{version_id}</code> and the optional <code>organization_uuid</code> query parameter was removed.</p>
+    <ul>
+      <li><strong>endpoint path</strong> &mdash; Moved to <code>/v1/compliance/apps/code/artifacts/{artifact_id}/versions/{version_id}</code></li>
+      <li><strong>organization_uuid param removed</strong> &mdash; Query parameter no longer accepted; route resolves the artifact without org scoping</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/code/artifacts/retrieve_version" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/code/artifacts/retrieve_version &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="download-code-artifact-version-content-versions" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Organizations</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The organization settings response gained an <code>expires_at</code> field on compliance API key objects, a new <code>String</code> setting type for Claude Code worker configuration, 12 new boolean settings, and a new <code>disabled_admin_request_types</code> StringList setting.</p>
+    <ul>
+      <li><strong>expires_at field</strong> &mdash; Added optional <code>expires_at</code> timestamp to compliance API key objects in the settings response</li>
+      <li><strong>String setting type</strong> &mdash; New setting type supporting <code>claude_code_default_worker_environment_id</code> and <code>claude_code_default_worker_pool_id</code></li>
+      <li><strong>Boolean settings expanded</strong> &mdash; 12 new boolean settings added including <code>chat_enabled</code>, <code>claude_code_web_enabled</code>, <code>claude_code_workflows_enabled</code>, <code>claude_design_enabled</code>, <code>inline_visualizations_enabled</code>, <code>member_usage_dashboard_visible</code>, and <code>work_across_apps_enabled</code></li>
+      <li><strong>disabled_admin_request_types</strong> &mdash; New StringList setting added alongside existing <code>allowed_invite_domains</code> and <code>ip_allowlist_ip_ranges</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/organizations" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/organizations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="organizations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>GET /v1/compliance/organizations/{organization_id}/settings</code> endpoint received identical additions as the Organizations page: <code>expires_at</code> on API key objects, new String setting type, 12 new boolean settings, and <code>disabled_admin_request_types</code>.</p>
+    <ul>
+      <li><strong>expires_at on api_keys</strong> &mdash; New optional field indicating key expiration time</li>
+      <li><strong>String setting type</strong> &mdash; New type added for Claude Code default worker environment and pool ID settings</li>
+      <li><strong>Boolean settings count</strong> &mdash; Expanded from 31 to 43 additional named values</li>
+      <li><strong>StringList settings</strong> &mdash; <code>disabled_admin_request_types</code> added as a new string-list setting name</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/organizations/settings" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/organizations/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get effective organization settings Settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Identical schema additions as the Settings page — <code>expires_at</code> on API key objects, new String setting type, expanded boolean settings enum, and <code>disabled_admin_request_types</code> in StringList settings.</p>
+    <ul>
+      <li><strong>expires_at on api_keys</strong> &mdash; Added to the retrieve endpoint&#x27;s response schema</li>
+      <li><strong>String setting type</strong> &mdash; <code>claude_code_default_worker_environment_id</code> and <code>claude_code_default_worker_pool_id</code> added</li>
+      <li><strong>Boolean settings</strong> &mdash; 12 additional named values added to the enum</li>
+      <li><strong>disabled_admin_request_types</strong> &mdash; New StringList setting added</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/api/compliance/organizations/settings/retrieve" target="_blank" rel="noopener">platform.claude.com/docs/en/api/compliance/organizations/settings/retrieve &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-effective-organization-settings-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-tools">🔧</div>
+    <h2>Agents &amp; Tools</h2>
+    <span class="count">7 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Agent Skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Skills API prerequisites were updated to remove the <code>code-execution-2025-08-25</code> beta header requirement, reducing required beta headers from three to two.</p>
+    <ul>
+      <li><strong>beta headers</strong> &mdash; <code>code-execution-2025-08-25</code> removed from prerequisites; code execution tool is now a dependency but does not require its own beta header when using GA tool versions</li>
+      <li><strong>prerequisite description</strong> &mdash; Reworded to reference the code execution tool page directly and note only two beta headers remain (<code>skills-2025-10-02</code> and <code>files-api-2025-04-14</code>)</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/agent-skills/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="agent-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Get started with Agent Skills in the API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>All code examples updated to use the GA <code>code_execution_20260521</code> tool type (replacing <code>code_execution_20250825</code>) and the <code>code-execution-2025-08-25</code> beta header was removed from all SDK and CLI samples.</p>
+    <ul>
+      <li><strong>tool type</strong> &mdash; <code>code_execution_20250825</code> replaced with <code>code_execution_20260521</code> across cURL, CLI, Python, TypeScript, C#, Go, Java, PHP, and Ruby examples</li>
+      <li><strong>beta header removed</strong> &mdash; <code>code-execution-2025-08-25</code> removed from all <code>betas</code> arrays and <code>--beta</code> flags; only <code>skills-2025-10-02</code> remains required</li>
+      <li><strong>note updated</strong> &mdash; Note now clarifies <code>code_execution_20260521</code> is GA and requires no beta header; older versions still work</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/agent-skills/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="get-started-with-agent-skills-in-the-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Deploy MCP tunnels with Docker Compose</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>mcp-proxy</code> Docker image digest was updated to a new SHA256 in all Compose configuration examples.</p>
+    <ul>
+      <li><strong>mcp-proxy image digest</strong> &mdash; Updated from <code>sha256:dab8c3f6ac44c15d91b1580af23a7da6e579865d5852e9ad31e35b6940daf436</code> to <code>sha256:9d4c80593b559fc3ca3814866418744fa94858b02a4d4a4cc52d423e732ccc81</code> in setup and mcp-proxy service definitions</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="deploy-mcp-tunnels-with-docker-compose" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Deploy MCP tunnels with Helm</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>All Helm chart version references were bumped from <code>2.0.0</code> to <code>2.0.1</code> across show-values, template, install, and upgrade commands.</p>
+    <ul>
+      <li><strong>chart version</strong> &mdash; <code>mcp-tunnel</code> Helm chart bumped from <code>2.0.0</code> to <code>2.0.1</code> in all command examples (show values, template, install, upgrade)</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="deploy-mcp-tunnels-with-helm" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>MCP tunnels quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The <code>mcp-proxy</code> image digest in the quickstart Docker Compose snippets was updated to the same new SHA256 as the deploy-compose guide.</p>
+    <ul>
+      <li><strong>mcp-proxy image digest</strong> &mdash; Updated in both macOS/Linux and Windows PowerShell Compose snippets to the new digest</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="mcp-tunnels-quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advisor tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Java SDK code examples were added for all three advisor tool usage patterns: basic single-turn, multi-turn conversation, and agentic loop with nudge logic.</p>
+    <ul>
+      <li><strong>Java basic example</strong> &mdash; Added Java snippet for creating a single message with <code>BetaAdvisorTool20260301</code> targeting Claude Opus 4.8 as the advisor</li>
+      <li><strong>Java multi-turn example</strong> &mdash; Added Java snippet demonstrating conversation continuation with advisor tool results passed back in subsequent messages</li>
+      <li><strong>Java agentic loop example</strong> &mdash; Added full Java implementation of an agent loop with <code>NUDGE_TURN</code> logic, <code>PAUSE_TURN</code> handling, and tool dispatch</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advisor-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Tool combinations</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The web search + code execution example updated the code execution tool type from <code>code_execution_20250825</code> to <code>code_execution_20260521</code>.</p>
+    <ul>
+      <li><strong>code_execution tool type</strong> &mdash; Updated from <code>code_execution_20250825</code> to <code>code_execution_20260521</code> in the combined web search and code execution tools example</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-combinations" target="_blank" rel="noopener">platform.claude.com/docs/en/agents-and-tools/tool-use/tool-combinations &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="tool-combinations" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">5 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate actions with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The hooks guide was updated to document the scoped naming convention for plugin-bundled MCP server tools in hook matchers.</p>
+    <ul>
+      <li><strong>plugin MCP tool naming</strong> &mdash; Added documentation that plugin-bundled MCP server tools use a scoped name format <code>mcp__plugin_&amp;lt;plugin-name&amp;gt;_&amp;lt;server-name&amp;gt;__&amp;lt;tool&amp;gt;</code> in hook matchers; bare server-key matchers never fire for these tools</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-actions-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The hooks reference was updated with plugin-bundled MCP server scoped naming rules, a clarification on <code>transcript_path</code> lag, a note on <code>last_assistant_message</code> preferred usage, and updated <code>mcp_tool</code> hook <code>server</code> field documentation.</p>
+    <ul>
+      <li><strong>plugin MCP tool matchers</strong> &mdash; New section documenting that plugin-bundled server tools use <code>mcp__plugin_&amp;lt;plugin-name&amp;gt;_&amp;lt;server-name&amp;gt;__&amp;lt;tool&amp;gt;</code> scoped names; bare key matchers do not fire</li>
+      <li><strong>mcp_tool server field</strong> &mdash; For plugin-bundled servers the <code>server</code> field must use the scoped name <code>plugin:&amp;lt;plugin-name&amp;gt;:&amp;lt;server-name&amp;gt;</code>, not the bare server key</li>
+      <li><strong>transcript_path caveat</strong> &mdash; Added note that the transcript file is written asynchronously and may lag the in-memory conversation; hooks should use <code>last_assistant_message</code> for current-turn text</li>
+      <li><strong>last_assistant_message note</strong> &mdash; Stop hook docs now recommend using <code>last_assistant_message</code> over reading <code>transcript_path</code> when the current turn&#x27;s final text is needed</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The MCP page was updated with short-form flag aliases, scoped server naming for plugin-bundled MCP servers, and guidance on using scoped names in hook matchers.</p>
+    <ul>
+      <li><strong>flag aliases</strong> &mdash; <code>-s</code> added as short form for <code>--scope</code>; <code>-e</code> for <code>--env</code>; <code>-t</code> for <code>--transport</code>; <code>-H</code> for <code>--header</code></li>
+      <li><strong>plugin server scoped name</strong> &mdash; Documented that plugin-bundled servers register under <code>plugin:&amp;lt;plugin-name&amp;gt;:&amp;lt;server-name&amp;gt;</code> and tools appear as <code>mcp__plugin_&amp;lt;plugin-name&amp;gt;_&amp;lt;server-name&amp;gt;__&amp;lt;tool&amp;gt;</code></li>
+      <li><strong>hook matcher guidance</strong> &mdash; Added note that hook matchers written against bare server keys never fire for plugin-bundled servers; scoped name must be used</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Plugin hook documentation updated to clarify that hooks targeting the plugin&#x27;s own bundled MCP server must use scoped tool and server names.</p>
+    <ul>
+      <li><strong>plugin MCP hook naming</strong> &mdash; Added note that tool matchers and <code>if</code> fields must use the scoped tool name <code>mcp__plugin_&amp;lt;plugin-name&amp;gt;_&amp;lt;server-name&amp;gt;__&amp;lt;tool&amp;gt;</code>; an <code>mcp_tool</code> hook&#x27;s <code>server</code> field takes <code>plugin:&amp;lt;plugin-name&amp;gt;:&amp;lt;server-name&amp;gt;</code>; bare server key matchers never fire</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Duplicate <code>theme={null}</code> attributes were removed from code block fences in the setup page; no functional content changed.</p>
+    <ul>
+      <li><strong>code block attributes</strong> &mdash; Removed repeated <code>theme={null}</code> duplication from bash, powershell, batch, and brew install code fences</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-managed">◈</div>
+    <h2>Managed Agents</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Self-hosted sandboxes</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The self-hosted sandboxes guide received numerous clarifications covering worker binary dependencies, environment key generation, skill executable permissions, ant CLI install options, <code>EnvironmentWorker</code> API semantics, and work-item stop/stats behavior.</p>
+    <ul>
+      <li><strong>binary dependencies</strong> &mdash; TypeScript SDK now requires <code>unzip</code> and <code>tar</code> on <code>PATH</code>; Python and Go SDKs use standard libraries with no binary requirements; bash invoked directly without <code>PATH</code> lookup</li>
+      <li><strong>environment key creation</strong> &mdash; Clarified environment keys are Console-only; the note explicitly states AWS IAM is used on Claude Platform on AWS instead</li>
+      <li><strong>skill executable permissions</strong> &mdash; Worker now preserves executable permissions from the skill bundle rather than unconditionally marking files executable</li>
+      <li><strong>ant CLI install options</strong> &mdash; Added Homebrew (<code>brew install anthropics/tap/ant</code>) as an alternative install method alongside the existing curl approach</li>
+      <li><strong>EnvironmentWorker.handle_item()</strong> &mdash; Now documented as accepting explicit work/session/environment identifiers or reading <code>ANTHROPIC_*</code> env vars set by <code>ant beta:worker poll --on-work</code></li>
+      <li><strong>work poller reclaim_older_than_ms</strong> &mdash; Description corrected to &quot;re-claim work items claimed but never acknowledged&quot; (not just stopped responding)</li>
+      <li><strong>oldest_queued_at</strong> &mdash; Now described as the timestamp of the oldest item still queued or being processed, or null when there is none</li>
+      <li><strong>work.stop --force flag</strong> &mdash; CLI <code>--force</code> flag documented as the CLI equivalent of <code>force: true</code> in the request body</li>
+      <li><strong>work item ID lookup</strong> &mdash; Note added to find work item IDs via the Environments Work endpoints</li>
+      <li><strong>spawn.sh comment</strong> &mdash; Corrected to &quot;called once per claimed work item&quot; (not per session)</li>
+      <li><strong>C#/Java/PHP/Ruby polling</strong> &mdash; Wording updated from &quot;not currently available&quot; to reference Environments Work endpoints for direct work claiming</li>
+      <li><strong>next steps cards</strong> &mdash; Reordered to surface the security model card first; MCP tunnels card description updated</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes" target="_blank" rel="noopener">platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="self-hosted-sandboxes" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">12 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create an Admin API key</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Claude Enterprise organization owners (not just primary owners) can now create Compliance Access Keys restricted to their own organization, and the key creation table and steps were updated to reflect this.</p>
+    <ul>
+      <li><strong>who can create keys</strong> &mdash; Table updated: organization owners can now create keys with Compliance API scopes restricted to their own organization; primary owners can create keys covering all linked organizations</li>
+      <li><strong>creation steps</strong> &mdash; Step 1 updated from &quot;sign in as primary owner&quot; to &quot;sign in as primary owner or organization owner&quot;</li>
+      <li><strong>scope combination note</strong> &mdash; Clarified that only primary owners can combine scopes from different APIs on a single key</li>
+      <li><strong>compliance API access link</strong> &mdash; Internal link updated to &quot;Set up the Compliance API&quot; (renamed from &quot;Get access&quot;)</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/admin-api-keys" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/admin-api-keys &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-an-admin-api-key" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Admin API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Compliance API section&#x27;s internal link to reference the renamed &quot;Set up the Compliance API&quot; page.</p>
+    <ul>
+      <li><strong>internal link</strong> &mdash; &quot;Get access to the Compliance API&quot; link updated to &quot;Set up the Compliance API&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/admin-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/admin-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="admin-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Analytics APIs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the Compliance API card link title from &quot;Get access to the Compliance API&quot; to &quot;Set up the Compliance API&quot;.</p>
+    <ul>
+      <li><strong>card title</strong> &mdash; Compliance API card title and link updated to match the renamed setup page</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/analytics-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/analytics-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="analytics-apis" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>API and data retention</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Minor wording updates: Covered Models requirement phrasing generalized, and trust-and-safety data retention description updated to reference automated systems rather than Usage Policy violations.</p>
+    <ul>
+      <li><strong>Covered Models applicability</strong> &mdash; &quot;applies on every platform&quot; changed to &quot;applies wherever Covered Models are offered&quot;</li>
+      <li><strong>trust and safety retention</strong> &mdash; Retention exception reworded from &quot;combat Usage Policy violations&quot; to &quot;flagged by Anthropic&#x27;s automated trust and safety systems&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/api-and-data-retention &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="api-and-data-retention" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Query the Activity Feed</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Internal links updated to reference the renamed &quot;Set up the Compliance API&quot; page.</p>
+    <ul>
+      <li><strong>internal links</strong> &mdash; Two references to &quot;Get access to the Compliance API&quot; updated to &quot;Set up the Compliance API&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-activity-feed" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-activity-feed &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="query-the-activity-feed" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Set up the Compliance API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>This page was renamed from &quot;Get access to the Compliance API&quot; and restructured into a unified step-by-step setup flow; organization owners can now create Compliance Access Keys scoped to their own organization in addition to primary owners.</p>
+    <ul>
+      <li><strong>page renamed</strong> &mdash; Title changed from &quot;Get access to the Compliance API&quot; to &quot;Set up the Compliance API&quot;; description updated accordingly</li>
+      <li><strong>organization owner key creation</strong> &mdash; Organization owners can now create Compliance Access Keys restricted to their own organization (primary owner keys cover all linked organizations)</li>
+      <li><strong>setup flow restructured</strong> &mdash; &quot;Request Compliance API access&quot; section replaced with a unified Steps block: Enable API → Decide key scope → Sign in with matching role → Open API settings → Select scopes</li>
+      <li><strong>read:compliance_activities scope description</strong> &mdash; Clarified that a parent-org key reads events for the parent and all linked orgs</li>
+      <li><strong>security warning promoted</strong> &mdash; Treat Compliance Access Keys like production database credentials warning moved earlier in the flow</li>
+      <li><strong>section anchor links updated</strong> &mdash; Internal anchor references updated to match restructured headings</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-api-access" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-api-access &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="set-up-the-compliance-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Compliance API</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated internal links to the renamed &quot;Set up the Compliance API&quot; page and clarified that directory endpoints return data from all linked orgs only for keys covering the parent organization.</p>
+    <ul>
+      <li><strong>internal links</strong> &mdash; &quot;Get access to the Compliance API&quot; references updated to &quot;Set up the Compliance API&quot;</li>
+      <li><strong>directory endpoints scope</strong> &mdash; Clarified that directory endpoints return data from every linked organization only for parent-org-scoped keys</li>
+      <li><strong>card title</strong> &mdash; Compliance API access card title updated in the &quot;In this section&quot; navigation</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-api" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-api &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="compliance-api" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Retrieve and delete chats, files, and projects</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The chat list endpoint no longer requires <code>user_ids[]</code> for org-wide queries; a new <code>order_by=updated_at</code> pattern is documented for incremental exports, and the prerequisite block was updated accordingly.</p>
+    <ul>
+      <li><strong>org-wide chat listing</strong> &mdash; <code>user_ids[]</code> is no longer required; omit it to list all chats under the parent org</li>
+      <li><strong>order_by=updated_at pattern</strong> &mdash; New recommended incremental export pattern: org-wide + <code>order_by=updated_at</code> + <code>updated_at.gte</code> picks up new and modified chats without enumerating users</li>
+      <li><strong>cursor opaqueness and constraints</strong> &mdash; Documented that cursors are bound to sort key; mixing <code>order_by</code> values with an existing cursor returns a 400; <code>before_id</code> not supported for org-wide queries</li>
+      <li><strong>prerequisite note</strong> &mdash; Updated from &quot;requires at least one user ID&quot; to &quot;none required for org-wide; user IDs needed only for user-filtered queries&quot;</li>
+      <li><strong>project_ids[] filter restriction</strong> &mdash; Clarified that <code>project_ids[]</code> filter requires at least one <code>user_ids[]</code> value (not the chat list generally)</li>
+      <li><strong>example request updated</strong> &mdash; cURL example now shows org-wide <code>order_by=updated_at</code> query instead of per-user <code>created_at</code> query</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-content-data" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-content-data &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="retrieve-and-delete-chats,-files,-and-projects" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Handle Compliance API errors</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Internal links updated to the renamed &quot;Set up the Compliance API&quot; page and the project-deletion error fix updated to clarify the <code>project_ids[]</code> filter restriction.</p>
+    <ul>
+      <li><strong>internal links</strong> &mdash; Multiple references updated from &quot;Get access&quot; to &quot;Set up the Compliance API&quot;</li>
+      <li><strong>project delete error fix</strong> &mdash; Clarified that the <code>project_ids[]</code> filter (not the chat list endpoint generally) requires <code>user_ids[]</code></li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-errors" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-errors &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="handle-compliance-api-errors" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Compliance API FAQ</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Internal links updated to the renamed setup page and FAQ answers updated to reflect that organization owners (not just primary owners) can create Compliance Access Keys.</p>
+    <ul>
+      <li><strong>key creation FAQ</strong> &mdash; Updated to note that organization owners can create Compliance Access Keys restricted to their own organization</li>
+      <li><strong>multi-org FAQ</strong> &mdash; Clarified that a parent-org-scoped key is required to enumerate all organizations via <code>GET /v1/compliance/organizations</code></li>
+      <li><strong>internal links</strong> &mdash; All &quot;Get access&quot; references updated to &quot;Set up the Compliance API&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-faq" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-faq &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="compliance-api-faq" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Design your compliance integration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Internal link to the Compliance API setup page updated to the new &quot;Set up the Compliance API&quot; title.</p>
+    <ul>
+      <li><strong>internal link</strong> &mdash; Note link updated from &quot;Get access to the Compliance API&quot; to &quot;Set up the Compliance API&quot;</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-integration-patterns" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-integration-patterns &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="design-your-compliance-integration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>List organizations, users, roles, groups, and settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Internal links updated to the renamed setup page and the Compliance Access Key scope description clarified for parent-org vs. single-org keys.</p>
+    <ul>
+      <li><strong>internal links</strong> &mdash; &quot;Get access to the Compliance API&quot; references updated to &quot;Set up the Compliance API&quot;</li>
+      <li><strong>key scope description</strong> &mdash; Updated to clarify a parent-org-scoped key returns data from all linked organizations; single-org keys are scoped accordingly</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/compliance-org-data" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/compliance-org-data &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="list-organizations,-users,-roles,-groups,-and-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">3 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude in Microsoft Foundry</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The Foundry guide was updated with Go and Ruby SDK notes, Entra ID Azure Identity library install instructions, Java SDK bumped to 2.48.0, <code>ANTHROPIC_FOUNDRY_BASE_URL</code> C# caveat, Azure CLI requirement clarification, and several prose and link improvements.</p>
+    <ul>
+      <li><strong>intro updated</strong> &mdash; Now mentions Claude Opus 4.8, Claude Sonnet 5, and the 1M-token context window; pricing link updated to use the doc-internal anchor</li>
+      <li><strong>Go and Ruby SDK tabs added</strong> &mdash; Both noted as lacking native Foundry support with workaround guidance in install section</li>
+      <li><strong>Entra ID dependencies</strong> &mdash; Python (<code>azure-identity</code>) and TypeScript (<code>@azure/identity</code>) install instructions added; Java Entra ID dependency (<code>azure-identity:1.18.3</code>) added</li>
+      <li><strong>Java SDK version</strong> &mdash; <code>anthropic-java-foundry</code> bumped from 2.47.1 to 2.48.0 in Gradle and Maven examples</li>
+      <li><strong>ANTHROPIC_FOUNDRY_BASE_URL caveat</strong> &mdash; Noted that the C# SDK does not read this variable and always constructs the URL from resource name</li>
+      <li><strong>Azure CLI prerequisite</strong> &mdash; Clarified as required for Entra ID cURL example, optional otherwise; Azure RBAC role requirement noted</li>
+      <li><strong>classic portal note</strong> &mdash; Converted from a Note callout to inline prose</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-in-microsoft-foundry" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Platform on AWS</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Code examples updated to use <code>claude-sonnet-5</code> as the default model, a migration table model ID example corrected, and a &quot;Next steps&quot; card group added.</p>
+    <ul>
+      <li><strong>default model in examples</strong> &mdash; All SDK and cURL examples updated from <code>claude-sonnet-4-6</code> to <code>claude-sonnet-5</code></li>
+      <li><strong>migration table model ID</strong> &mdash; Example model ID corrected from <code>anthropic.claude-opus-4-6</code> to <code>anthropic.claude-haiku-4-5</code> with matching Bedrock ID format</li>
+      <li><strong>Next steps section</strong> &mdash; New card group added with links to Features overview, Pricing, and Model deprecations</li>
+      <li><strong>Additional resources</strong> &mdash; Converted plain list to card group format</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-platform-on-aws" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A new &quot;Enum value casing&quot; section was added under Invalid outputs documenting that Claude may return enum values that differ only in capitalization, with a recommendation to compare case-insensitively.</p>
+    <ul>
+      <li><strong>enum casing caveat</strong> &mdash; Added to the supported features <code>enum</code> bullet noting a capitalization caveat</li>
+      <li><strong>Enum value casing section</strong> &mdash; New subsection under Invalid outputs explains that structured outputs do not guarantee exact capitalization of string enum/const values; the response completes normally with no error</li>
+      <li><strong>mitigation guidance</strong> &mdash; Recommends comparing enum values case-insensitively and avoiding enums that differ only in capitalization</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-test">🧪</div>
+    <h2>Testing &amp; Evaluation</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Streaming refusals</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The streaming refusal response shape was updated to include a new <code>stop_details</code> object with <code>category</code> and <code>explanation</code> fields, replacing the previous warning that no additional context was provided.</p>
+    <ul>
+      <li><strong>stop_details object</strong> &mdash; New optional field on refusal responses containing <code>type</code>, <code>category</code> (e.g., <code>&quot;cyber&quot;</code>), and a human-readable <code>explanation</code> string</li>
+      <li><strong>message_delta event</strong> &mdash; Noted that <code>stop_details</code> arrives on the <code>message_delta</code> event alongside <code>stop_reason</code></li>
+      <li><strong>null handling</strong> &mdash; <code>stop_details</code> (and its fields) can be null when the refusal maps to no named category or on earlier models; branch on <code>stop_reason</code> rather than assuming stop_details is populated</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals" target="_blank" rel="noopener">platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="streaming-refusals" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 45 docs analyzed &middot; 2026-07-08
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
