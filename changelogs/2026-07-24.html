@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; July 24, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">July 24, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jul 24 at 07:28 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">8</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+    <div class="stat other">
+      <div class="num">1</div>
+      <div class="label">Other</div>
+    </div>
+    <div class="stat plat">
+      <div class="num">2</div>
+      <div class="label">Platform</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Forked skill background execution</strong> &mdash; Skills with <code>context: fork</code> now run in the background by default (v2.1.218); new <code>background: false</code> frontmatter field forces foreground execution, and <code>/code-review</code> migrated to a forked subagent</li>
+      <li><strong>Subagent budget enforcement</strong> &mdash; <code>--max-budget-usd</code> now aggregates spend from subagents toward the cap, stops running background subagents when the cap is hit, and returns <code>Budget limit reached</code> on spawn attempts (v2.1.217)</li>
+      <li><strong>Checkpoint scope for subagent edits</strong> &mdash; Documented that edits from background subagents and background forked skills land outside session checkpoints and cannot be restored with <code>/rewind</code>; use git to revert</li>
+      <li><strong>Boolean frontmatter relaxation</strong> &mdash; Plugin and skill frontmatter Boolean fields now accept <code>yes</code>, <code>no</code>, <code>on</code>, <code>off</code>, <code>1</code>, and <code>0</code> in any case, in addition to <code>true</code>/<code>false</code> (v2.1.218)</li>
+      <li><strong>Network config scoping for Claude Desktop</strong> &mdash; Proxy and TLS environment variables are now restricted to managed settings and <code>~/.claude/settings.json</code> in Claude Desktop sessions where the app manages the provider connection (v2.1.217)</li>
+      <li><strong>Structured outputs cURL examples</strong> &mdash; Added cURL code samples for data extraction, content classification, API response generation, and combined tool-use-plus-structured-output workflows</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">8 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Checkpointing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new section documenting that edits made by background subagents and background forked skills fall outside session checkpoints and cannot be restored by rewinding.</p>
+    <ul>
+      <li><strong>Subagent edits not restored</strong> &mdash; Clarified that edits from background subagents (including <code>/code-review --fix</code> and background forked skills) are not tracked by session checkpoints; only foreground forked skills (<code>background: false</code>) have their edits restored on rewind</li>
+      <li><strong>Foreground fork exception</strong> &mdash; Documented that a skill with <code>context: fork</code> running in the foreground edits the working tree during the invoking turn, so rewinding restores those edits as usual</li>
+      <li><strong>Version note</strong> &mdash; Forked skills ran in the foreground by default before v2.1.218; from v2.1.218 onward they default to background</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/checkpointing" target="_blank" rel="noopener">code.claude.com/docs/en/checkpointing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="checkpointing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>CLI reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Updated the <code>--max-budget-usd</code> flag description to reflect that subagent spend now counts toward the cap and that cap enforcement stops running background subagents (v2.1.217).</p>
+    <ul>
+      <li><strong>--max-budget-usd subagent aggregation</strong> &mdash; Spend from subagents now counts toward the <code>--max-budget-usd</code> cap; requires v2.1.217 or later</li>
+      <li><strong>Cap enforcement behavior</strong> &mdash; Once spend reaches the cap, spawning a new subagent fails with <code>Budget limit reached</code> and Claude Code stops background subagents that are still running</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/cli-reference" target="_blank" rel="noopener">code.claude.com/docs/en/cli-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="cli-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that proxy and TLS certificate environment variables are read only from managed settings and <code>~/.claude/settings.json</code> in Claude Desktop sessions where the app manages the provider connection, preventing checked-out repositories from redirecting those paths.</p>
+    <ul>
+      <li><strong>Proxy variable scoping in Claude Desktop</strong> &mdash; In Claude Desktop sessions where the app manages the provider connection (Code tab on a third-party provider, Cowork sessions), <code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code>, <code>NO_PROXY</code>, and TLS certificate variables are read only from managed settings and <code>~/.claude/settings.json</code>; repository-level settings files are ignored (v2.1.217)</li>
+      <li><strong>Local and SSH session behavior</strong> &mdash; Local, SSH, and WSL Code tab sessions signed in through claude.ai are not app-managed, so Claude Code reads these variables from every settings scope as in any terminal session</li>
+      <li><strong>Pre-v2.1.217 behavior</strong> &mdash; Before v2.1.217, Claude Code ignored these variables in every settings file when the app managed the connection</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Documented that Boolean frontmatter fields in plugin skills and commands now accept a broader set of truthy/falsy values beyond just <code>true</code> and <code>false</code> (v2.1.218).</p>
+    <ul>
+      <li><strong>Boolean frontmatter values</strong> &mdash; Fields such as <code>disable-model-invocation</code> now accept <code>yes</code>, <code>no</code>, <code>on</code>, <code>off</code>, <code>1</code>, and <code>0</code> in any letter case, in addition to <code>true</code> and <code>false</code>; earlier versions recognized only <code>true</code>/<code>false</code></li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added the new <code>disableMobileSimulatorTools</code> managed setting that blocks Claude&#x27;s access to the iOS Simulator pane in the desktop app.</p>
+    <ul>
+      <li><strong>disableMobileSimulatorTools</strong> &mdash; New managed-settings-only boolean that, when set to <code>true</code>, removes Claude&#x27;s tool access to the desktop app&#x27;s iOS Simulator pane while preserving manual user access; any non-boolean value (e.g., <code>&quot;true&quot;</code> or <code>1</code>) is ignored and logs a warning</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Expanded the forked-subagent section with background execution controls, a new <code>background</code> frontmatter field, updated stacking behavior, and clarifications on tool availability and checkpoint scope for backgrounded forks.</p>
+    <ul>
+      <li><strong>background frontmatter field</strong> &mdash; New optional field (v2.1.218) on skills with <code>context: fork</code>; defaults to <code>true</code> (runs in background); set to <code>false</code> to block the invoking turn until the forked subagent completes</li>
+      <li><strong>Background fork forced-foreground cases</strong> &mdash; Even without <code>background: false</code>, forked skills run in the foreground in non-interactive (<code>-p</code>) mode, when <code>CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1</code>, when the same skill is already running, or when fired by a scheduled task</li>
+      <li><strong>Tool set for backgrounded forks</strong> &mdash; Background forked skills use the narrower background-subagent tool set; set <code>background: false</code> to retain the full tool set</li>
+      <li><strong>Checkpoint scope</strong> &mdash; Edits from backgrounded forked skills fall outside session checkpoints and cannot be undone with <code>/rewind</code>; use git to revert</li>
+      <li><strong>Boolean frontmatter values</strong> &mdash; Skill frontmatter Boolean fields now accept <code>yes</code>, <code>no</code>, <code>on</code>, <code>off</code>, <code>1</code>, and <code>0</code> in any case (v2.1.218)</li>
+      <li><strong>/code-review stacking behavior</strong> &mdash; <code>/code-review</code> now runs as a forked subagent from v2.1.218, ending skill-stack expansion at that token; on earlier versions it ran inline and could be stacked</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Clarified that the reduced background-subagent tool set does not apply to conversation forks, adding a new exception to the background subagent tool availability rule.</p>
+    <ul>
+      <li><strong>Conversation fork tool set exception</strong> &mdash; Background subagents now run with the smaller built-in tool set except for conversation forks, which retain the full tool set; previously the restriction applied to all background subagents without exception</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Troubleshooting</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a quick-reference entry for the <code>Claude Code process exited with code 1</code> error encountered in VS Code and SDK applications.</p>
+    <ul>
+      <li><strong>Process exit code error entry</strong> &mdash; Added triage row for <code>Claude Code process exited with code 1</code> in VS Code or an SDK app, linking to the error reference page for resolution steps</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener">code.claude.com/docs/en/troubleshooting &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="troubleshooting" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-other">📄</div>
+    <h2>Other</h2>
+    <span class="count">1 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>User management</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a FAQ entry clarifying Admin API key persistence after creator offboarding, and updated the Compliance API card link and description to reflect the current API surface.</p>
+    <ul>
+      <li><strong>Admin API key persistence on user removal</strong> &mdash; New FAQ clarifies that Admin API keys are scoped to the organization, not the creator; removing, deprovisioning, or downgrading the creator does not revoke their keys; administrators must manually delete affected keys in Organization settings when offboarding</li>
+      <li><strong>Compliance API card updated</strong> &mdash; Updated the See Also card link from <code>/compliance-org-data</code> to <code>/compliance-api</code> and revised the description to reflect audit activity and user-content retrieval/deletion capabilities</li>
+      <li><strong>Admin API guide reference link</strong> &mdash; Updated the Members/Invites row in the endpoint access table to link to the &quot;Admin API guide&quot; (was &quot;Admin API&quot;) for Claude Console organizations</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/manage-claude/user-management" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/user-management &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="user-management" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-plat">◈</div>
+    <h2>Platform</h2>
+    <span class="count">2 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Refusals and fallback</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added a new <code>general_harms</code> classifier category to the refusal <code>stop_details</code> reference table for Claude Fable 5.</p>
+    <ul>
+      <li><strong>general_harms classifier category</strong> &mdash; New <code>stop_details</code> category returned when a request is determined to be related to a broadly harmful area; benign work may occasionally trigger this category</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/refusals-and-fallback &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="refusals-and-fallback" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Structured outputs</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Added cURL code examples for structured output use cases (data extraction, content classification, API response generation, and combined strict tool use) and corrected the top-level code group to exclude the shell tab.</p>
+    <ul>
+      <li><strong>cURL examples for data extraction</strong> &mdash; Added a raw cURL snippet using <code>output_config.format.type: json_schema</code> for invoice data extraction, alongside existing CLI and SDK tabs</li>
+      <li><strong>cURL examples for content classification</strong> &mdash; Added a cURL snippet for structured classification responses with <code>category</code>, <code>confidence</code>, <code>tags</code>, and <code>sentiment</code> fields</li>
+      <li><strong>cURL examples for API response generation</strong> &mdash; Added a cURL snippet demonstrating structured API-ready response generation with <code>status</code>, <code>data</code>, <code>errors</code>, and <code>metadata</code> schema fields</li>
+      <li><strong>cURL example for combined tool use + structured output</strong> &mdash; Added a cURL snippet showing simultaneous use of strict tool input schemas and <code>output_config</code> JSON schema for agentic workflows</li>
+      <li><strong>Top-level CodeGroup shell exclusion</strong> &mdash; The introductory code group now sets <code>exclude=&quot;shell:cURL&quot;</code> to suppress the shell tab where it is not applicable</li>
+    </ul>
+    <a class="source-link" href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">platform.claude.com/docs/en/build-with-claude/structured-outputs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="structured-outputs" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 11 docs analyzed &middot; 2026-07-24
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
