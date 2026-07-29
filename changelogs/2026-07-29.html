@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Docs Changelog &mdash; July 29, 2026</title>
+  <style>
+:root {
+  --bg: #0D0D16;
+  --surface: #161624;
+  --surface-hover: #1C1A28;
+  --border: #2A2840;
+  --text: #E8E0D4;
+  --text-muted: #9A9088;
+  --accent: #F0A050;
+  --accent-dim: rgba(240, 160, 80, 0.08);
+  --blue: #60A0E0;
+  --blue-dim: rgba(96, 160, 224, 0.08);
+  --green: #50C8A0;
+  --green-dim: rgba(80, 200, 160, 0.08);
+  --purple: #C080E0;
+  --purple-dim: rgba(192, 128, 224, 0.08);
+  --red: #F06060;
+  --red-dim: rgba(240, 96, 96, 0.06);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif', serif; }
+.source-link, .tag, .count { font-family: 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+header .date {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+header .badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(80, 200, 160, 0.25);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-heading .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-heading h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-heading .count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.icon-cli  { background: var(--blue-dim);   color: var(--blue); }
+.icon-sdk  { background: var(--purple-dim); color: var(--purple); }
+.icon-api  { background: var(--accent-dim); color: var(--accent); }
+.icon-plat { background: var(--accent-dim); color: var(--accent); }
+.icon-res  { background: var(--green-dim);  color: var(--green); }
+.icon-other { background: var(--blue-dim);  color: var(--blue); }
+.icon-about  { background: var(--blue-dim);   color: var(--blue); }
+.icon-tools  { background: var(--accent-dim); color: var(--accent); }
+.icon-test   { background: var(--green-dim);  color: var(--green); }
+.icon-release { background: var(--purple-dim); color: var(--purple); }
+.icon-prompts { background: var(--accent-dim); color: var(--accent); }
+.icon-start  { background: var(--green-dim);  color: var(--green); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card:hover { border-color: rgba(240, 160, 80, 0.3); box-shadow: 0 0 20px rgba(240, 160, 80, 0.08); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.tag-updated { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,160,224,0.2); }
+.tag-new     { background: var(--green-dim); color: var(--green); border: 1px solid rgba(80,200,160,0.25); }
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.card ul li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.source-link:hover { border-bottom-color: var(--blue); }
+
+.highlights {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.highlights h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.highlights ul li::before { background: var(--accent); }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat .num { font-size: 1.6rem; font-weight: 700; }
+.stat .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+.stat.cli  .num { color: var(--blue); }
+.stat.sdk  .num { color: var(--purple); }
+.stat.api  .num { color: var(--accent); }
+.stat.plat .num { color: var(--accent); }
+.stat.res  .num { color: var(--green); }
+.stat.other .num { color: var(--blue); }
+.stat.about  .num { color: var(--blue); }
+.stat.tools  .num { color: var(--accent); }
+.stat.test   .num { color: var(--green); }
+.stat.release .num { color: var(--purple); }
+.stat.prompts .num { color: var(--accent); }
+.stat.start  .num { color: var(--green); }
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+.course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.course-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(240, 160, 80, 0.25);
+}
+.course-btn-icon { font-size: 0.65rem; }
+.course-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,8,0.5), 0 0 20px rgba(240,160,80,0.15);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 10000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .section-heading h2 { font-size: 1.1rem; }
+  .card { padding: 1rem 1.1rem; }
+  .stats { gap: 0.6rem; }
+  .stat { min-width: 100px; padding: 0.75rem; }
+  .stat .num { font-size: 1.3rem; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Claude Docs Changelog</h1>
+    <div class="date">July 29, 2026</div>
+    <span class="badge">Up to date &mdash; synced Jul 29 at 07:41 UTC</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat cli">
+      <div class="num">28</div>
+      <div class="label">Claude Code CLI</div>
+    </div>
+  </div>
+
+  <div class="highlights">
+    <h3>Key Highlights</h3>
+    <ul>
+      <li><strong>Headless streaming — subagent nesting</strong> &mdash; Nested subagents now forward messages at every depth via <code>parent_tool_use_id</code>; new <code>mcp_server_errors</code> field in <code>system/init</code> exposes skipped MCP config entries for CI gating (requires v2.1.219).</li>
+      <li><strong>Dev containers — auth persistence</strong> &mdash; Volume mount guidance updated to also set <code>CLAUDE_CODE_DIR</code> so <code>~/.claude.json</code> (OAuth, MCP servers, project trust) persists across rebuilds alongside <code>~/.claude</code>.</li>
+      <li><strong>Hooks — <code>PermissionRequest</code> semantics</strong> &mdash; Event now fires for background subagents that cannot show a prompt; if no hook returns a decision the call is auto-denied. <code>SessionEnd</code> hooks gain a shared 1.5-second budget.</li>
+      <li><strong>MCP — Microsoft Foundry tool-search behavior</strong> &mdash; Azure-hosted Foundry deployments always fall back to upfront MCP tool loading; <code>ENABLE_TOOL_SEARCH=true</code> cannot override the server-side rejection.</li>
+      <li><strong>Settings — <code>switchModelsOnFlag</code></strong> &mdash; New setting controls whether Claude Code auto-switches to the fallback model on a safety-classifier flag or pauses for user confirmation.</li>
+      <li><strong>Network config — verify guidance</strong> &mdash; New section documents how to confirm proxy, CA cert, and mTLS settings loaded correctly via <code>--debug</code> and <code>/status</code> before sending any requests.</li>
+    </ul>
+  </div>
+
+  <div class="section-heading">
+    <div class="icon icon-cli">&gt;_</div>
+    <h2>Claude Code CLI</h2>
+    <span class="count">28 updated</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Checkpointing</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The &#x27;Restore vs. summarize&#x27; section was collapsed into a streamlined &#x27;Guide a summary&#x27; section, removing separate descriptions of summarize-from-here and summarize-up-to-here in favor of a single concise explanation.</p>
+    <ul>
+      <li><strong>Section rename</strong> &mdash; &#x27;Restore vs. summarize&#x27; replaced by &#x27;Guide a summary&#x27;, dropping the bullet-by-bullet breakdown of the two summarize directions.</li>
+      <li><strong>Note update</strong> &mdash; Clarified that Summarize is &#x27;like a targeted /compact&#x27;, keeping the branch-off recommendation via /branch or --fork-session.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/checkpointing" target="_blank" rel="noopener">code.claude.com/docs/en/checkpointing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="checkpointing" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code on the web</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The page was restructured to move cloud environment configuration details to the dedicated Configure cloud environments page, and a note was added that Claude Tag channel sessions use organization-shared environments only.</p>
+    <ul>
+      <li><strong>Page restructure</strong> &mdash; The &#x27;The cloud environment&#x27; section (including installed tools, setup scripts, network access, environment caching, resource limits, and environment config tables) was removed and replaced with a short &#x27;Cloud environments&#x27; section linking to the new dedicated page.</li>
+      <li><strong>Claude Tag sessions</strong> &mdash; Added note that Claude Tag channel sessions use organization-shared environments only.</li>
+      <li><strong>Subtitle update</strong> &mdash; Lead description updated to emphasize session management, sharing, and auto-fix pull requests rather than environment configuration.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/claude-code-on-the-web" target="_blank" rel="noopener">code.claude.com/docs/en/claude-code-on-the-web &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-on-the-web" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Common workflows</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>All inline code block examples were updated from bare theme={null} to wrap theme={null} to enable line-wrapping in the rendered UI.</p>
+    <ul>
+      <li><strong>Code block wrapping</strong> &mdash; Every <code>text theme={null}</code> block in workflow steps and example sections changed to <code>text wrap theme={null}</code> for consistent display of long prompt strings.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/common-workflows" target="_blank" rel="noopener">code.claude.com/docs/en/common-workflows &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="common-workflows" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Manage costs effectively</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The &#x27;Long context&#x27; and &#x27;Cache misses&#x27; explanations were expanded to clarify that every tool-result batch is a separate request billed at cached token rates, and that Pro/Max users are offered a summary-based resume after a cache miss on a large session.</p>
+    <ul>
+      <li><strong>Long context clarification</strong> &mdash; Now explains that each tool-result batch is a separate API request, and that prompt caching means history is re-read at the cached token rate, not full price, on every message.</li>
+      <li><strong>Cache miss note</strong> &mdash; Added that on Pro and Max plans, resuming a large session after a long break triggers an offer to resume from a summary so later requests don&#x27;t carry the full history.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener">code.claude.com/docs/en/costs &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="manage-costs-effectively" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Data usage</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The data-flow diagram now renders separate light and dark variants, and the telemetry section documents that DISABLE_TELEMETRY and CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC also disable the feature-flag evaluation that Remote Control depends on.</p>
+    <ul>
+      <li><strong>Dark-mode diagram</strong> &mdash; Added a second <code>&amp;lt;img&amp;gt;</code> tag with <code>className=&quot;hidden dark:block&quot;</code> pointing to a new dark-variant SVG for the external-connections diagram.</li>
+      <li><strong>Telemetry side-effects</strong> &mdash; Documented that <code>DISABLE_TELEMETRY</code> and <code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC</code> also disable feature-flag evaluation required by Remote Control; <code>DISABLE_ERROR_REPORTING</code> does not.</li>
+      <li><strong>Terminology</strong> &mdash; &#x27;cloud environments&#x27; changed to &#x27;cloud sessions&#x27; in the cloud execution section.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">code.claude.com/docs/en/data-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="data-usage" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Desktop application</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Desktop&#x27;s MCP server loading rules were expanded into a dedicated subsection clarifying conflict resolution between claude_desktop_config.json and ~/.claude.json, and the /desktop handoff command was restricted to x64 Windows explicitly.</p>
+    <ul>
+      <li><strong>MCP server conflict resolution</strong> &mdash; Promoted the MCP note to a full subsection; documented that when the same server name appears in <code>claude_desktop_config.json</code> and <code>~/.claude.json</code>/<code>.mcp.json</code>, the Code tab uses the <code>claude_desktop_config.json</code> definition for local sessions, departing from the normal scope hierarchy.</li>
+      <li><strong>/desktop restriction</strong> &mdash; Clarified the command is available on macOS and &lt;em&gt;x64&lt;/em&gt; Windows (not all Windows).</li>
+      <li><strong>Cloud env UI label</strong> &mdash; &#x27;Add environment&#x27; button renamed to &#x27;Add cloud environment&#x27; in the desktop docs; cloud environments link updated to the new dedicated page.</li>
+      <li><strong>Git check tip</strong> &mdash; Added &#x27;if it prints a version number, Git is installed&#x27; to the Windows Git verification step.</li>
+      <li><strong>autoVerify example</strong> &mdash; Expanded the <code>autoVerify: false</code> JSON snippet to include a full configurations array example.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="desktop-application" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Development containers</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Auth-persistence instructions now require setting CLAUDE_CONFIG_DIR alongside the volume mount so ~/.claude.json is also preserved, and a Node.js install fallback tip and a CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC Remote Control caveat were added.</p>
+    <ul>
+      <li><strong>Auth persistence fix</strong> &mdash; <code>~/.claude.json</code> (OAuth token, personal MCP servers, project trust) lives outside <code>~/.claude</code>; docs now require <code>containerEnv: {CLAUDE_CONFIG_DIR: ...}</code> alongside the volume mount to keep sign-in state across rebuilds.</li>
+      <li><strong>Node.js install fallback</strong> &mdash; Added a tip: if the Claude Code dev container feature fails to install Node.js, add <code>ghcr.io/devcontainers/features/node:1</code> above it in the features block.</li>
+      <li><strong>Remote Control caveat</strong> &mdash; Documented that <code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC</code> also disables the feature-flag evaluation Remote Control needs, so sessions in that container can&#x27;t use Remote Control.</li>
+      <li><strong>Codespaces clarification</strong> &mdash; Split the Codespaces paragraph to clarify that <code>~/.claude</code> persists on stop/start but is cleared on rebuild, and that secrets are exposed as environment variables automatically.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/devcontainer" target="_blank" rel="noopener">code.claude.com/docs/en/devcontainer &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="development-containers" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code GitLab CI/CD</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Inline command example blocks were updated from bare theme={null} to wrap theme={null} for consistent line-wrapping display.</p>
+    <ul>
+      <li><strong>Code block wrapping</strong> &mdash; Three <code>text theme={null}</code> example blocks in the trigger-usage section changed to <code>text wrap theme={null}</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/gitlab-ci-cd" target="_blank" rel="noopener">code.claude.com/docs/en/gitlab-ci-cd &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-gitlab-ci/cd" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Run Claude Code programmatically</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The streaming reference gained a dedicated &#x27;Follow subagent messages&#x27; section documenting nested-subagent message forwarding, a new &#x27;Handle API retries&#x27; section, and a new mcp_server_errors field in system/init for detecting skipped MCP config entries; several subsections were reorganized.</p>
+    <ul>
+      <li><strong>Nested subagent streaming</strong> &mdash; Documented that messages from subagents spawned by subagents carry the spawning Agent tool call&#x27;s ID in <code>parent_tool_use_id</code>, enabling full nesting-tree reconstruction; requires v2.1.219.</li>
+      <li><strong>mcp_server_errors field</strong> &mdash; <code>system/init</code> now includes <code>mcp_server_errors</code> listing <code>--mcp-config</code> entries skipped by validation (e.g., <code>url_missing_type</code>, <code>unknown_type</code>); CI can fail on a non-empty array. Requires v2.1.219.</li>
+      <li><strong>Section reorganization</strong> &mdash; Stream content split into named subsections: &#x27;Follow subagent messages&#x27;, &#x27;Handle API retries&#x27;, &#x27;Read session metadata&#x27;, &#x27;Fail CI when a plugin or MCP server doesn&#x27;t load&#x27;, &#x27;Track plugin installs&#x27;.</li>
+      <li><strong>capabilities update</strong> &mdash; Added <code>interrupt_cancel_queued_v1</code> to the example capability strings in the <code>system/init</code> description.</li>
+      <li><strong>Agent SDK cross-link</strong> &mdash; Moved the Agent SDK streaming cross-link to immediately follow the jq streaming example.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">code.claude.com/docs/en/headless &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="run-claude-code-programmatically" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Automate actions with hooks</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>PermissionRequest semantics were clarified to cover background subagents in non-interactive mode, SessionEnd hooks gained a documented 1.5-second shared budget, and settings.local.json gitignore language was made more precise.</p>
+    <ul>
+      <li><strong>PermissionRequest in non-interactive mode</strong> &mdash; Hooks now fire for background subagents that can&#x27;t show a prompt; if no hook returns a decision the tool call is denied. In plain <code>-p</code> runs use PreToolUse instead.</li>
+      <li><strong>SessionEnd budget</strong> &mdash; Added that SessionEnd hooks share a 1.5-second budget; if a per-hook timeout in settings is longer, Claude Code raises the budget up to 60 seconds.</li>
+      <li><strong>settings.local.json wording</strong> &mdash; &#x27;gitignored when Claude Code creates it&#x27; changed to &#x27;gitignored when Claude Code saves a setting to it&#x27;.</li>
+      <li><strong>Test steps added</strong> &mdash; Added &#x27;Test the hook&#x27; steps for the Prettier and env-file-block examples, and a confirmation note for the ConfigChange audit-log example.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener">code.claude.com/docs/en/hooks-guide &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="automate-actions-with-hooks" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Hooks reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Dark-mode diagrams were added for the lifecycle and hook-resolution SVGs, PermissionRequest semantics were updated to cover background subagents, SessionEnd timeout budgeting was documented, and /hooks menu source labels were renamed.</p>
+    <ul>
+      <li><strong>Dark-mode diagrams</strong> &mdash; Added dark-variant <code>&amp;lt;img&amp;gt;</code> tags for the hooks-lifecycle and hook-resolution SVGs.</li>
+      <li><strong>PermissionRequest description</strong> &mdash; Updated from &#x27;when a permission dialog appears&#x27; to &#x27;when Claude Code is about to ask you for permission&#x27;; background subagents now have hooks run and calls auto-denied if no hook decides.</li>
+      <li><strong>SessionEnd timeout</strong> &mdash; <code>timeout</code> field docs updated: SessionEnd hooks share a 1.5-second budget, raised to match the per-hook setting up to 60 seconds.</li>
+      <li><strong>/hooks menu labels</strong> &mdash; Source labels renamed: &#x27;User&#x27; → &#x27;User Settings&#x27;, &#x27;Project&#x27; → &#x27;Project Settings&#x27;, &#x27;Local&#x27; → &#x27;Local Settings&#x27;, &#x27;Plugin&#x27; → &#x27;Plugin Hooks&#x27;, &#x27;Session&#x27; → &#x27;Session Hooks&#x27;, &#x27;Built-in&#x27; → &#x27;Built-in Hooks&#x27;.</li>
+      <li><strong>Script setup notes</strong> &mdash; Added instructions to save the block-rm script to <code>.claude/hooks/block-rm.sh</code> and make it executable with <code>chmod +x</code>; added Windows PowerShell guidance.</li>
+      <li><strong>stdin handling fix</strong> &mdash; Hook example script updated to capture stdin with <code>input=$(cat)</code> before passing to jq.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/hooks" target="_blank" rel="noopener">code.claude.com/docs/en/hooks &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="hooks-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Interactive mode</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Vim NORMAL mode navigation was updated to document that the left arrow on an empty prompt now opens agent view (requires v2.1.219), and the note was reworded for clarity.</p>
+    <ul>
+      <li><strong>NORMAL mode left arrow</strong> &mdash; From v2.1.219, pressing <code>←</code> on an empty prompt in NORMAL mode opens agent view; before v2.1.219 it did nothing.</li>
+      <li><strong>Wording</strong> &mdash; &#x27;j/k and the arrow keys&#x27; specified as &#x27;j/k and ↑/↓&#x27; for history navigation.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">code.claude.com/docs/en/interactive-mode &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="interactive-mode" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Connect Claude Code to tools via MCP</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Microsoft Foundry Azure deployments are now documented as always falling back to upfront MCP tool loading regardless of ENABLE_TOOL_SEARCH, server-name conflict resolution for the Desktop Code tab was clarified, and several example blocks gained wrap formatting and additional context.</p>
+    <ul>
+      <li><strong>Foundry tool-search behavior</strong> &mdash; Azure-hosted Foundry deployments reject tool search server-side; Claude Code detects the rejection and loads MCP tools upfront. <code>ENABLE_TOOL_SEARCH=true</code> cannot override this.</li>
+      <li><strong>ENABLE_TOOL_SEARCH table</strong> &mdash; Updated unset and <code>true</code> rows to document Foundry exception; added Foundry to the fallback-to-upfront list.</li>
+      <li><strong>Desktop Code tab scope resolution</strong> &mdash; When the same stdio server name appears at user scope in <code>~/.claude.json</code> and in <code>.mcp.json</code>, the Code tab uses the <code>~/.claude.json</code> definition.</li>
+      <li><strong>WaitForMcpServers note</strong> &mdash; Added detail that Foundry starts on the tool-search path and switches to upfront loading after detecting server-side rejection.</li>
+      <li><strong>Plugin reload behavior</strong> &mdash; <code>/reload-plugins</code> now keeps live connections of plugin servers whose config is unchanged; before v2.1.210 it disconnected them.</li>
+      <li><strong>SSE transport note</strong> &mdash; Added that some services still expose only an SSE endpoint, with the command using <code>--transport sse</code>.</li>
+      <li><strong>Example improvements</strong> &mdash; Sentry and PostgreSQL examples gained introductory sentences and confirmation steps; duplicate-server-name error message documented.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">code.claude.com/docs/en/mcp &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="connect-claude-code-to-tools-via-mcp" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Model configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The ANTHROPIC_DEFAULT_OPUS_MODEL_DESCRIPTION default was updated to include a &#x27;(1M context)&#x27; suffix variant for models with the [1m] suffix, and the CLAUDE_CODE_SUBAGENT_MODEL description was reworded for clarity.</p>
+    <ul>
+      <li><strong>Opus model description default</strong> &mdash; When the pinned Opus model ID has the <code>[1m]</code> suffix and <code>CLAUDE_CODE_DISABLE_1M_CONTEXT</code> is not set, the description defaults to &#x27;Custom Opus model (1M context)&#x27; instead of &#x27;Custom Opus model&#x27;.</li>
+      <li><strong>CLAUDE_CODE_SUBAGENT_MODEL wording</strong> &mdash; Description clarified to &#x27;the model Claude Code uses for all subagents, agent teams, and agents in a workflow&#x27;.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener">code.claude.com/docs/en/model-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="model-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Monitoring</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The managed-settings OTLP locking section was rewritten to enumerate exactly which developer-set variables are removed for each managed variable type (endpoint, protocol, credentials), and OTEL_EXPORTER_OTLP_PROTOCOL was documented as having no built-in default.</p>
+    <ul>
+      <li><strong>Section rewrite</strong> &mdash; &#x27;Managed endpoints govern signal-specific endpoints&#x27; renamed to &#x27;How managed settings lock the OTLP destination&#x27; with a new bullet breakdown: setting endpoint removes per-signal endpoints; setting protocol removes per-signal protocols; setting credentials removes per-signal credentials plus all developer-set endpoints.</li>
+      <li><strong>OTEL_EXPORTER_OTLP_PROTOCOL default</strong> &mdash; Now documented as having no default; users must set this or a per-signal protocol variable for each otlp exporter.</li>
+      <li><strong>Exporter selectors note</strong> &mdash; Clarified that <code>OTEL_METRICS_EXPORTER</code>, <code>OTEL_LOGS_EXPORTER</code>, and <code>OTEL_TRACES_EXPORTER</code> follow normal per-key precedence and should be set in managed settings if they need to be locked.</li>
+      <li><strong>Verification tip</strong> &mdash; Added tip to confirm a configuration by checking for the <code>claude_code.session.count</code> metric after starting a session, and to check SIEM configs by submitting a prompt and looking for <code>claude_code.user_prompt</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">code.claude.com/docs/en/monitoring-usage &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="monitoring" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Enterprise network configuration</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A new &#x27;Verify your configuration&#x27; section was added documenting how to confirm proxy, CA cert, and mTLS settings loaded correctly via --debug logging and /status, and lowercase proxy variable precedence order was documented.</p>
+    <ul>
+      <li><strong>Verify your configuration section</strong> &mdash; New section explains that most settings are not validated at startup; proxy URL parsing is the exception. Instructs engineers to use <code>claude --debug</code> and look for CA cert, mTLS cert, and mTLS key confirmation lines in the debug log.</li>
+      <li><strong>/status integration</strong> &mdash; Documents that <code>/status</code> shows Proxy, mTLS client cert, mTLS client key, and Additional CA cert(s) rows to spot-check loaded configuration.</li>
+      <li><strong>Proxy variable precedence</strong> &mdash; Documented that lowercase variants work and Claude Code uses the first set value in the order <code>https_proxy</code>, <code>HTTPS_PROXY</code>, <code>http_proxy</code>, <code>HTTP_PROXY</code>.</li>
+      <li><strong>Startup note</strong> &mdash; Added that environment variables are read once at startup; a running session does not pick up later shell changes.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/network-config" target="_blank" rel="noopener">code.claude.com/docs/en/network-config &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="enterprise-network-configuration" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Overview</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Two small clarifications were added: ANTHROPIC_API_KEY skips the login prompt at startup, and the /desktop handoff requires a claude.ai subscription.</p>
+    <ul>
+      <li><strong>API key login behavior</strong> &mdash; If <code>ANTHROPIC_API_KEY</code> is set, Claude Code skips the login prompt and asks to approve the key instead.</li>
+      <li><strong>/desktop subscription requirement</strong> &mdash; Noted that the /desktop terminal-to-desktop handoff requires a claude.ai subscription.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">code.claude.com/docs/en/overview &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="overview" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create and distribute a plugin marketplace</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Organization sync rules for the admin Plugin settings page were documented, strictKnownMarketplaces empty-array behavior was clarified to include the official Anthropic marketplace, and a new example was added for allowing only the official marketplace.</p>
+    <ul>
+      <li><strong>Organization sync source rules</strong> &mdash; New Note block documents that marketplaces distributed via Organization settings &gt; Plugins must be private/internal GitHub repos; npm sources are not supported; private plugin sources require shared ownership or a GHE App install.</li>
+      <li><strong>Relative paths for private plugins</strong> &mdash; Advises placing private plugins inside the marketplace repo and using relative paths so organization sync packages them without requiring separate repo access.</li>
+      <li><strong>strictKnownMarketplaces empty array</strong> &mdash; Clarified that <code>[]</code> blocks the official Anthropic marketplace as well as user-added ones.</li>
+      <li><strong>Official marketplace allowlist example</strong> &mdash; Added a new <code>strictKnownMarketplaces</code> example that allows only <code>anthropics/claude-plugins-official</code>, with notes on exact matching and auto-registration behavior.</li>
+      <li><strong>validate command syntax</strong> &mdash; <code>claude plugin validate</code> examples updated to require an explicit path argument, e.g., <code>claude plugin validate .</code>.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugin-marketplaces" target="_blank" rel="noopener">code.claude.com/docs/en/plugin-marketplaces &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-and-distribute-a-plugin-marketplace" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Plugins reference</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>PermissionRequest description was updated to match the new semantics, /reload-plugins now documents that live connections of unchanged servers are preserved, and the local scope description was reworded.</p>
+    <ul>
+      <li><strong>PermissionRequest description</strong> &mdash; Updated from &#x27;when a permission dialog appears&#x27; to &#x27;when a tool call needs a permission decision&#x27;.</li>
+      <li><strong>/reload-plugins connection preservation</strong> &mdash; Added that Claude Code keeps live connections of plugin MCP servers whose configuration is unchanged after a reload.</li>
+      <li><strong>Local scope wording</strong> &mdash; &#x27;gitignored when Claude Code creates it&#x27; changed to &#x27;gitignored when Claude Code saves a setting to it&#x27;.</li>
+      <li><strong>validate command syntax</strong> &mdash; Troubleshooting table updated to use <code>claude plugin validate ./my-plugin</code> with an explicit path.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">code.claude.com/docs/en/plugins-reference &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="plugins-reference" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create plugins</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Testing guidance was improved with instructions to trigger hook events explicitly and check the debug log, LSP server error visibility was documented, and the plugin validate command now requires an explicit path argument.</p>
+    <ul>
+      <li><strong>Hook testing guidance</strong> &mdash; Replaced &#x27;verify hooks work as expected&#x27; with instructions to trigger the matched event (e.g., ask Claude to edit a file for PostToolUse) and check the debug log for exit codes and output.</li>
+      <li><strong>LSP error visibility</strong> &mdash; Added note that a language server failing to start appears in the /plugin Errors tab, with example error message.</li>
+      <li><strong>plugin validate path</strong> &mdash; <code>claude plugin validate</code> updated to <code>claude plugin validate ./your-plugin</code> with documentation of the pass/warn output format and <code>--strict</code> flag.</li>
+      <li><strong>Reload-plugins skill count note</strong> &mdash; Added that the skills count in the /reload-plugins summary covers only <code>commands/</code> directories, so it may report 0 skills even when a skill reloaded.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">code.claude.com/docs/en/plugins &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-plugins" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Quickstart</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>All inline prompt example blocks were updated to use wrap formatting, and a note was added that ANTHROPIC_API_KEY bypasses the browser login prompt.</p>
+    <ul>
+      <li><strong>Code block wrapping</strong> &mdash; Every <code>text theme={null}</code> and <code>bash/powershell/batch theme={null}</code> block changed to single <code>theme={null}</code> (deduplicated) with <code>wrap</code> where applicable.</li>
+      <li><strong>API key login note</strong> &mdash; Added that if <code>ANTHROPIC_API_KEY</code> is set, Claude Code skips the login prompt and asks to approve the key instead.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener">code.claude.com/docs/en/quickstart &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="quickstart" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Configure the sandboxed Bash tool</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The description of settings.local.json gitignore behavior was updated to clarify that Claude Code adds the file to the global git excludes file (not the repo&#x27;s .gitignore) when saving a setting.</p>
+    <ul>
+      <li><strong>settings.local.json gitignore</strong> &mdash; &#x27;Not checked into git&#x27; wording replaced with: Claude Code adds <code>**/.claude/settings.local.json</code> to your global git excludes file when it saves a setting there; manually created files must be gitignored by hand.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener">code.claude.com/docs/en/sandboxing &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="configure-the-sandboxed-bash-tool" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Security</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>A /security-review command cross-link was added to the related resources section, and cloud-session cleanup language was made more accurate.</p>
+    <ul>
+      <li><strong>/security-review link</strong> &mdash; Added a link to the <code>/security-review</code> command for on-demand security passes over current-branch changes.</li>
+      <li><strong>Cloud cleanup wording</strong> &mdash; &#x27;Automatically terminated after session completion&#x27; changed to &#x27;Session VMs are reclaimed after a period of inactivity&#x27;.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/security" target="_blank" rel="noopener">code.claude.com/docs/en/security &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="security" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Claude Code settings</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The settings reference gained a new switchModelsOnFlag entry, remote.defaultEnvironmentId was documented, settings.local.json gitignore behavior was made precise, and the attribution.sessionUrl description was corrected to say &#x27;cloud or Remote Control session&#x27;.</p>
+    <ul>
+      <li><strong>switchModelsOnFlag setting</strong> &mdash; New setting (default <code>true</code>) controls whether Claude Code auto-switches to the fallback model when a safety classifier flags a request, or pauses for user choice. Requires v2.1.160.</li>
+      <li><strong>remote.defaultEnvironmentId</strong> &mdash; Documented new setting for setting the default cloud environment for CLI cloud sessions; written by <code>/remote-env</code>.</li>
+      <li><strong>settings.local.json gitignore precision</strong> &mdash; Explains that Claude Code adds <code>**/.claude/settings.local.json</code> to the global git excludes file (<code>core.excludesFile</code> or XDG path) when saving a setting there.</li>
+      <li><strong>attribution.sessionUrl wording</strong> &mdash; &#x27;web or Remote Control session&#x27; corrected to &#x27;cloud or Remote Control session&#x27;.</li>
+      <li><strong>strictKnownMarketplaces empty array</strong> &mdash; Clarified that <code>[]</code> blocks the official Anthropic marketplace; added a new example for allowing only the official marketplace.</li>
+      <li><strong>OTEL_EXPORTER_OTLP_PROTOCOL example</strong> &mdash; Added <code>&quot;OTEL_EXPORTER_OTLP_PROTOCOL&quot;: &quot;http/protobuf&quot;</code> to the managed settings example.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/settings" target="_blank" rel="noopener">code.claude.com/docs/en/settings &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="claude-code-settings" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Advanced setup</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The apt installation steps were expanded to verify the GPG key fingerprint before trusting it, gnupg was added to the prerequisite install, and a post-install version confirmation tip was added.</p>
+    <ul>
+      <li><strong>GPG key verification</strong> &mdash; apt install steps now include <code>gpg --show-keys</code> to verify the fingerprint (<code>31DDDE24DDFAB679F42D7BD2BAA929FF1A7ECACE</code>) before adding the repository; moved inline instead of a post-step note.</li>
+      <li><strong>gnupg prerequisite</strong> &mdash; Added <code>gnupg</code> alongside <code>curl</code> in the prerequisite install command.</li>
+      <li><strong>Version confirmation tip</strong> &mdash; Added note that <code>claude --version</code> prints the exact installed version after a version-pinned install.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener">code.claude.com/docs/en/setup &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="advanced-setup" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Extend Claude with skills</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>The /verify skill now self-records its recipe when run without one, nested skills load on demand rather than at startup, and --add-dir can supply skills from outside the project path.</p>
+    <ul>
+      <li><strong>/verify self-recording</strong> &mdash; When /verify runs without a recorded recipe it writes what worked to <code>.claude/skills/verify/SKILL.md</code>; at the repo root this replaces the bundled /verify. Requires v2.1.200.</li>
+      <li><strong>Nested skills load on demand</strong> &mdash; Skills in subdirectory <code>.claude/skills/</code> directories are no longer loaded at startup; they load the first time Claude reads or edits a file in that subdirectory and remain available for the rest of the session.</li>
+      <li><strong>--add-dir for skills</strong> &mdash; Documented that <code>--add-dir</code> causes Claude Code to read <code>.claude/skills/</code> inside the added directory at startup.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="extend-claude-with-skills" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Create custom subagents</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Subagent names containing &#x27;:&#x27; are now rejected (v2.1.218), frontmatter hooks require workspace trust for project-level agents, and a chmod reminder and test-the-hook step were added to the hook examples.</p>
+    <ul>
+      <li><strong>Name colon restriction</strong> &mdash; Agent names containing <code>:</code> are reserved for plugin-scoped identifiers; Claude Code logs an error and skips the file. Requires v2.1.218.</li>
+      <li><strong>Frontmatter hook workspace trust</strong> &mdash; Project-level subagent frontmatter hooks now require workspace trust for the folder containing the agent file; hooks are skipped without a trust grant and an error is logged. Before v2.1.218, hooks ran without this requirement.</li>
+      <li><strong>chmod reminder</strong> &mdash; Added <code>chmod +x</code> reminder for hook validation scripts on macOS/Linux.</li>
+      <li><strong>Test the hook step</strong> &mdash; Added test step for the read-only query hook: ask the subagent to run an UPDATE and verify the Blocked message.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">code.claude.com/docs/en/sub-agents &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="create-custom-subagents" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Use Claude Code in VS Code</h3>
+      <span class="tag tag-updated">Updated</span>
+    </div>
+    <p>Inline prompt example blocks in the @-mention and browser sections were updated to use wrap formatting and remove leading &#x27;&gt;&#x27; characters.</p>
+    <ul>
+      <li><strong>Code block wrapping</strong> &mdash; @-mention and @browser example blocks changed to <code>wrap theme={null}</code>; leading <code>&amp;gt;</code> prompt characters removed from multi-line examples.</li>
+      <li><strong>Git workflow examples</strong> &mdash; Commit/PR prompt examples updated to remove leading <code>&amp;gt;</code> characters and use <code>wrap</code> formatting.</li>
+    </ul>
+    <a class="source-link" href="https://code.claude.com/docs/en/vs-code" target="_blank" rel="noopener">code.claude.com/docs/en/vs-code &rarr;</a>
+    <div class="course-row"><button class="course-btn" data-topic="use-claude-code-in-vs-code" onclick="copyCourseCmd(this)"><span class="course-btn-icon">▶</span> Create Course</button><span class="course-note">Requires Claude Code + claude-docs plugin</span></div>
+  </div>
+
+  <footer>
+    Generated from <a href="https://github.com/costiash/claude-code-docs" target="_blank" rel="noopener" style="color: var(--blue); text-decoration: none;">claude-code-docs</a> &middot; 28 docs analyzed &middot; 2026-07-29
+  </footer>
+
+</div>
+
+<script>
+function copyCourseCmd(btn) {
+  var topic = btn.dataset.topic;
+  var cmd = '/docs --course ' + topic;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd).then(function() { showToast('Copied! Paste in Claude Code: ' + cmd); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = cmd; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied! Paste in Claude Code: ' + cmd);
+  }
+}
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) { toast = document.createElement('div'); toast.id = 'toast'; toast.className = 'toast'; document.body.appendChild(toast); }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
